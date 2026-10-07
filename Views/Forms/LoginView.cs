@@ -12,7 +12,7 @@ public partial class LoginView : Form
         InitializeComponent();
         DarkThemeModule.Apply(this);
         AcceptButton = btnLogin;
-        Icon = SystemIcons.Shield;
+        Icon = AppIcon.Create();
     }
 
     protected override void OnShown(EventArgs e)

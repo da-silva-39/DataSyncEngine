@@ -11,7 +11,7 @@ public static class DarkThemeModule
     {
         try
         {
-            int useDark = 1;
+            int useDark = IsDark ? 1 : 0;
             DwmSetWindowAttribute(form.Handle, 20, ref useDark, sizeof(int));
         }
         catch
@@ -20,10 +20,21 @@ public static class DarkThemeModule
     }
 
 
-    public static readonly Color BackgroundColor = ColorTranslator.FromHtml("#1E1E1E");
-    public static readonly Color PanelColor = ColorTranslator.FromHtml("#2D2D30");
-    public static readonly Color TextColor = Color.White;
-    public static readonly Color AccentColor = ColorTranslator.FromHtml("#007ACC");
+    public static Color BackgroundColor { get; private set; } = ColorTranslator.FromHtml("#1E1E1E");
+    public static Color PanelColor { get; private set; } = ColorTranslator.FromHtml("#2D2D30");
+    public static Color TextColor { get; private set; } = Color.White;
+    public static Color AccentColor { get; private set; } = ColorTranslator.FromHtml("#007ACC");
+
+    public static bool IsDark { get; private set; } = true;
+
+    public static void SetTheme(bool dark)
+    {
+        IsDark = dark;
+        BackgroundColor = dark ? ColorTranslator.FromHtml("#1E1E1E") : ColorTranslator.FromHtml("#F3F3F3");
+        PanelColor = dark ? ColorTranslator.FromHtml("#2D2D30") : Color.White;
+        TextColor = dark ? Color.White : ColorTranslator.FromHtml("#1E1E1E");
+        AccentColor = ColorTranslator.FromHtml("#007ACC");
+    }
 
     public static void Apply(Control root)
     {
@@ -81,9 +92,16 @@ public static class DarkThemeModule
                 combo.BackColor = PanelColor;
                 combo.ForeColor = TextColor;
                 break;
+            case StatusStrip strip:
+                strip.BackColor = PanelColor;
+                strip.ForeColor = TextColor;
+                break;
+            case ToolStrip ts:
+                ts.BackColor = PanelColor;
+                ts.ForeColor = TextColor;
+                break;
             default:
-                if (control.BackColor == SystemColors.Control)
-                    control.BackColor = BackgroundColor;
+                control.BackColor = BackgroundColor;
                 break;
         }
 

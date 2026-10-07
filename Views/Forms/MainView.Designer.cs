@@ -85,7 +85,7 @@ partial class MainView : Form
         this.btnSelectFolder.UseVisualStyleBackColor = false;
 
         this.lblStatus.AutoSize = true;
-        this.lblStatus.Location = new System.Drawing.Point(665, 22);
+        this.lblStatus.Location = new System.Drawing.Point(290, 62);
         this.lblStatus.Name = "lblStatus";
         this.lblStatus.TabIndex = 1;
         this.lblStatus.Text = "Ready.";
@@ -143,14 +143,38 @@ partial class MainView : Form
         this.statusStrip.TabIndex = 1;
         this.lblServerInfo.Name = "lblServerInfo";
         this.lblServerInfo.Text = "";
+
+        this.btnTheme = new System.Windows.Forms.ToolStripDropDownButton();
+        this.themeDarkItem = new System.Windows.Forms.ToolStripMenuItem();
+        this.themeLightItem = new System.Windows.Forms.ToolStripMenuItem();
+        this.btnTheme.Text = "Theme";
+        this.themeDarkItem.Text = "Dark";
+        this.themeLightItem.Text = "Light";
+        this.btnTheme.DropDownItems.Add(this.themeDarkItem);
+        this.btnTheme.DropDownItems.Add(this.themeLightItem);
+        this.themeDarkItem.Click += new System.EventHandler(this.themeDarkItem_Click);
+        this.themeLightItem.Click += new System.EventHandler(this.themeLightItem_Click);
+        this.statusStrip.Items.Add(new System.Windows.Forms.ToolStripSeparator());
+        this.statusStrip.Items.Add(this.btnTheme);
+
+        this.txtFilter = new System.Windows.Forms.TextBox();
+        this.txtFilter.Location = new System.Drawing.Point(15, 58);
+        this.txtFilter.Name = "txtFilter";
+        this.txtFilter.Size = new System.Drawing.Size(250, 27);
+        this.txtFilter.TabIndex = 7;
+        this.txtFilter.PlaceholderText = "Type to filter files...";
+        this.txtFilter.TextChanged += new System.EventHandler(this.txtFilter_TextChanged);
+        this.tabSync.Controls.Add(this.txtFilter);
+
+        this.gridFiles.Location = new System.Drawing.Point(15, 95);
+        this.gridFiles.Size = new System.Drawing.Size(940, 465);
+
         this.Controls.Add(this.statusStrip);
 
         this.gridFiles.AllowUserToAddRows = false;
         this.gridFiles.AllowUserToDeleteRows = false;
         this.gridFiles.ReadOnly = true;
-        this.gridFiles.Location = new System.Drawing.Point(15, 60);
         this.gridFiles.Name = "gridFiles";
-        this.gridFiles.Size = new System.Drawing.Size(940, 500);
         this.gridFiles.TabIndex = 2;
 
         this.tabServers.Controls.Add(this.gridServers);
@@ -304,6 +328,10 @@ partial class MainView : Form
     private System.Windows.Forms.Button btnDeleteServer;
     private System.Windows.Forms.StatusStrip statusStrip;
     private System.Windows.Forms.ToolStripStatusLabel lblServerInfo;
+    private System.Windows.Forms.ToolStripDropDownButton btnTheme;
+    private System.Windows.Forms.ToolStripMenuItem themeDarkItem;
+    private System.Windows.Forms.ToolStripMenuItem themeLightItem;
+    private System.Windows.Forms.TextBox txtFilter;
     private System.Windows.Forms.ContextMenuStrip trayMenu;
     private System.Windows.Forms.ToolStripMenuItem trayShow;
     private System.Windows.Forms.ToolStripMenuItem trayExit;

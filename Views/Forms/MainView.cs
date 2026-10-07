@@ -23,12 +23,35 @@ public partial class MainView : Form
     {
         InitializeComponent();
         DarkThemeModule.Apply(this);
-        Icon = SystemIcons.Shield;
+        Icon = AppIcon.Create();
+        notifyIcon.Icon = AppIcon.Create();
         _viewModel = new MainViewModel(AppServices.Session.Role ?? Core.Enums.UserRole.Operator);
         ApplyRoleLayout();
         WireEvents();
         UpdateServerInfo();
         AppServices.HotSwap.ServerChanged += _ => UpdateServerInfo();
+    }
+
+    private void themeDarkItem_Click(object? sender, EventArgs e)
+    {
+        DarkThemeModule.SetTheme(true);
+        foreach (Form f in Application.OpenForms) DarkThemeModule.Apply(f);
+    }
+
+    private void themeLightItem_Click(object? sender, EventArgs e)
+    {
+        DarkThemeModule.SetTheme(false);
+        foreach (Form f in Application.OpenForms) DarkThemeModule.Apply(f);
+    }
+
+    private void txtFilter_TextChanged(object? sender, EventArgs e)
+    {
+        string term = txtFilter.Text.Trim().ToLowerInvariant();
+        var filtered = _viewModel.Files
+            .Where(f => f.FileName.Contains(term, StringComparison.OrdinalIgnoreCase) || f.Status.ToString().Contains(term, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+        gridFiles.DataSource = null;
+        gridFiles.DataSource = term.Length == 0 ? _viewModel.Files : filtered;
     }
 
     private void trayShow_Click(object? sender, EventArgs e)
