@@ -19,6 +19,8 @@ public static class AppServices
         Password = string.Empty
     };
 
+    public static string MasterKey { get; set; } = "DataSyncEngine-MasterKey-2026";
+
     public static SessionController Session { get; } = new();
     public static PasswordHasher Hasher { get; } = new();
     public static CacheController Cache { get; } = new();

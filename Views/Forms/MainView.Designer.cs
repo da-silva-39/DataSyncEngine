@@ -21,8 +21,12 @@ partial class MainView : Form
         this.tabAudit = new System.Windows.Forms.TabPage();
         this.tabAnalytics = new System.Windows.Forms.TabPage();
         this.btnSelectFolder = new System.Windows.Forms.Button();
+        this.btnSync = new System.Windows.Forms.Button();
+        this.btnDelete = new System.Windows.Forms.Button();
         this.lblStatus = new System.Windows.Forms.Label();
         this.gridFiles = new System.Windows.Forms.DataGridView();
+        this.notifyIcon = new System.Windows.Forms.NotifyIcon();
+        this.components = new System.ComponentModel.Container();
         this.btnAddServer = new System.Windows.Forms.Button();
         this.gridServers = new System.Windows.Forms.DataGridView();
         this.gridAudit = new System.Windows.Forms.DataGridView();
@@ -51,6 +55,8 @@ partial class MainView : Form
         this.tabSync.Controls.Add(this.gridFiles);
         this.tabSync.Controls.Add(this.lblStatus);
         this.tabSync.Controls.Add(this.btnSelectFolder);
+        this.tabSync.Controls.Add(this.btnSync);
+        this.tabSync.Controls.Add(this.btnDelete);
         this.tabSync.Location = new System.Drawing.Point(4, 34);
         this.tabSync.Name = "tabSync";
         this.tabSync.Padding = new System.Windows.Forms.Padding(3);
@@ -66,10 +72,28 @@ partial class MainView : Form
         this.btnSelectFolder.UseVisualStyleBackColor = false;
 
         this.lblStatus.AutoSize = true;
-        this.lblStatus.Location = new System.Drawing.Point(180, 22);
+        this.lblStatus.Location = new System.Drawing.Point(500, 22);
         this.lblStatus.Name = "lblStatus";
         this.lblStatus.TabIndex = 1;
         this.lblStatus.Text = "Ready.";
+
+        this.btnSync.Location = new System.Drawing.Point(180, 15);
+        this.btnSync.Name = "btnSync";
+        this.btnSync.Size = new System.Drawing.Size(110, 32);
+        this.btnSync.TabIndex = 3;
+        this.btnSync.Text = "Sync";
+        this.btnSync.UseVisualStyleBackColor = false;
+
+        this.btnDelete.Location = new System.Drawing.Point(305, 15);
+        this.btnDelete.Name = "btnDelete";
+        this.btnDelete.Size = new System.Drawing.Size(110, 32);
+        this.btnDelete.TabIndex = 4;
+        this.btnDelete.Text = "Delete";
+        this.btnDelete.UseVisualStyleBackColor = false;
+
+        this.notifyIcon.Icon = System.Drawing.SystemIcons.Application;
+        this.notifyIcon.Text = "DataSyncEngine";
+        this.notifyIcon.Visible = true;
 
         this.gridFiles.AllowUserToAddRows = false;
         this.gridFiles.AllowUserToDeleteRows = false;
@@ -155,6 +179,9 @@ partial class MainView : Form
     private System.Windows.Forms.TabPage tabAudit;
     private System.Windows.Forms.TabPage tabAnalytics;
     private System.Windows.Forms.Button btnSelectFolder;
+    private System.Windows.Forms.Button btnSync;
+    private System.Windows.Forms.Button btnDelete;
+    private System.Windows.Forms.NotifyIcon notifyIcon;
     private System.Windows.Forms.Label lblStatus;
     private System.Windows.Forms.DataGridView gridFiles;
     private System.Windows.Forms.Button btnAddServer;

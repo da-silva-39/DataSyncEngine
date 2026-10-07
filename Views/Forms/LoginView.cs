@@ -31,6 +31,7 @@ public partial class LoginView : Form
             bool ok = await _viewModel.LoginAsync();
             if (ok)
             {
+                await AppServices.AuditLogger.LogLoginAsync(_viewModel.Username);
                 DialogResult = DialogResult.OK;
                 Close();
             }
