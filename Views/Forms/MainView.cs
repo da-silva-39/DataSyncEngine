@@ -32,6 +32,29 @@ public partial class MainView : Form
         AppServices.HotSwap.ServerChanged += _ => UpdateServerInfo();
     }
 
+    protected override async void OnShown(EventArgs e)
+    {
+        base.OnShown(e);
+        await _viewModel.LoadServersAsync();
+        UpdateDashboard();
+    }
+
+    private void UpdateDashboard()
+    {
+        SetCard(cardFiles, _viewModel.Files.Count.ToString());
+        SetCard(cardSynced, _viewModel.Files.Count(f => f.Status == Core.Enums.SyncStatus.Synced).ToString());
+        SetCard(cardPending, _viewModel.Files.Count(f => f.Status == Core.Enums.SyncStatus.Pending).ToString());
+        SetCard(cardServers, _viewModel.Servers.Count.ToString());
+    }
+
+    private static void SetCard(System.Windows.Forms.Panel card, string value)
+    {
+        foreach (Control c in card.Controls)
+        {
+            if (c.Name == "lblValue") c.Text = value;
+        }
+    }
+
     private void themeDarkItem_Click(object? sender, EventArgs e)
     {
         DarkThemeModule.SetTheme(true);
@@ -104,6 +127,7 @@ public partial class MainView : Form
                 await _viewModel.ScanFolderAsync(dialog.SelectedPath, scanner);
                 gridFiles.DataSource = null;
                 gridFiles.DataSource = _viewModel.Files;
+                UpdateDashboard();
                 int synced = _viewModel.Files.Count(f => f.Status == Core.Enums.SyncStatus.Synced);
                 int pending = _viewModel.Files.Count(f => f.Status == Core.Enums.SyncStatus.Pending);
                 lblStatus.Text = $"Scanned {_viewModel.Files.Count} files. Synced: {synced}, Pending: {pending}";
@@ -130,12 +154,18 @@ public partial class MainView : Form
             }
             lblStatus.Text = "Syncing...";
             Cursor = Cursors.WaitCursor;
+            progressBar.Value = 0;
+            progressBar.Maximum = pending.Count;
+            var engine = AppServices.SyncEngine;
+            Action<string> tick = _ => { if (progressBar.Value < progressBar.Maximum) progressBar.Value++; };
+            engine.FileProcessed += tick;
+            engine.FileFailed += tick;
             try
             {
-                var engine = AppServices.SyncEngine;
                 int ok = await engine.ProcessBatchAsync(pending, f => File.ReadAllBytes(f.FilePath));
                 gridFiles.DataSource = null;
                 gridFiles.DataSource = _viewModel.Files;
+                UpdateDashboard();
                 lblStatus.Text = $"Synced {ok}/{pending.Count} files.";
                 notifyIcon.ShowBalloonTip(3000, "DataSyncEngine", $"Sync completed: {ok}/{pending.Count}.", ToolTipIcon.Info);
                 await AppServices.AuditLogger.LogAsync(Core.Enums.LogAction.SyncCompleted, $"Synced {ok}/{pending.Count} files.");
@@ -152,6 +182,8 @@ public partial class MainView : Form
             }
             finally
             {
+                engine.FileProcessed -= tick;
+                engine.FileFailed -= tick;
                 Cursor = Cursors.Default;
             }
         };
@@ -173,6 +205,7 @@ public partial class MainView : Form
                         ?? new Model.Entities.FileModel { FilePath = path, FileName = Path.GetFileName(path) });
                 gridFiles.DataSource = null;
                 gridFiles.DataSource = _viewModel.Files;
+                UpdateDashboard();
                 lblStatus.Text = $"Resume completed: {ok} file(s).";
                 await AppServices.AuditLogger.LogAsync(Core.Enums.LogAction.SyncCompleted, $"Resume: {ok} files recovered.");
             }
@@ -212,6 +245,7 @@ public partial class MainView : Form
                 _viewModel.Files.Remove(file);
                 gridFiles.DataSource = null;
                 gridFiles.DataSource = _viewModel.Files;
+                UpdateDashboard();
                 await AppServices.AuditLogger.LogAsync(Core.Enums.LogAction.FileDelete, $"Deleted {file.FilePath}.");
             }
             catch (Exception ex)

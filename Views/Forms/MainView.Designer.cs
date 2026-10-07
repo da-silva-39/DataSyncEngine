@@ -16,6 +16,12 @@ partial class MainView : Form
     private void InitializeComponent()
     {
         this.tabControl = new System.Windows.Forms.TabControl();
+        this.cardFiles = new System.Windows.Forms.Panel();
+        this.cardSynced = new System.Windows.Forms.Panel();
+        this.cardPending = new System.Windows.Forms.Panel();
+        this.cardServers = new System.Windows.Forms.Panel();
+        this.lblDashTitle = new System.Windows.Forms.Label();
+        this.tabDashboard = new System.Windows.Forms.TabPage();
         this.tabSync = new System.Windows.Forms.TabPage();
         this.tabServers = new System.Windows.Forms.TabPage();
         this.tabAudit = new System.Windows.Forms.TabPage();
@@ -41,6 +47,7 @@ partial class MainView : Form
         this.gridAudit = new System.Windows.Forms.DataGridView();
         this.lblAnalytics = new System.Windows.Forms.Label();
         this.tabControl.SuspendLayout();
+        this.tabDashboard.SuspendLayout();
         this.tabSync.SuspendLayout();
         this.tabServers.SuspendLayout();
         this.tabAudit.SuspendLayout();
@@ -57,11 +64,35 @@ partial class MainView : Form
         this.tabControl.SelectedIndex = 0;
         this.tabControl.Size = new System.Drawing.Size(980, 620);
         this.tabControl.TabIndex = 0;
+        this.tabControl.Controls.Add(this.tabDashboard);
         this.tabControl.Controls.Add(this.tabSync);
         this.tabControl.Controls.Add(this.tabServers);
         this.tabControl.Controls.Add(this.tabAudit);
         this.tabControl.Controls.Add(this.tabAnalytics);
         this.tabControl.Controls.Add(this.tabUsers);
+
+        this.tabDashboard.Controls.Add(this.lblDashTitle);
+        this.tabDashboard.Controls.Add(this.cardFiles);
+        this.tabDashboard.Controls.Add(this.cardSynced);
+        this.tabDashboard.Controls.Add(this.cardPending);
+        this.tabDashboard.Controls.Add(this.cardServers);
+        this.tabDashboard.Location = new System.Drawing.Point(4, 34);
+        this.tabDashboard.Name = "tabDashboard";
+        this.tabDashboard.Padding = new System.Windows.Forms.Padding(3);
+        this.tabDashboard.Size = new System.Drawing.Size(972, 582);
+        this.tabDashboard.TabIndex = 0;
+        this.tabDashboard.Text = "Dashboard";
+
+        this.lblDashTitle.AutoSize = true;
+        this.lblDashTitle.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
+        this.lblDashTitle.Location = new System.Drawing.Point(25, 20);
+        this.lblDashTitle.Name = "lblDashTitle";
+        this.lblDashTitle.Text = "Overview";
+
+        SetupCard(this.cardFiles, "All files", 25);
+        SetupCard(this.cardSynced, "Synced", 268);
+        SetupCard(this.cardPending, "Pending", 511);
+        SetupCard(this.cardServers, "Servers", 754);
 
         this.tabSync.Controls.Add(this.gridFiles);
         this.tabSync.Controls.Add(this.lblStatus);
@@ -85,7 +116,7 @@ partial class MainView : Form
         this.btnSelectFolder.UseVisualStyleBackColor = false;
 
         this.lblStatus.AutoSize = true;
-        this.lblStatus.Location = new System.Drawing.Point(290, 62);
+        this.lblStatus.Location = new System.Drawing.Point(510, 62);
         this.lblStatus.Name = "lblStatus";
         this.lblStatus.TabIndex = 1;
         this.lblStatus.Text = "Ready.";
@@ -165,6 +196,13 @@ partial class MainView : Form
         this.txtFilter.PlaceholderText = "Type to filter files...";
         this.txtFilter.TextChanged += new System.EventHandler(this.txtFilter_TextChanged);
         this.tabSync.Controls.Add(this.txtFilter);
+
+        this.progressBar = new System.Windows.Forms.ProgressBar();
+        this.progressBar.Location = new System.Drawing.Point(280, 61);
+        this.progressBar.Name = "progressBar";
+        this.progressBar.Size = new System.Drawing.Size(210, 20);
+        this.progressBar.TabIndex = 8;
+        this.tabSync.Controls.Add(this.progressBar);
 
         this.gridFiles.Location = new System.Drawing.Point(15, 95);
         this.gridFiles.Size = new System.Drawing.Size(940, 465);
@@ -309,8 +347,39 @@ partial class MainView : Form
         this.ResumeLayout(false);
     }
 
+    private void SetupCard(System.Windows.Forms.Panel card, string caption, int x)
+    {
+        card.Location = new System.Drawing.Point(x, 70);
+        card.Size = new System.Drawing.Size(220, 110);
+        card.Name = caption;
+        var lblCaption = new System.Windows.Forms.Label
+        {
+            AutoSize = true,
+            Location = new System.Drawing.Point(15, 15),
+            Text = caption,
+            Name = "lblCaption"
+        };
+        var lblValue = new System.Windows.Forms.Label
+        {
+            AutoSize = true,
+            Location = new System.Drawing.Point(15, 50),
+            Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold),
+            Text = "0",
+            Name = "lblValue",
+            ForeColor = System.Drawing.Color.FromArgb(0, 122, 204)
+        };
+        card.Controls.Add(lblCaption);
+        card.Controls.Add(lblValue);
+    }
+
     private System.Windows.Forms.TabControl tabControl;
+    private System.Windows.Forms.TabPage tabDashboard;
     private System.Windows.Forms.TabPage tabSync;
+    private System.Windows.Forms.Panel cardFiles;
+    private System.Windows.Forms.Panel cardSynced;
+    private System.Windows.Forms.Panel cardPending;
+    private System.Windows.Forms.Panel cardServers;
+    private System.Windows.Forms.Label lblDashTitle;
     private System.Windows.Forms.TabPage tabServers;
     private System.Windows.Forms.TabPage tabAudit;
     private System.Windows.Forms.TabPage tabAnalytics;
@@ -332,6 +401,7 @@ partial class MainView : Form
     private System.Windows.Forms.ToolStripMenuItem themeDarkItem;
     private System.Windows.Forms.ToolStripMenuItem themeLightItem;
     private System.Windows.Forms.TextBox txtFilter;
+    private System.Windows.Forms.ProgressBar progressBar;
     private System.Windows.Forms.ContextMenuStrip trayMenu;
     private System.Windows.Forms.ToolStripMenuItem trayShow;
     private System.Windows.Forms.ToolStripMenuItem trayExit;

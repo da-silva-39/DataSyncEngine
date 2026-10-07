@@ -44,6 +44,14 @@ partial class ServerConfigView : Form
         this.lblPassword.AutoSize = true; this.lblPassword.Location = new System.Drawing.Point(20, 220); this.lblPassword.Text = "Password:";
         this.txtPassword.Location = new System.Drawing.Point(140, 217); this.txtPassword.Size = new System.Drawing.Size(220, 27); this.txtPassword.TabIndex = 5; this.txtPassword.UseSystemPasswordChar = true;
         this.chkActive.AutoSize = true; this.chkActive.Location = new System.Drawing.Point(140, 260); this.chkActive.Text = "Set as active server"; this.chkActive.TabIndex = 6;
+        this.btnTest = new System.Windows.Forms.Button();
+        this.btnTest.Location = new System.Drawing.Point(20, 300);
+        this.btnTest.Size = new System.Drawing.Size(110, 32);
+        this.btnTest.TabIndex = 8;
+        this.btnTest.Text = "Test";
+        this.btnTest.UseVisualStyleBackColor = false;
+        this.btnTest.Click += new System.EventHandler(this.btnTest_Click);
+
         this.btnSave.Location = new System.Drawing.Point(140, 300); this.btnSave.Size = new System.Drawing.Size(110, 32); this.btnSave.TabIndex = 7; this.btnSave.Text = "Save"; this.btnSave.UseVisualStyleBackColor = false;
         this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
 
@@ -56,7 +64,7 @@ partial class ServerConfigView : Form
         this.Controls.Add(this.lblDatabase); this.Controls.Add(this.txtDatabase);
         this.Controls.Add(this.lblUser); this.Controls.Add(this.txtUser);
         this.Controls.Add(this.lblPassword); this.Controls.Add(this.txtPassword);
-        this.Controls.Add(this.chkActive); this.Controls.Add(this.btnSave);
+        this.Controls.Add(this.chkActive); this.Controls.Add(this.btnSave); this.Controls.Add(this.btnTest);
         this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
         this.MaximizeBox = false;
         this.Name = "ServerConfigView";
@@ -80,4 +88,5 @@ partial class ServerConfigView : Form
     private System.Windows.Forms.TextBox txtPassword;
     private System.Windows.Forms.CheckBox chkActive;
     private System.Windows.Forms.Button btnSave;
+    private System.Windows.Forms.Button btnTest;
 }

@@ -25,6 +25,33 @@ public partial class ServerConfigView : Form
         Text = "Edit Server";
     }
 
+    private async void btnTest_Click(object? sender, EventArgs e)
+    {
+        if (!int.TryParse(txtPort.Text, out int port)) port = 3306;
+        var server = new Model.Entities.ServerModel
+        {
+            Host = txtHost.Text.Trim(),
+            Port = port,
+            Database = txtDatabase.Text.Trim(),
+            User = txtUser.Text.Trim(),
+            Password = txtPassword.Text
+        };
+        Cursor = Cursors.WaitCursor;
+        try
+        {
+            await using var conn = await Model.DataAccess.DbConnectionFactory.OpenConnectionAsync(server);
+            MessageBox.Show("Connection OK.", "ServerConfig", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Connection failed: {ex.Message}", "ServerConfig", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+        finally
+        {
+            Cursor = Cursors.Default;
+        }
+    }
+
     private async void btnSave_Click(object? sender, EventArgs e)
     {
         if (!int.TryParse(txtPort.Text, out int port)) port = 3306;
