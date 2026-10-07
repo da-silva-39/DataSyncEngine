@@ -12,9 +12,27 @@ public partial class MainView : Form
     {
         if (!_exitRequested)
         {
+            var choice = MessageBox.Show(
+                "Do you want to exit the application or minimize it to the system tray?",
+                "DataSyncEngine",
+                MessageBoxButtons.YesNoCancel,
+                MessageBoxIcon.Question,
+                MessageBoxDefaultButton.Button2);
+            if (choice == DialogResult.Yes)
+            {
+                _exitRequested = true;
+                Application.Exit();
+                return;
+            }
+            if (choice == DialogResult.No)
+            {
+                e.Cancel = true;
+                Hide();
+                notifyIcon.ShowBalloonTip(2000, "DataSyncEngine", "Still running in the system tray.", ToolTipIcon.Info);
+                return;
+            }
             e.Cancel = true;
-            Hide();
-            notifyIcon.ShowBalloonTip(2000, "DataSyncEngine", "Still running in the system tray.", ToolTipIcon.Info);
+            return;
         }
         base.OnFormClosing(e);
     }

@@ -2,6 +2,7 @@ using Controller.Security;
 using Core.Enums;
 using Core.Interfaces;
 using Model.Entities;
+using Model.Entities;
 using Model.Repositories;
 
 namespace Controller.System;
@@ -13,20 +14,20 @@ public class AuthController : IAuthService
 
     private readonly SessionController _session;
     private readonly PasswordHasher _hasher;
-    private readonly Func<UserRepository> _userRepositoryFactory;
+    private readonly Func<Core.Interfaces.IUserRepository<Model.Entities.UserModel>> _userRepositoryFactory;
 
     public bool IsAuthenticated => _session.IsActive;
     public string? CurrentUsername => _session.Username;
     public UserRole? CurrentRole => _session.Role;
 
-    private AuthController(SessionController session, PasswordHasher hasher, Func<UserRepository> userRepositoryFactory)
+    private AuthController(SessionController session, PasswordHasher hasher, Func<Core.Interfaces.IUserRepository<Model.Entities.UserModel>> userRepositoryFactory)
     {
         _session = session;
         _hasher = hasher;
         _userRepositoryFactory = userRepositoryFactory;
     }
 
-    public static AuthController Initialize(SessionController session, PasswordHasher hasher, Func<UserRepository> userRepositoryFactory)
+    public static AuthController Initialize(SessionController session, PasswordHasher hasher, Func<Core.Interfaces.IUserRepository<Model.Entities.UserModel>> userRepositoryFactory)
     {
         lock (_lock)
         {
@@ -41,7 +42,7 @@ public class AuthController : IAuthService
     {
         try
         {
-            UserRepository repo = _userRepositoryFactory();
+            IUserRepository<UserModel> repo = _userRepositoryFactory();
             UserModel? user = await repo.GetByUsernameAsync(username, cancellationToken);
             if (user == null || !user.IsActive) return false;
             if (!_hasher.Verify(password, user.Salt, user.PasswordHash)) return false;
