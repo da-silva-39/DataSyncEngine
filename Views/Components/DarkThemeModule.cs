@@ -1,7 +1,25 @@
+using System.Runtime.InteropServices;
+
 namespace Views.Components;
 
 public static class DarkThemeModule
 {
+    [DllImport("dwmapi.dll")]
+    private static extern int DwmSetWindowAttribute(IntPtr hwnd, int attribute, ref int pvAttribute, int cbAttribute);
+
+    public static void SetDarkTitleBar(Form form)
+    {
+        try
+        {
+            int useDark = 1;
+            DwmSetWindowAttribute(form.Handle, 20, ref useDark, sizeof(int));
+        }
+        catch
+        {
+        }
+    }
+
+
     public static readonly Color BackgroundColor = ColorTranslator.FromHtml("#1E1E1E");
     public static readonly Color PanelColor = ColorTranslator.FromHtml("#2D2D30");
     public static readonly Color TextColor = Color.White;
@@ -21,6 +39,7 @@ public static class DarkThemeModule
             case Form form:
                 form.BackColor = BackgroundColor;
                 form.ForeColor = TextColor;
+                SetDarkTitleBar(form);
                 break;
             case Panel or GroupBox or TabControl or TabPage:
                 control.BackColor = PanelColor;
@@ -30,7 +49,9 @@ public static class DarkThemeModule
                 button.BackColor = AccentColor;
                 button.ForeColor = TextColor;
                 button.FlatStyle = FlatStyle.Flat;
-                button.FlatAppearance.BorderColor = AccentColor;
+                button.FlatAppearance.BorderSize = 0;
+                button.Cursor = Cursors.Hand;
+                button.Padding = new Padding(4);
                 break;
             case TextBox textBox:
                 textBox.BackColor = PanelColor;
@@ -51,6 +72,10 @@ public static class DarkThemeModule
                 grid.DefaultCellStyle.BackColor = BackgroundColor;
                 grid.DefaultCellStyle.ForeColor = TextColor;
                 grid.DefaultCellStyle.SelectionBackColor = AccentColor;
+                grid.AlternatingRowsDefaultCellStyle.BackColor = PanelColor;
+                grid.AlternatingRowsDefaultCellStyle.ForeColor = TextColor;
+                grid.RowTemplate.Height = 28;
+                grid.BorderStyle = BorderStyle.None;
                 break;
             case ComboBox combo:
                 combo.BackColor = PanelColor;

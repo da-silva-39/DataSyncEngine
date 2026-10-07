@@ -6,14 +6,48 @@ namespace Views.Forms;
 public partial class MainView : Form
 {
     private readonly MainViewModel _viewModel;
+    private bool _exitRequested;
+
+    protected override void OnFormClosing(FormClosingEventArgs e)
+    {
+        if (!_exitRequested)
+        {
+            e.Cancel = true;
+            Hide();
+            notifyIcon.ShowBalloonTip(2000, "DataSyncEngine", "Still running in the system tray.", ToolTipIcon.Info);
+        }
+        base.OnFormClosing(e);
+    }
 
     public MainView()
     {
         InitializeComponent();
         DarkThemeModule.Apply(this);
+        Icon = SystemIcons.Shield;
         _viewModel = new MainViewModel(AppServices.Session.Role ?? Core.Enums.UserRole.Operator);
         ApplyRoleLayout();
         WireEvents();
+        UpdateServerInfo();
+        AppServices.HotSwap.ServerChanged += _ => UpdateServerInfo();
+    }
+
+    private void trayShow_Click(object? sender, EventArgs e)
+    {
+        Show();
+        WindowState = FormWindowState.Normal;
+        BringToFront();
+    }
+
+    private void trayExit_Click(object? sender, EventArgs e)
+    {
+        _exitRequested = true;
+        Close();
+        Application.Exit();
+    }
+
+    private void UpdateServerInfo()
+    {
+        lblServerInfo.Text = $"Server: {AppServices.CurrentServer.Name} ({AppServices.CurrentServer.Host}:{AppServices.CurrentServer.Port}) | User: {AppServices.Session.Username} | Role: {AppServices.Session.Role}";
     }
 
     private void ApplyRoleLayout()
@@ -130,6 +164,7 @@ public partial class MainView : Form
             string? user = AppServices.Session.Username;
             AppServices.Auth.Logout();
             if (user != null) await AppServices.AuditLogger.LogLogoutAsync(user);
+            _exitRequested = true;
             Close();
         };
 

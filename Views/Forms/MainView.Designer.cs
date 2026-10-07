@@ -122,6 +122,29 @@ partial class MainView : Form
         this.notifyIcon.Text = "DataSyncEngine";
         this.notifyIcon.Visible = true;
 
+        this.trayMenu = new System.Windows.Forms.ContextMenuStrip();
+        this.trayShow = new System.Windows.Forms.ToolStripMenuItem();
+        this.trayExit = new System.Windows.Forms.ToolStripMenuItem();
+        this.trayMenu.Items.Add(this.trayShow);
+        this.trayMenu.Items.Add(this.trayExit);
+        this.trayShow.Text = "Show";
+        this.trayExit.Text = "Exit";
+        this.trayShow.Click += new System.EventHandler(this.trayShow_Click);
+        this.trayExit.Click += new System.EventHandler(this.trayExit_Click);
+        this.notifyIcon.ContextMenuStrip = this.trayMenu;
+        this.notifyIcon.DoubleClick += new System.EventHandler(this.trayShow_Click);
+
+        this.statusStrip = new System.Windows.Forms.StatusStrip();
+        this.lblServerInfo = new System.Windows.Forms.ToolStripStatusLabel();
+        this.statusStrip.Items.Add(this.lblServerInfo);
+        this.statusStrip.Location = new System.Drawing.Point(0, 597);
+        this.statusStrip.Name = "statusStrip";
+        this.statusStrip.Size = new System.Drawing.Size(980, 22);
+        this.statusStrip.TabIndex = 1;
+        this.lblServerInfo.Name = "lblServerInfo";
+        this.lblServerInfo.Text = "";
+        this.Controls.Add(this.statusStrip);
+
         this.gridFiles.AllowUserToAddRows = false;
         this.gridFiles.AllowUserToDeleteRows = false;
         this.gridFiles.ReadOnly = true;
@@ -279,6 +302,11 @@ partial class MainView : Form
     private System.Windows.Forms.Button btnEditServer;
     private System.Windows.Forms.Button btnSetActive;
     private System.Windows.Forms.Button btnDeleteServer;
+    private System.Windows.Forms.StatusStrip statusStrip;
+    private System.Windows.Forms.ToolStripStatusLabel lblServerInfo;
+    private System.Windows.Forms.ContextMenuStrip trayMenu;
+    private System.Windows.Forms.ToolStripMenuItem trayShow;
+    private System.Windows.Forms.ToolStripMenuItem trayExit;
     private System.Windows.Forms.NotifyIcon notifyIcon;
     private System.Windows.Forms.Label lblStatus;
     private System.Windows.Forms.DataGridView gridFiles;

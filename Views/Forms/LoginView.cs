@@ -11,6 +11,8 @@ public partial class LoginView : Form
     {
         InitializeComponent();
         DarkThemeModule.Apply(this);
+        AcceptButton = btnLogin;
+        Icon = SystemIcons.Shield;
     }
 
     protected override void OnShown(EventArgs e)

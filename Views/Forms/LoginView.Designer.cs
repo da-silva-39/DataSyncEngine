@@ -24,6 +24,8 @@ partial class LoginView : Form
         this.lblError = new System.Windows.Forms.Label();
         this.SuspendLayout();
 
+        this.lblSubtitle = new System.Windows.Forms.Label();
+
         this.lblTitle.AutoSize = true;
         this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold);
         this.lblTitle.Location = new System.Drawing.Point(110, 30);
@@ -31,6 +33,11 @@ partial class LoginView : Form
         this.lblTitle.Size = new System.Drawing.Size(180, 37);
         this.lblTitle.TabIndex = 0;
         this.lblTitle.Text = "DataSyncEngine";
+
+        this.lblSubtitle.AutoSize = true;
+        this.lblSubtitle.Location = new System.Drawing.Point(140, 70);
+        this.lblSubtitle.Name = "lblSubtitle";
+        this.lblSubtitle.Text = "Sign in to continue";
 
         this.lblUser.AutoSize = true;
         this.lblUser.Location = new System.Drawing.Point(60, 100);
@@ -74,6 +81,7 @@ partial class LoginView : Form
         this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
         this.ClientSize = new System.Drawing.Size(420, 290);
         this.Controls.Add(this.lblTitle);
+        this.Controls.Add(this.lblSubtitle);
         this.Controls.Add(this.lblUser);
         this.Controls.Add(this.txtUsername);
         this.Controls.Add(this.lblPassword);
@@ -90,6 +98,7 @@ partial class LoginView : Form
     }
 
     private System.Windows.Forms.Label lblTitle;
+    private System.Windows.Forms.Label lblSubtitle;
     private System.Windows.Forms.Label lblUser;
     private System.Windows.Forms.Label lblPassword;
     private System.Windows.Forms.TextBox txtUsername;
