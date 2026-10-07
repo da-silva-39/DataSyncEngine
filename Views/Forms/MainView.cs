@@ -39,6 +39,14 @@ public partial class MainView : Form
         UpdateDashboard();
     }
 
+    private static void HideColumns(DataGridView grid, params string[] names)
+    {
+        foreach (string name in names)
+        {
+            if (grid.Columns.Contains(name)) grid.Columns[name].Visible = false;
+        }
+    }
+
     private void UpdateDashboard()
     {
         SetCard(cardFiles, _viewModel.Files.Count.ToString());
@@ -272,6 +280,7 @@ public partial class MainView : Form
             await _viewModel.LoadUsersAsync();
             gridUsers.DataSource = null;
             gridUsers.DataSource = _viewModel.Users;
+            HideColumns(gridUsers, "PasswordHash", "Salt");
         };
 
         btnAddUser.Click += (_, _) =>
@@ -311,7 +320,7 @@ public partial class MainView : Form
                 s.IsActive = s.Id == target.Id;
                 await AppServices.Servers.UpdateAsync(s);
             }
-            AppServices.CurrentServer = target;
+            AppServices.HotSwap.SwitchServer(target);
             await AppServices.AuditLogger.LogAsync(Core.Enums.LogAction.ServerSwitch, $"Switched to {target.Name}.");
             gridServers.DataSource = null;
             gridServers.DataSource = _viewModel.Servers;
@@ -332,6 +341,8 @@ public partial class MainView : Form
             await _viewModel.LoadServersAsync();
             gridServers.DataSource = null;
             gridServers.DataSource = _viewModel.Servers;
+            UpdateDashboard();
+            HideColumns(gridServers, "Password");
         };
     }
 }

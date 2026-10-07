@@ -20,7 +20,6 @@ partial class FileExplorerView : Form
         this.btnBrowse = new System.Windows.Forms.Button();
         this.grid = new System.Windows.Forms.DataGridView();
         this.lblStatus = new System.Windows.Forms.Label();
-        this.ctxMenu = new System.Windows.Forms.ContextMenuStrip();
         this.ctxSync = new System.Windows.Forms.ToolStripMenuItem();
         this.ctxHash = new System.Windows.Forms.ToolStripMenuItem();
         this.ctxProps = new System.Windows.Forms.ToolStripMenuItem();
@@ -28,6 +27,8 @@ partial class FileExplorerView : Form
         this.ctxDelete = new System.Windows.Forms.ToolStripMenuItem();
         this.ctxRefresh = new System.Windows.Forms.ToolStripMenuItem();
         this.SuspendLayout();
+        this.components = new System.ComponentModel.Container();
+        this.ctxMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
         ((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
 
         this.lblFolder.AutoSize = true;

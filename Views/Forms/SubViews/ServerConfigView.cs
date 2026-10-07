@@ -75,7 +75,7 @@ public partial class ServerConfigView : Form
                 int id = await AppServices.Servers.InsertAsync(server);
                 MessageBox.Show($"Server saved with id {id}.", "ServerConfig", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            if (server.IsActive) AppServices.CurrentServer = server;
+            if (server.IsActive) AppServices.HotSwap.SwitchServer(server);
             DialogResult = DialogResult.OK;
             Close();
         }
