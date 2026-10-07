@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS files (
     size_bytes BIGINT NOT NULL DEFAULT 0,
     sha256_hash VARCHAR(64) NOT NULL,
     status VARCHAR(16) NOT NULL DEFAULT 'Pending',
-    uploaded_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    uploaded_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     content_blob LONGBLOB,
     KEY ix_files_status (status),
     KEY ix_files_hash (sha256_hash)
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS audit_logs (
     username VARCHAR(64) NOT NULL,
     action VARCHAR(32) NOT NULL,
     details VARCHAR(1024) NOT NULL DEFAULT '',
-    timestamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     KEY ix_audit_username (username),
     KEY ix_audit_timestamp (timestamp)
 ) ENGINE=InnoDB;

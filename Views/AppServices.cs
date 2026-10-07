@@ -16,7 +16,7 @@ public static class AppServices
         Port = 3306,
         Database = "datasync_db",
         User = "root",
-        Password = string.Empty
+        Password = "jose200739"
     };
 
     public static string MasterKey { get; set; } = "DataSyncEngine-MasterKey-2026";

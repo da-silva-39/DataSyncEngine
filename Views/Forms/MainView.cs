@@ -23,6 +23,10 @@ public partial class MainView : Form
             tabControl.TabPages.Remove(tabAudit);
             tabControl.TabPages.Remove(tabAnalytics);
         }
+        if (_viewModel.Role != Core.Enums.UserRole.Admin)
+        {
+            btnAddServer.Visible = false;
+        }
     }
 
     private void WireEvents()
