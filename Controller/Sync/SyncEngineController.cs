@@ -14,11 +14,14 @@ public class SyncEngineController
     private readonly Func<byte[]> _masterKeyProvider;
     private readonly List<string> _pendingResume = new();
 
+    private static readonly string ResumeQueuePath = Path.Combine(AppContext.BaseDirectory, "resume_queue.txt");
+
     public IReadOnlyList<string> PendingResume => _pendingResume;
 
     public void MarkForResume(string path)
     {
         if (!_pendingResume.Contains(path)) _pendingResume.Add(path);
+        SaveQueue();
     }
 
     public event Action<string>? FileProcessed;
@@ -31,6 +34,27 @@ public class SyncEngineController
         _compressor = compressor;
         _fileRepository = fileRepository;
         _masterKeyProvider = masterKeyProvider;
+        try
+        {
+            if (File.Exists(ResumeQueuePath))
+            {
+                _pendingResume.AddRange(File.ReadAllLines(ResumeQueuePath).Where(l => !string.IsNullOrWhiteSpace(l)));
+            }
+        }
+        catch
+        {
+        }
+    }
+
+    private void SaveQueue()
+    {
+        try
+        {
+            File.WriteAllLines(ResumeQueuePath, _pendingResume);
+        }
+        catch
+        {
+        }
     }
 
     public async Task<bool> ProcessFileAsync(FileModel file, byte[] content, CancellationToken cancellationToken = default)
@@ -49,6 +73,7 @@ public class SyncEngineController
         {
             file.Status = SyncStatus.Pending;
             if (!_pendingResume.Contains(file.FilePath)) _pendingResume.Add(file.FilePath);
+            SaveQueue();
             FileFailed?.Invoke(file.FilePath);
             return false;
         }
@@ -73,6 +98,7 @@ public class SyncEngineController
             if (await ProcessFileAsync(model, contentProvider(model), cancellationToken))
             {
                 _pendingResume.Remove(path);
+                SaveQueue();
                 ok++;
             }
         }

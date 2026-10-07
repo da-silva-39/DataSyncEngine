@@ -9,17 +9,24 @@ namespace Views;
 
 public static class AppServices
 {
-    public static ServerModel CurrentServer { get; set; } = new()
-    {
-        Name = "default",
-        Host = "localhost",
-        Port = 3306,
-        Database = "datasync_db",
-        User = "root",
-        Password = "jose200739"
-    };
-
     public static string MasterKey { get; set; } = "DataSyncEngine-MasterKey-2026";
+
+    public static ServerModel CurrentServer { get; set; } = LoadServer();
+
+    private static ServerModel LoadServer()
+    {
+        var s = AppSettings.Load();
+        MasterKey = s.MasterKey;
+        return new ServerModel
+        {
+            Name = s.ServerName,
+            Host = s.ServerHost,
+            Port = s.ServerPort,
+            Database = s.Database,
+            User = s.User,
+            Password = s.Password
+        };
+    }
 
     public static SessionController Session { get; } = new();
     public static PasswordHasher Hasher { get; } = new();
