@@ -50,6 +50,7 @@ public static class DarkThemeModule
             case Form form:
                 form.BackColor = BackgroundColor;
                 form.ForeColor = TextColor;
+                form.Font = new Font("Segoe UI", 9.5F);
                 SetDarkTitleBar(form);
                 break;
             case Panel or GroupBox or TabControl or TabPage:

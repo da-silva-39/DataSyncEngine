@@ -16,6 +16,11 @@ public class SyncEngineController
 
     public IReadOnlyList<string> PendingResume => _pendingResume;
 
+    public void MarkForResume(string path)
+    {
+        if (!_pendingResume.Contains(path)) _pendingResume.Add(path);
+    }
+
     public event Action<string>? FileProcessed;
     public event Action<string>? FileFailed;
 

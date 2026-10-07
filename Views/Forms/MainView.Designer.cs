@@ -100,6 +100,7 @@ partial class MainView : Form
         this.tabSync.Controls.Add(this.btnSync);
         this.tabSync.Controls.Add(this.btnDelete);
         this.tabSync.Controls.Add(this.btnResume);
+        this.tabSync.Controls.Add(this.btnExplorer);
         this.tabSync.Controls.Add(this.btnLogout);
         this.tabSync.Location = new System.Drawing.Point(4, 34);
         this.tabSync.Name = "tabSync";
@@ -141,6 +142,14 @@ partial class MainView : Form
         this.btnResume.TabIndex = 5;
         this.btnResume.Text = "Resume";
         this.btnResume.UseVisualStyleBackColor = false;
+
+        this.btnExplorer = new System.Windows.Forms.Button();
+        this.btnExplorer.Location = new System.Drawing.Point(555, 15);
+        this.btnExplorer.Name = "btnExplorer";
+        this.btnExplorer.Size = new System.Drawing.Size(110, 32);
+        this.btnExplorer.TabIndex = 9;
+        this.btnExplorer.Text = "Explorer";
+        this.btnExplorer.UseVisualStyleBackColor = false;
 
         this.btnLogout.Location = new System.Drawing.Point(850, 15);
         this.btnLogout.Name = "btnLogout";
@@ -387,6 +396,7 @@ partial class MainView : Form
     private System.Windows.Forms.Button btnSync;
     private System.Windows.Forms.Button btnDelete;
     private System.Windows.Forms.Button btnResume;
+    private System.Windows.Forms.Button btnExplorer;
     private System.Windows.Forms.Button btnLogout;
     private System.Windows.Forms.Button btnAddUser;
     private System.Windows.Forms.Button btnDeleteUser;

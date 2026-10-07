@@ -188,6 +188,12 @@ public partial class MainView : Form
             }
         };
 
+        btnExplorer.Click += (_, _) =>
+        {
+            using var explorer = new SubViews.FileExplorerView();
+            explorer.ShowDialog(this);
+        };
+
         btnResume.Click += async (_, _) =>
         {
             var engine = AppServices.SyncEngine;
