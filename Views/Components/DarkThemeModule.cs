@@ -2,10 +2,10 @@ namespace Views.Components;
 
 public static class DarkThemeModule
 {
-    public static readonly Color Background = ColorTranslator.FromHtml("#1E1E1E");
-    public static readonly Color Panel = ColorTranslator.FromHtml("#2D2D30");
-    public static readonly Color Text = Color.White;
-    public static readonly Color Accent = ColorTranslator.FromHtml("#007ACC");
+    public static readonly Color BackgroundColor = ColorTranslator.FromHtml("#1E1E1E");
+    public static readonly Color PanelColor = ColorTranslator.FromHtml("#2D2D30");
+    public static readonly Color TextColor = Color.White;
+    public static readonly Color AccentColor = ColorTranslator.FromHtml("#007ACC");
 
     public static void Apply(Control root)
     {
@@ -19,46 +19,46 @@ public static class DarkThemeModule
         switch (control)
         {
             case Form form:
-                form.BackColor = Background;
-                form.ForeColor = Text;
+                form.BackColor = BackgroundColor;
+                form.ForeColor = TextColor;
                 break;
             case Panel or GroupBox or TabControl or TabPage:
-                control.BackColor = Panel;
-                control.ForeColor = Text;
+                control.BackColor = PanelColor;
+                control.ForeColor = TextColor;
                 break;
             case Button button:
-                button.BackColor = Accent;
-                button.ForeColor = Text;
+                button.BackColor = AccentColor;
+                button.ForeColor = TextColor;
                 button.FlatStyle = FlatStyle.Flat;
-                button.FlatAppearance.BorderColor = Accent;
+                button.FlatAppearance.BorderColor = AccentColor;
                 break;
             case TextBox textBox:
-                textBox.BackColor = Panel;
-                textBox.ForeColor = Text;
+                textBox.BackColor = PanelColor;
+                textBox.ForeColor = TextColor;
                 textBox.BorderStyle = BorderStyle.FixedSingle;
                 break;
             case Label label:
-                label.ForeColor = Text;
+                label.ForeColor = TextColor;
                 label.BackColor = Color.Transparent;
                 break;
             case DataGridView grid:
-                grid.BackgroundColor = Background;
-                grid.ForeColor = Text;
-                grid.GridColor = Panel;
+                grid.BackgroundColor = BackgroundColor;
+                grid.ForeColor = TextColor;
+                grid.GridColor = PanelColor;
                 grid.EnableHeadersVisualStyles = false;
-                grid.ColumnHeadersDefaultCellStyle.BackColor = Panel;
-                grid.ColumnHeadersDefaultCellStyle.ForeColor = Text;
-                grid.DefaultCellStyle.BackColor = Background;
-                grid.DefaultCellStyle.ForeColor = Text;
-                grid.DefaultCellStyle.SelectionBackColor = Accent;
+                grid.ColumnHeadersDefaultCellStyle.BackColor = PanelColor;
+                grid.ColumnHeadersDefaultCellStyle.ForeColor = TextColor;
+                grid.DefaultCellStyle.BackColor = BackgroundColor;
+                grid.DefaultCellStyle.ForeColor = TextColor;
+                grid.DefaultCellStyle.SelectionBackColor = AccentColor;
                 break;
             case ComboBox combo:
-                combo.BackColor = Panel;
-                combo.ForeColor = Text;
+                combo.BackColor = PanelColor;
+                combo.ForeColor = TextColor;
                 break;
             default:
                 if (control.BackColor == SystemColors.Control)
-                    control.BackColor = Background;
+                    control.BackColor = BackgroundColor;
                 break;
         }
 
