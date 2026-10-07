@@ -23,6 +23,8 @@ partial class MainView : Form
         this.btnSelectFolder = new System.Windows.Forms.Button();
         this.btnSync = new System.Windows.Forms.Button();
         this.btnDelete = new System.Windows.Forms.Button();
+        this.btnResume = new System.Windows.Forms.Button();
+        this.btnLogout = new System.Windows.Forms.Button();
         this.lblStatus = new System.Windows.Forms.Label();
         this.gridFiles = new System.Windows.Forms.DataGridView();
         this.notifyIcon = new System.Windows.Forms.NotifyIcon();
@@ -57,6 +59,8 @@ partial class MainView : Form
         this.tabSync.Controls.Add(this.btnSelectFolder);
         this.tabSync.Controls.Add(this.btnSync);
         this.tabSync.Controls.Add(this.btnDelete);
+        this.tabSync.Controls.Add(this.btnResume);
+        this.tabSync.Controls.Add(this.btnLogout);
         this.tabSync.Location = new System.Drawing.Point(4, 34);
         this.tabSync.Name = "tabSync";
         this.tabSync.Padding = new System.Windows.Forms.Padding(3);
@@ -72,7 +76,7 @@ partial class MainView : Form
         this.btnSelectFolder.UseVisualStyleBackColor = false;
 
         this.lblStatus.AutoSize = true;
-        this.lblStatus.Location = new System.Drawing.Point(500, 22);
+        this.lblStatus.Location = new System.Drawing.Point(665, 22);
         this.lblStatus.Name = "lblStatus";
         this.lblStatus.TabIndex = 1;
         this.lblStatus.Text = "Ready.";
@@ -90,6 +94,20 @@ partial class MainView : Form
         this.btnDelete.TabIndex = 4;
         this.btnDelete.Text = "Delete";
         this.btnDelete.UseVisualStyleBackColor = false;
+
+        this.btnResume.Location = new System.Drawing.Point(430, 15);
+        this.btnResume.Name = "btnResume";
+        this.btnResume.Size = new System.Drawing.Size(110, 32);
+        this.btnResume.TabIndex = 5;
+        this.btnResume.Text = "Resume";
+        this.btnResume.UseVisualStyleBackColor = false;
+
+        this.btnLogout.Location = new System.Drawing.Point(850, 15);
+        this.btnLogout.Name = "btnLogout";
+        this.btnLogout.Size = new System.Drawing.Size(110, 32);
+        this.btnLogout.TabIndex = 6;
+        this.btnLogout.Text = "Logout";
+        this.btnLogout.UseVisualStyleBackColor = false;
 
         this.notifyIcon.Icon = System.Drawing.SystemIcons.Application;
         this.notifyIcon.Text = "DataSyncEngine";
@@ -181,6 +199,8 @@ partial class MainView : Form
     private System.Windows.Forms.Button btnSelectFolder;
     private System.Windows.Forms.Button btnSync;
     private System.Windows.Forms.Button btnDelete;
+    private System.Windows.Forms.Button btnResume;
+    private System.Windows.Forms.Button btnLogout;
     private System.Windows.Forms.NotifyIcon notifyIcon;
     private System.Windows.Forms.Label lblStatus;
     private System.Windows.Forms.DataGridView gridFiles;

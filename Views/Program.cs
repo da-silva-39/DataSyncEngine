@@ -7,10 +7,12 @@ static class Program
     {
         ApplicationConfiguration.Initialize();
         AppServices.Initialize();
-        using var login = new Forms.LoginView();
-        if (login.ShowDialog() == DialogResult.OK)
+        while (true)
         {
+            using var login = new Forms.LoginView();
+            if (login.ShowDialog() != DialogResult.OK) return;
             Application.Run(new Forms.MainView());
+            if (AppServices.Session.IsActive) return;
         }
     }
 }

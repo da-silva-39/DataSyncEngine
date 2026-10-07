@@ -67,8 +67,7 @@ public partial class MainView : Form
             Cursor = Cursors.WaitCursor;
             try
             {
-                byte[] Key() => AppServices.Aes.DeriveKey(AppServices.MasterKey);
-                var engine = new Controller.Sync.SyncEngineController(AppServices.Aes, AppServices.Compressor, AppServices.Files, Key);
+                var engine = AppServices.SyncEngine;
                 int ok = await engine.ProcessBatchAsync(pending, f => File.ReadAllBytes(f.FilePath));
                 gridFiles.DataSource = null;
                 gridFiles.DataSource = _viewModel.Files;
@@ -90,6 +89,40 @@ public partial class MainView : Form
             {
                 Cursor = Cursors.Default;
             }
+        };
+
+        btnResume.Click += async (_, _) =>
+        {
+            var engine = AppServices.SyncEngine;
+            if (engine.PendingResume.Count == 0)
+            {
+                lblStatus.Text = "No files marked for resume.";
+                return;
+            }
+            lblStatus.Text = "Resuming...";
+            try
+            {
+                int ok = await engine.ResumePendingAsync(
+                    f => File.ReadAllBytes(f.FilePath),
+                    path => _viewModel.Files.FirstOrDefault(f => f.FilePath.Equals(path, StringComparison.OrdinalIgnoreCase))
+                        ?? new Model.Entities.FileModel { FilePath = path, FileName = Path.GetFileName(path) });
+                gridFiles.DataSource = null;
+                gridFiles.DataSource = _viewModel.Files;
+                lblStatus.Text = $"Resume completed: {ok} file(s).";
+                await AppServices.AuditLogger.LogAsync(Core.Enums.LogAction.SyncCompleted, $"Resume: {ok} files recovered.");
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
+        };
+
+        btnLogout.Click += async (_, _) =>
+        {
+            string? user = AppServices.Session.Username;
+            AppServices.Auth.Logout();
+            if (user != null) await AppServices.AuditLogger.LogLogoutAsync(user);
+            Close();
         };
 
         btnDelete.Click += async (_, _) =>

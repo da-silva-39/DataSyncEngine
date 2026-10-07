@@ -37,10 +37,13 @@ public static class AppServices
 
     public static AuditLoggerController AuditLogger => new(() => Audits, () => Session.Username);
 
+    public static Controller.Sync.SyncEngineController SyncEngine { get; private set; } = null!;
+
     public static void Initialize()
     {
         Auth = AuthController.Initialize(Session, Hasher, () => Users);
         HotSwap = new HotSwapController(CurrentServer, Cache);
         HotSwap.ServerChanged += server => CurrentServer = server;
+        SyncEngine = new Controller.Sync.SyncEngineController(Aes, Compressor, Files, () => Aes.DeriveKey(MasterKey));
     }
 }
