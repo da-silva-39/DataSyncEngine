@@ -160,5 +160,12 @@ public partial class MainView : Form
             gridAudit.DataSource = null;
             gridAudit.DataSource = _viewModel.AuditEntries;
         };
+
+        tabServers.Enter += async (_, _) =>
+        {
+            await _viewModel.LoadServersAsync();
+            gridServers.DataSource = null;
+            gridServers.DataSource = _viewModel.Servers;
+        };
     }
 }
