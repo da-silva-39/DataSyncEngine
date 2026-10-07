@@ -26,6 +26,10 @@ public partial class MainView : Form
         if (_viewModel.Role != Core.Enums.UserRole.Admin)
         {
             btnAddServer.Visible = false;
+            btnEditServer.Visible = false;
+            btnSetActive.Visible = false;
+            btnDeleteServer.Visible = false;
+            tabControl.TabPages.Remove(tabUsers);
         }
     }
 
@@ -163,6 +167,66 @@ public partial class MainView : Form
             await _viewModel.LoadAuditAsync();
             gridAudit.DataSource = null;
             gridAudit.DataSource = _viewModel.AuditEntries;
+        };
+
+        tabUsers.Enter += async (_, _) =>
+        {
+            await _viewModel.LoadUsersAsync();
+            gridUsers.DataSource = null;
+            gridUsers.DataSource = _viewModel.Users;
+        };
+
+        btnAddUser.Click += (_, _) =>
+        {
+            using var dialog = new SubViews.UserConfigView();
+            dialog.ShowDialog(this);
+        };
+
+        btnDeleteUser.Click += async (_, _) =>
+        {
+            if (gridUsers.CurrentRow?.DataBoundItem is not Model.Entities.UserModel user) return;
+            if (user.Username.Equals(AppServices.Session.Username, StringComparison.OrdinalIgnoreCase))
+            {
+                MessageBox.Show("Cannot delete the logged in user.", "Users", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (MessageBox.Show($"Delete user {user.Username}?", "Users", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
+            await AppServices.Users.DeleteAsync(user.Id);
+            await _viewModel.LoadUsersAsync();
+            gridUsers.DataSource = null;
+            gridUsers.DataSource = _viewModel.Users;
+            await AppServices.AuditLogger.LogAsync(Core.Enums.LogAction.FileDelete, $"User {user.Username} deleted.");
+        };
+
+        btnEditServer.Click += (_, _) =>
+        {
+            if (gridServers.CurrentRow?.DataBoundItem is not Model.Entities.ServerModel server) return;
+            using var dialog = new SubViews.ServerConfigView(server);
+            dialog.ShowDialog(this);
+        };
+
+        btnSetActive.Click += async (_, _) =>
+        {
+            if (gridServers.CurrentRow?.DataBoundItem is not Model.Entities.ServerModel target) return;
+            foreach (var s in _viewModel.Servers)
+            {
+                s.IsActive = s.Id == target.Id;
+                await AppServices.Servers.UpdateAsync(s);
+            }
+            AppServices.CurrentServer = target;
+            await AppServices.AuditLogger.LogAsync(Core.Enums.LogAction.ServerSwitch, $"Switched to {target.Name}.");
+            gridServers.DataSource = null;
+            gridServers.DataSource = _viewModel.Servers;
+        };
+
+        btnDeleteServer.Click += async (_, _) =>
+        {
+            if (gridServers.CurrentRow?.DataBoundItem is not Model.Entities.ServerModel server) return;
+            if (MessageBox.Show($"Delete server {server.Name}?", "Servers", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
+            await AppServices.Servers.DeleteAsync(server.Id);
+            await _viewModel.LoadServersAsync();
+            gridServers.DataSource = null;
+            gridServers.DataSource = _viewModel.Servers;
         };
 
         tabServers.Enter += async (_, _) =>

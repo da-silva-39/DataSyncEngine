@@ -11,9 +11,23 @@ public class MainViewModel
     public List<AuditLogModel> AuditEntries { get; } = new();
     public List<ServerModel> Servers { get; } = new();
 
+    public List<UserModel> Users { get; } = new();
+
     public MainViewModel(UserRole role)
     {
         Role = role;
+    }
+
+    public async Task LoadUsersAsync()
+    {
+        Users.Clear();
+        try
+        {
+            Users.AddRange(await AppServices.Users.GetAllAsync());
+        }
+        catch
+        {
+        }
     }
 
     public async Task ScanFolderAsync(string path, Controller.Sync.DirectoryScannerController scanner)
