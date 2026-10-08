@@ -21,6 +21,7 @@ public partial class MainView : Form
             gridFiles.DataSource = null;
             gridFiles.DataSource = _viewModel.Files;
             UpdateDashboard();
+            txtFilter_TextChanged(txtFilter, EventArgs.Empty);
             int synced = _viewModel.Files.Count(f => f.Status == Core.Enums.SyncStatus.Synced);
             int pending = _viewModel.Files.Count(f => f.Status == Core.Enums.SyncStatus.Pending);
             lblStatus.Text = $"Scanned {_viewModel.Files.Count} files. Synced: {synced}, Pending: {pending}";

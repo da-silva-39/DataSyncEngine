@@ -66,6 +66,7 @@ public class SyncEngineController
             await _fileRepository.InsertWithBlobAsync(file, compressed, cancellationToken);
             await SaveColdStorageAsync(file, compressed, cancellationToken);
             file.Status = SyncStatus.Synced;
+            if (_pendingResume.Remove(file.FilePath)) SaveQueue();
             FileProcessed?.Invoke(file.FilePath);
             return true;
         }

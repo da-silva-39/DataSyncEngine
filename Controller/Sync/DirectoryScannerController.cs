@@ -31,22 +31,46 @@ public class DirectoryScannerController
             stored = Array.Empty<FileModel>();
         }
 
-        var byPath = stored.ToDictionary(f => f.FilePath, f => f, StringComparer.OrdinalIgnoreCase);
-
-        foreach (string path in Directory.EnumerateFiles(directory, "*", SearchOption.AllDirectories))
+        var byPath = new Dictionary<string, FileModel>(StringComparer.OrdinalIgnoreCase);
+        foreach (FileModel f in stored)
         {
-            string hash;
-            long size;
+            byPath.TryAdd(f.FilePath, f);
+        }
+
+        var pending = new Stack<string>();
+        pending.Push(directory);
+        while (pending.Count > 0)
+        {
+            string current = pending.Pop();
+            string[] subdirs = Array.Empty<string>();
+            string[] files = Array.Empty<string>();
             try
             {
-                await using FileStream stream = File.OpenRead(path);
-                hash = await _sha256.ComputeHashAsync(stream, cancellationToken);
-                size = stream.Length;
+                subdirs = Directory.GetDirectories(current);
+                files = Directory.GetFiles(current);
             }
-            catch (IOException)
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
             {
                 continue;
             }
+            foreach (string sub in subdirs) pending.Push(sub);
+            foreach (string path in files)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                string hash;
+                long size;
+                DateTime modified;
+                try
+                {
+                    await using FileStream stream = File.OpenRead(path);
+                    hash = await _sha256.ComputeHashAsync(stream, cancellationToken);
+                    size = stream.Length;
+                    modified = File.GetLastWriteTimeUtc(path);
+                }
+                catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+                {
+                    continue;
+                }
 
             SyncStatus status;
             if (byPath.TryGetValue(path, out FileModel? existing))
@@ -61,8 +85,9 @@ public class DirectoryScannerController
                 SizeBytes = size,
                 Sha256Hash = hash,
                 Status = status,
-                UploadedAt = File.GetLastWriteTimeUtc(path)
+                UploadedAt = modified
             });
+            }
         }
         return results;
     }
