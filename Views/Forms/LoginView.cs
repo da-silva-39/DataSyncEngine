@@ -12,7 +12,10 @@ public partial class LoginView : Form
         InitializeComponent();
         DarkThemeModule.Apply(this);
         AcceptButton = btnLogin;
-        Icon = AppIcon.Create();
+        if (!DarkThemeModule.IsDesignTime)
+        {
+            Icon = AppIcon.Create();
+        }
     }
 
     protected override void OnShown(EventArgs e)

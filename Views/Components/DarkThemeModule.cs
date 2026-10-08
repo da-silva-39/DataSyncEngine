@@ -9,6 +9,7 @@ public static class DarkThemeModule
 
     public static void SetDarkTitleBar(Form form)
     {
+        if (IsDesignTime) return;
         try
         {
             int useDark = IsDark ? 1 : 0;
@@ -26,6 +27,8 @@ public static class DarkThemeModule
     public static Color AccentColor { get; private set; } = ColorTranslator.FromHtml("#007ACC");
 
     public static bool IsDark { get; private set; } = true;
+
+    public static bool IsDesignTime => System.ComponentModel.LicenseManager.UsageMode == System.ComponentModel.LicenseUsageMode.Designtime;
 
     public static void SetTheme(bool dark)
     {

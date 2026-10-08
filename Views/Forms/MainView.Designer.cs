@@ -89,10 +89,86 @@ partial class MainView : Form
         this.lblDashTitle.Name = "lblDashTitle";
         this.lblDashTitle.Text = "Overview";
 
-        SetupCard(this.cardFiles, "All files", 25);
-        SetupCard(this.cardSynced, "Synced", 268);
-        SetupCard(this.cardPending, "Pending", 511);
-        SetupCard(this.cardServers, "Servers", 754);
+        this.lblFilesCap = new System.Windows.Forms.Label();
+        this.lblFilesVal = new System.Windows.Forms.Label();
+        this.lblSyncedCap = new System.Windows.Forms.Label();
+        this.lblSyncedVal = new System.Windows.Forms.Label();
+        this.lblPendingCap = new System.Windows.Forms.Label();
+        this.lblPendingVal = new System.Windows.Forms.Label();
+        this.lblServersCap = new System.Windows.Forms.Label();
+        this.lblServersVal = new System.Windows.Forms.Label();
+
+        this.cardFiles.Location = new System.Drawing.Point(25, 70);
+        this.cardFiles.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+        this.cardFiles.Name = "cardFiles";
+        this.cardFiles.Size = new System.Drawing.Size(220, 110);
+        this.cardFiles.TabIndex = 1;
+        this.lblFilesCap.AutoSize = true;
+        this.lblFilesCap.Location = new System.Drawing.Point(15, 15);
+        this.lblFilesCap.Name = "lblFilesCap";
+        this.lblFilesCap.Text = "All files";
+        this.lblFilesVal.AutoSize = true;
+        this.lblFilesVal.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold);
+        this.lblFilesVal.ForeColor = System.Drawing.Color.FromArgb(0, 122, 204);
+        this.lblFilesVal.Location = new System.Drawing.Point(15, 50);
+        this.lblFilesVal.Name = "lblFilesVal";
+        this.lblFilesVal.Text = "0";
+        this.cardFiles.Controls.Add(this.lblFilesCap);
+        this.cardFiles.Controls.Add(this.lblFilesVal);
+
+        this.cardSynced.Location = new System.Drawing.Point(268, 70);
+        this.cardSynced.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+        this.cardSynced.Name = "cardSynced";
+        this.cardSynced.Size = new System.Drawing.Size(220, 110);
+        this.cardSynced.TabIndex = 2;
+        this.lblSyncedCap.AutoSize = true;
+        this.lblSyncedCap.Location = new System.Drawing.Point(15, 15);
+        this.lblSyncedCap.Name = "lblSyncedCap";
+        this.lblSyncedCap.Text = "Synced";
+        this.lblSyncedVal.AutoSize = true;
+        this.lblSyncedVal.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold);
+        this.lblSyncedVal.ForeColor = System.Drawing.Color.FromArgb(0, 122, 204);
+        this.lblSyncedVal.Location = new System.Drawing.Point(15, 50);
+        this.lblSyncedVal.Name = "lblSyncedVal";
+        this.lblSyncedVal.Text = "0";
+        this.cardSynced.Controls.Add(this.lblSyncedCap);
+        this.cardSynced.Controls.Add(this.lblSyncedVal);
+
+        this.cardPending.Location = new System.Drawing.Point(511, 70);
+        this.cardPending.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+        this.cardPending.Name = "cardPending";
+        this.cardPending.Size = new System.Drawing.Size(220, 110);
+        this.cardPending.TabIndex = 3;
+        this.lblPendingCap.AutoSize = true;
+        this.lblPendingCap.Location = new System.Drawing.Point(15, 15);
+        this.lblPendingCap.Name = "lblPendingCap";
+        this.lblPendingCap.Text = "Pending";
+        this.lblPendingVal.AutoSize = true;
+        this.lblPendingVal.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold);
+        this.lblPendingVal.ForeColor = System.Drawing.Color.FromArgb(0, 122, 204);
+        this.lblPendingVal.Location = new System.Drawing.Point(15, 50);
+        this.lblPendingVal.Name = "lblPendingVal";
+        this.lblPendingVal.Text = "0";
+        this.cardPending.Controls.Add(this.lblPendingCap);
+        this.cardPending.Controls.Add(this.lblPendingVal);
+
+        this.cardServers.Location = new System.Drawing.Point(754, 70);
+        this.cardServers.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+        this.cardServers.Name = "cardServers";
+        this.cardServers.Size = new System.Drawing.Size(220, 110);
+        this.cardServers.TabIndex = 4;
+        this.lblServersCap.AutoSize = true;
+        this.lblServersCap.Location = new System.Drawing.Point(15, 15);
+        this.lblServersCap.Name = "lblServersCap";
+        this.lblServersCap.Text = "Servers";
+        this.lblServersVal.AutoSize = true;
+        this.lblServersVal.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold);
+        this.lblServersVal.ForeColor = System.Drawing.Color.FromArgb(0, 122, 204);
+        this.lblServersVal.Location = new System.Drawing.Point(15, 50);
+        this.lblServersVal.Name = "lblServersVal";
+        this.lblServersVal.Text = "0";
+        this.cardServers.Controls.Add(this.lblServersCap);
+        this.cardServers.Controls.Add(this.lblServersVal);
 
         this.tabSync.Controls.Add(this.gridFiles);
         this.tabSync.Controls.Add(this.lblStatus);
@@ -162,7 +238,7 @@ partial class MainView : Form
         this.notifyIcon.Text = "DataSyncEngine";
         this.notifyIcon.Visible = true;
 
-        this.trayMenu = new System.Windows.Forms.ContextMenuStrip();
+        this.trayMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
         this.trayShow = new System.Windows.Forms.ToolStripMenuItem();
         this.trayExit = new System.Windows.Forms.ToolStripMenuItem();
         this.trayMenu.Items.Add(this.trayShow);
@@ -356,38 +432,21 @@ partial class MainView : Form
         this.ResumeLayout(false);
     }
 
-    private void SetupCard(System.Windows.Forms.Panel card, string caption, int x)
-    {
-        card.Location = new System.Drawing.Point(x, 70);
-        card.Size = new System.Drawing.Size(220, 110);
-        card.Name = caption;
-        var lblCaption = new System.Windows.Forms.Label
-        {
-            AutoSize = true,
-            Location = new System.Drawing.Point(15, 15),
-            Text = caption,
-            Name = "lblCaption"
-        };
-        var lblValue = new System.Windows.Forms.Label
-        {
-            AutoSize = true,
-            Location = new System.Drawing.Point(15, 50),
-            Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold),
-            Text = "0",
-            Name = "lblValue",
-            ForeColor = System.Drawing.Color.FromArgb(0, 122, 204)
-        };
-        card.Controls.Add(lblCaption);
-        card.Controls.Add(lblValue);
-    }
-
     private System.Windows.Forms.TabControl tabControl;
     private System.Windows.Forms.TabPage tabDashboard;
     private System.Windows.Forms.TabPage tabSync;
     private System.Windows.Forms.Panel cardFiles;
+    private System.Windows.Forms.Label lblFilesCap;
+    private System.Windows.Forms.Label lblFilesVal;
     private System.Windows.Forms.Panel cardSynced;
+    private System.Windows.Forms.Label lblSyncedCap;
+    private System.Windows.Forms.Label lblSyncedVal;
     private System.Windows.Forms.Panel cardPending;
+    private System.Windows.Forms.Label lblPendingCap;
+    private System.Windows.Forms.Label lblPendingVal;
     private System.Windows.Forms.Panel cardServers;
+    private System.Windows.Forms.Label lblServersCap;
+    private System.Windows.Forms.Label lblServersVal;
     private System.Windows.Forms.Label lblDashTitle;
     private System.Windows.Forms.TabPage tabServers;
     private System.Windows.Forms.TabPage tabAudit;

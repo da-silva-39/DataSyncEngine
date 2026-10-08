@@ -41,8 +41,11 @@ public partial class MainView : Form
     {
         InitializeComponent();
         DarkThemeModule.Apply(this);
-        Icon = AppIcon.Create();
-        notifyIcon.Icon = AppIcon.Create();
+        if (!DarkThemeModule.IsDesignTime)
+        {
+            Icon = AppIcon.Create();
+            notifyIcon.Icon = AppIcon.Create();
+        }
         _viewModel = new MainViewModel(AppServices.Session.Role ?? Core.Enums.UserRole.Operator);
         ApplyRoleLayout();
         WireEvents();
@@ -67,18 +70,10 @@ public partial class MainView : Form
 
     private void UpdateDashboard()
     {
-        SetCard(cardFiles, _viewModel.Files.Count.ToString());
-        SetCard(cardSynced, _viewModel.Files.Count(f => f.Status == Core.Enums.SyncStatus.Synced).ToString());
-        SetCard(cardPending, _viewModel.Files.Count(f => f.Status == Core.Enums.SyncStatus.Pending).ToString());
-        SetCard(cardServers, _viewModel.Servers.Count.ToString());
-    }
-
-    private static void SetCard(System.Windows.Forms.Panel card, string value)
-    {
-        foreach (Control c in card.Controls)
-        {
-            if (c.Name == "lblValue") c.Text = value;
-        }
+        lblFilesVal.Text = _viewModel.Files.Count.ToString();
+        lblSyncedVal.Text = _viewModel.Files.Count(f => f.Status == Core.Enums.SyncStatus.Synced).ToString();
+        lblPendingVal.Text = _viewModel.Files.Count(f => f.Status == Core.Enums.SyncStatus.Pending).ToString();
+        lblServersVal.Text = _viewModel.Servers.Count.ToString();
     }
 
     private void themeDarkItem_Click(object? sender, EventArgs e)
