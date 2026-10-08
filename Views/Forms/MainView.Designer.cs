@@ -376,6 +376,37 @@ partial class MainView : Form
         this.lblAnalytics.Name = "lblAnalytics";
         this.lblAnalytics.Text = "Analytics dashboard (Admin only).";
 
+        this.lblAnaTotal = new System.Windows.Forms.Label();
+        this.lblAnaSynced = new System.Windows.Forms.Label();
+        this.lblAnaPending = new System.Windows.Forms.Label();
+        this.lblAnaModified = new System.Windows.Forms.Label();
+        this.lblAnaBytes = new System.Windows.Forms.Label();
+        this.lblAnaTotal.AutoSize = true;
+        this.lblAnaTotal.Location = new System.Drawing.Point(20, 60);
+        this.lblAnaTotal.Name = "lblAnaTotal";
+        this.lblAnaTotal.Text = "Total files: 0";
+        this.lblAnaSynced.AutoSize = true;
+        this.lblAnaSynced.Location = new System.Drawing.Point(20, 90);
+        this.lblAnaSynced.Name = "lblAnaSynced";
+        this.lblAnaSynced.Text = "Synced: 0";
+        this.lblAnaPending.AutoSize = true;
+        this.lblAnaPending.Location = new System.Drawing.Point(20, 120);
+        this.lblAnaPending.Name = "lblAnaPending";
+        this.lblAnaPending.Text = "Pending: 0";
+        this.lblAnaModified.AutoSize = true;
+        this.lblAnaModified.Location = new System.Drawing.Point(20, 150);
+        this.lblAnaModified.Name = "lblAnaModified";
+        this.lblAnaModified.Text = "Modified: 0";
+        this.lblAnaBytes.AutoSize = true;
+        this.lblAnaBytes.Location = new System.Drawing.Point(20, 180);
+        this.lblAnaBytes.Name = "lblAnaBytes";
+        this.lblAnaBytes.Text = "Total size: 0 bytes";
+        this.tabAnalytics.Controls.Add(this.lblAnaTotal);
+        this.tabAnalytics.Controls.Add(this.lblAnaSynced);
+        this.tabAnalytics.Controls.Add(this.lblAnaPending);
+        this.tabAnalytics.Controls.Add(this.lblAnaModified);
+        this.tabAnalytics.Controls.Add(this.lblAnaBytes);
+
         this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
         this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
         this.ClientSize = new System.Drawing.Size(980, 620);
@@ -481,4 +512,9 @@ partial class MainView : Form
     private System.Windows.Forms.DataGridView gridServers;
     private System.Windows.Forms.DataGridView gridAudit;
     private System.Windows.Forms.Label lblAnalytics;
+    private System.Windows.Forms.Label lblAnaTotal;
+    private System.Windows.Forms.Label lblAnaSynced;
+    private System.Windows.Forms.Label lblAnaPending;
+    private System.Windows.Forms.Label lblAnaModified;
+    private System.Windows.Forms.Label lblAnaBytes;
 }

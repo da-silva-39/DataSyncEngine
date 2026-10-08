@@ -266,6 +266,8 @@ public partial class MainView : Form
                 }
             }
 
+            if (MessageBox.Show($"Delete {file.FileName} from the server?", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes) return;
+
             try
             {
                 if (file.Id > 0) await AppServices.Files.DeleteAsync(file.Id);
@@ -279,6 +281,15 @@ public partial class MainView : Form
             {
                 notifyIcon.ShowBalloonTip(5000, "DataSyncEngine", $"Delete failed: {ex.Message}", ToolTipIcon.Error);
             }
+        };
+
+        tabAnalytics.Enter += (_, _) =>
+        {
+            lblAnaTotal.Text = $"Total files: {_viewModel.Files.Count}";
+            lblAnaSynced.Text = $"Synced: {_viewModel.Files.Count(f => f.Status == Core.Enums.SyncStatus.Synced)}";
+            lblAnaPending.Text = $"Pending: {_viewModel.Files.Count(f => f.Status == Core.Enums.SyncStatus.Pending)}";
+            lblAnaModified.Text = $"Modified: {_viewModel.Files.Count(f => f.Status == Core.Enums.SyncStatus.Modified)}";
+            lblAnaBytes.Text = $"Total size: {_viewModel.Files.Sum(f => f.SizeBytes)} bytes";
         };
 
         tabAudit.Enter += async (_, _) =>
