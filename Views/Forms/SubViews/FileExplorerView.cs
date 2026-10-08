@@ -36,7 +36,8 @@ public partial class FileExplorerView : Form
     {
         if (SelectedFile is not { } file) return;
         var engine = AppServices.SyncEngine;
-        bool ok = await engine.ProcessFileAsync(file, File.ReadAllBytes(file.FilePath));
+        lblStatus.Text = "Synchronizing...";
+        bool ok = await Task.Run(() => engine.ProcessFileAsync(file, File.ReadAllBytes(file.FilePath)));
         grid.Refresh();
         lblStatus.Text = ok ? $"{file.FileName} synchronized." : $"{file.FileName} marked for resume.";
     }
@@ -64,10 +65,11 @@ public partial class FileExplorerView : Form
         var engine = AppServices.SyncEngine;
         engine.MarkForResume(file.FilePath);
         file.Status = Core.Enums.SyncStatus.Pending;
-        int ok = await engine.ResumePendingAsync(
+        lblStatus.Text = "Resuming...";
+        int ok = await Task.Run(() => engine.ResumePendingAsync(
             f => File.ReadAllBytes(f.FilePath),
             path => _files.FirstOrDefault(f => f.FilePath.Equals(path, StringComparison.OrdinalIgnoreCase))
-                ?? new Model.Entities.FileModel { FilePath = path, FileName = Path.GetFileName(path) });
+                ?? new Model.Entities.FileModel { FilePath = path, FileName = Path.GetFileName(path) }));
         grid.Refresh();
         lblStatus.Text = $"Resume: {ok} file(s) recovered.";
     }

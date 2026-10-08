@@ -32,8 +32,8 @@ public class MainViewModel
 
     public async Task ScanFolderAsync(string path, Controller.Sync.DirectoryScannerController scanner)
     {
+        IReadOnlyList<FileModel> scanned = await Task.Run(() => scanner.ScanAsync(path));
         Files.Clear();
-        IReadOnlyList<FileModel> scanned = await scanner.ScanAsync(path);
         Files.AddRange(scanned);
     }
 

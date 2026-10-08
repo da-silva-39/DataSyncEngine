@@ -124,6 +124,16 @@ public partial class MainView : Form
         lblServersVal.Text = _viewModel.Servers.Count.ToString();
     }
 
+    private void TickProgress()
+    {
+        if (progressBar.InvokeRequired)
+        {
+            progressBar.Invoke(new Action(TickProgress));
+            return;
+        }
+        if (progressBar.Value < progressBar.Maximum) progressBar.Value++;
+    }
+
     private void themeDarkItem_Click(object? sender, EventArgs e)
     {
         DarkThemeModule.SetTheme(true);
@@ -217,12 +227,12 @@ public partial class MainView : Form
             progressBar.Value = 0;
             progressBar.Maximum = pending.Count;
             var engine = AppServices.SyncEngine;
-            Action<string> tick = _ => { if (progressBar.Value < progressBar.Maximum) progressBar.Value++; };
+            Action<string> tick = _ => TickProgress();
             engine.FileProcessed += tick;
             engine.FileFailed += tick;
             try
             {
-                int ok = await engine.ProcessBatchAsync(pending, f => File.ReadAllBytes(f.FilePath));
+                int ok = await Task.Run(() => engine.ProcessBatchAsync(pending, f => File.ReadAllBytes(f.FilePath)));
                 gridFiles.DataSource = null;
                 gridFiles.DataSource = _viewModel.Files;
                 UpdateDashboard();
@@ -263,12 +273,13 @@ public partial class MainView : Form
                 return;
             }
             lblStatus.Text = "Resuming...";
+            Cursor = Cursors.WaitCursor;
             try
             {
-                int ok = await engine.ResumePendingAsync(
+                int ok = await Task.Run(() => engine.ResumePendingAsync(
                     f => File.ReadAllBytes(f.FilePath),
                     path => _viewModel.Files.FirstOrDefault(f => f.FilePath.Equals(path, StringComparison.OrdinalIgnoreCase))
-                        ?? new Model.Entities.FileModel { FilePath = path, FileName = Path.GetFileName(path) });
+                        ?? new Model.Entities.FileModel { FilePath = path, FileName = Path.GetFileName(path) }));
                 gridFiles.DataSource = null;
                 gridFiles.DataSource = _viewModel.Files;
                 UpdateDashboard();
