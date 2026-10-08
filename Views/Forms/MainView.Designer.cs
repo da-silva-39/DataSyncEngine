@@ -191,6 +191,7 @@ partial class MainView : Form
         this.btnSelectFolder.TabIndex = 0;
         this.btnSelectFolder.Text = "Select Folder";
         this.btnSelectFolder.UseVisualStyleBackColor = false;
+        this.btnSelectFolder.AccessibleName = "Select folder to scan";
 
         this.lblStatus.AutoSize = true;
         this.lblStatus.Location = new System.Drawing.Point(510, 62);
@@ -203,6 +204,7 @@ partial class MainView : Form
         this.btnSync.Size = new System.Drawing.Size(110, 32);
         this.btnSync.TabIndex = 3;
         this.btnSync.Text = "Sync";
+        this.btnSync.AccessibleName = "Synchronize pending files";
         this.btnSync.UseVisualStyleBackColor = false;
 
         this.btnDelete.Location = new System.Drawing.Point(305, 15);
@@ -210,6 +212,7 @@ partial class MainView : Form
         this.btnDelete.Size = new System.Drawing.Size(110, 32);
         this.btnDelete.TabIndex = 4;
         this.btnDelete.Text = "Delete";
+        this.btnDelete.AccessibleName = "Delete selected file";
         this.btnDelete.UseVisualStyleBackColor = false;
 
         this.btnResume.Location = new System.Drawing.Point(430, 15);
@@ -217,6 +220,7 @@ partial class MainView : Form
         this.btnResume.Size = new System.Drawing.Size(110, 32);
         this.btnResume.TabIndex = 5;
         this.btnResume.Text = "Resume";
+        this.btnResume.AccessibleName = "Resume failed uploads";
         this.btnResume.UseVisualStyleBackColor = false;
 
         this.btnExplorer = new System.Windows.Forms.Button();
@@ -225,6 +229,7 @@ partial class MainView : Form
         this.btnExplorer.Size = new System.Drawing.Size(110, 32);
         this.btnExplorer.TabIndex = 9;
         this.btnExplorer.Text = "Explorer";
+        this.btnExplorer.AccessibleName = "Open file explorer";
         this.btnExplorer.UseVisualStyleBackColor = false;
 
         this.btnLogout.Location = new System.Drawing.Point(850, 15);
@@ -232,6 +237,7 @@ partial class MainView : Form
         this.btnLogout.Size = new System.Drawing.Size(110, 32);
         this.btnLogout.TabIndex = 6;
         this.btnLogout.Text = "Logout";
+        this.btnLogout.AccessibleName = "Log out";
         this.btnLogout.UseVisualStyleBackColor = false;
 
         this.notifyIcon.Icon = System.Drawing.SystemIcons.Application;
@@ -247,6 +253,10 @@ partial class MainView : Form
         this.trayExit.Text = "Exit";
         this.trayShow.Click += new System.EventHandler(this.trayShow_Click);
         this.trayExit.Click += new System.EventHandler(this.trayExit_Click);
+        this.trayAbout = new System.Windows.Forms.ToolStripMenuItem();
+        this.trayAbout.Text = "About";
+        this.trayAbout.Click += new System.EventHandler(this.trayAbout_Click);
+        this.trayMenu.Items.Add(this.trayAbout);
         this.notifyIcon.ContextMenuStrip = this.trayMenu;
         this.notifyIcon.DoubleClick += new System.EventHandler(this.trayShow_Click);
 
@@ -278,6 +288,7 @@ partial class MainView : Form
         this.txtFilter.Name = "txtFilter";
         this.txtFilter.Size = new System.Drawing.Size(250, 27);
         this.txtFilter.TabIndex = 7;
+        this.txtFilter.AccessibleName = "Filter files";
         this.txtFilter.PlaceholderText = "Type to filter files...";
         this.txtFilter.TextChanged += new System.EventHandler(this.txtFilter_TextChanged);
         this.tabSync.Controls.Add(this.txtFilter);
@@ -414,6 +425,18 @@ partial class MainView : Form
         this.Name = "MainView";
         this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
         this.Text = "DataSyncEngine";
+        this.KeyPreview = true;
+        this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainView_KeyDown);
+
+        this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+        this.toolTip.SetToolTip(this.btnSelectFolder, "Choose a folder to scan");
+        this.toolTip.SetToolTip(this.btnSync, "Upload pending files (Ctrl+S)");
+        this.toolTip.SetToolTip(this.btnDelete, "Delete the selected file (Del)");
+        this.toolTip.SetToolTip(this.btnResume, "Resume failed uploads");
+        this.toolTip.SetToolTip(this.btnExplorer, "Open the file explorer");
+        this.toolTip.SetToolTip(this.btnLogout, "Log out of the application");
+        this.toolTip.SetToolTip(this.txtFilter, "Type to filter files (Ctrl+F)");
+        this.toolTip.SetToolTip(this.progressBar, "Synchronization progress");
         this.tabControl.ResumeLayout(false);
         this.tabSync.ResumeLayout(false);
         this.tabSync.PerformLayout();
@@ -502,6 +525,8 @@ partial class MainView : Form
     private System.Windows.Forms.ToolStripMenuItem themeLightItem;
     private System.Windows.Forms.TextBox txtFilter;
     private System.Windows.Forms.ProgressBar progressBar;
+    private System.Windows.Forms.ToolTip toolTip;
+    private System.Windows.Forms.ToolStripMenuItem trayAbout;
     private System.Windows.Forms.ContextMenuStrip trayMenu;
     private System.Windows.Forms.ToolStripMenuItem trayShow;
     private System.Windows.Forms.ToolStripMenuItem trayExit;

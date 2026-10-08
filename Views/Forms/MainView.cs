@@ -7,6 +7,54 @@ public partial class MainView : Form
 {
     private readonly MainViewModel _viewModel;
     private bool _exitRequested;
+    private string? _lastFolder;
+
+    private async Task RefreshFolderAsync(string path)
+    {
+        _lastFolder = path;
+        lblStatus.Text = "Scanning...";
+        Cursor = Cursors.WaitCursor;
+        try
+        {
+            var scanner = new Controller.Sync.DirectoryScannerController(AppServices.Sha256, AppServices.Files);
+            await _viewModel.ScanFolderAsync(path, scanner);
+            gridFiles.DataSource = null;
+            gridFiles.DataSource = _viewModel.Files;
+            UpdateDashboard();
+            int synced = _viewModel.Files.Count(f => f.Status == Core.Enums.SyncStatus.Synced);
+            int pending = _viewModel.Files.Count(f => f.Status == Core.Enums.SyncStatus.Pending);
+            lblStatus.Text = $"Scanned {_viewModel.Files.Count} files. Synced: {synced}, Pending: {pending}";
+        }
+        finally
+        {
+            Cursor = Cursors.Default;
+        }
+    }
+
+    private async void MainView_KeyDown(object? sender, KeyEventArgs e)
+    {
+        if (e.KeyCode == Keys.F5 && _lastFolder != null)
+        {
+            e.Handled = true;
+            await RefreshFolderAsync(_lastFolder);
+        }
+        else if (e.Control && e.KeyCode == Keys.S)
+        {
+            e.Handled = true;
+            btnSync.PerformClick();
+        }
+        else if (e.KeyCode == Keys.Delete && gridFiles.Focused)
+        {
+            e.Handled = true;
+            btnDelete.PerformClick();
+        }
+        else if (e.Control && e.KeyCode == Keys.F)
+        {
+            e.Handled = true;
+            tabControl.SelectedTab = tabSync;
+            txtFilter.Focus();
+        }
+    }
 
     protected override void OnFormClosing(FormClosingEventArgs e)
     {
@@ -98,6 +146,13 @@ public partial class MainView : Form
         gridFiles.DataSource = term.Length == 0 ? _viewModel.Files : filtered;
     }
 
+    private void trayAbout_Click(object? sender, EventArgs e)
+    {
+        trayShow_Click(sender, e);
+        using var about = new SubViews.AboutView();
+        about.ShowDialog(this);
+    }
+
     private void trayShow_Click(object? sender, EventArgs e)
     {
         Show();
@@ -140,23 +195,7 @@ public partial class MainView : Form
         {
             using var dialog = new FolderBrowserDialog { Description = "Select folder to scan" };
             if (dialog.ShowDialog(this) != DialogResult.OK) return;
-            lblStatus.Text = "Scanning...";
-            Cursor = Cursors.WaitCursor;
-            try
-            {
-                var scanner = new Controller.Sync.DirectoryScannerController(AppServices.Sha256, AppServices.Files);
-                await _viewModel.ScanFolderAsync(dialog.SelectedPath, scanner);
-                gridFiles.DataSource = null;
-                gridFiles.DataSource = _viewModel.Files;
-                UpdateDashboard();
-                int synced = _viewModel.Files.Count(f => f.Status == Core.Enums.SyncStatus.Synced);
-                int pending = _viewModel.Files.Count(f => f.Status == Core.Enums.SyncStatus.Pending);
-                lblStatus.Text = $"Scanned {_viewModel.Files.Count} files. Synced: {synced}, Pending: {pending}";
-            }
-            finally
-            {
-                Cursor = Cursors.Default;
-            }
+            await RefreshFolderAsync(dialog.SelectedPath);
         };
 
         btnAddServer.Click += (_, _) =>
