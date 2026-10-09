@@ -556,6 +556,7 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.tabTrash.Controls.Add(this.lblTrashInfo);
 
         this.gridTrash = new Krypton.Toolkit.KryptonDataGridView();
+        ((System.ComponentModel.ISupportInitialize)(this.gridTrash)).BeginInit();
         this.gridTrash.AllowUserToAddRows = false;
         this.gridTrash.AllowUserToDeleteRows = false;
         this.gridTrash.ReadOnly = true;
@@ -736,7 +737,6 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.tabSettings.Controls.Add(this.lblSetFont);
 
         this.trkFontSize = new Krypton.Toolkit.KryptonTrackBar();
-        ((System.ComponentModel.ISupportInitialize)(this.trkFontSize)).BeginInit();
         this.trkFontSize.Location = new System.Drawing.Point(20, 135);
         this.trkFontSize.Minimum = 8;
         this.trkFontSize.Maximum = 16;
@@ -744,7 +744,6 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.trkFontSize.Size = new System.Drawing.Size(250, 45);
         this.trkFontSize.TabIndex = 2;
         this.trkFontSize.ValueChanged += new System.EventHandler(this.trkFontSize_ValueChanged);
-        ((System.ComponentModel.ISupportInitialize)(this.trkFontSize)).EndInit();
         this.tabSettings.Controls.Add(this.trkFontSize);
 
         this.lblFontSizeVal = new Krypton.Toolkit.KryptonLabel();
@@ -1014,7 +1013,6 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         ((System.ComponentModel.ISupportInitialize)(this.gridServers)).EndInit();
         ((System.ComponentModel.ISupportInitialize)(this.gridAudit)).EndInit();
         ((System.ComponentModel.ISupportInitialize)(this.gridTrash)).EndInit();
-        ((System.ComponentModel.ISupportInitialize)(this.trkFontSize)).EndInit();
         this.tabBackup.ResumeLayout(false);
         this.tabTrash.ResumeLayout(false);
         this.tabTrash.PerformLayout();
