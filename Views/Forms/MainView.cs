@@ -17,6 +17,33 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
     private ActivityMessageFilter? _activityFilter;
     private readonly System.Windows.Forms.Timer _maintenanceTimer = new() { Interval = 60_000 };
     private bool _backupRunning;
+    private SubViews.LockView? _lockView;
+
+    private void RebuildNotifications()
+    {
+        if (IsDisposed || Disposing) return;
+        if (statusStrip.InvokeRequired)
+        {
+            try { BeginInvoke(RebuildNotifications); } catch { }
+            return;
+        }
+        var items = NotificationCenter.Items;
+        btnNotifications.Text = $"Notifications ({items.Count})";
+        var dropDown = btnNotifications.DropDownItems;
+        dropDown.Clear();
+        if (items.Count == 0)
+        {
+            dropDown.Add(new ToolStripLabel("No notifications yet") { Enabled = false });
+            return;
+        }
+        foreach (var item in items.Take(10))
+            dropDown.Add(new ToolStripLabel($"{item.At:HH:mm}  {TruncateText(item.Message, 72)}") { Enabled = false });
+        dropDown.Add(new ToolStripSeparator());
+        dropDown.Add(new ToolStripMenuItem("Clear all", null, (_, _) => NotificationCenter.Clear()));
+    }
+
+    private static string TruncateText(string text, int max)
+        => text.Length <= max ? text : text[..(max - 1)] + "…";
 
     private sealed class ActivityMessageFilter(Action onActivity) : IMessageFilter
     {
@@ -187,6 +214,12 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
 
     private void Notify(string title, string message, ToolTipIcon icon)
     {
+        NotificationCenter.Push(message, icon switch
+        {
+            ToolTipIcon.Error => ToastKind.Error,
+            ToolTipIcon.Warning => ToastKind.Warning,
+            _ => ToastKind.Info,
+        });
         if (!AppServices.Settings.Notifications) return;
         try
         {
@@ -206,6 +239,11 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
                 await RefreshFolderAsync(_lastFolder);
             else
                 await RefreshCurrentTabAsync();
+        }
+        else if (e.Control && e.KeyCode == Keys.L)
+        {
+            e.Handled = true;
+            LockSession();
         }
         else if (e.Control && e.Shift && e.KeyCode == Keys.E)
         {
@@ -294,6 +332,8 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         Application.AddMessageFilter(_activityFilter);
         _maintenanceTimer.Tick += MaintenanceTimer_Tick;
         _maintenanceTimer.Start();
+        NotificationCenter.Changed += RebuildNotifications;
+        RebuildNotifications();
     }
 
     private async void MaintenanceTimer_Tick(object? sender, EventArgs e)
@@ -339,6 +379,7 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
 
     private async Task LogoutAsync(string reason)
     {
+        if (_lockView is { IsDisposed: false }) _lockView.ForceDismiss();
         string? user = AppServices.Session.Username;
         if (user != null)
             await AppServices.AuditLogger.LogAsync(Core.Enums.LogAction.Logout, $"User {user} logged out ({reason}).");
@@ -351,6 +392,7 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
     {
         _maintenanceTimer.Stop();
         _maintenanceTimer.Dispose();
+        NotificationCenter.Changed -= RebuildNotifications;
         if (_activityFilter != null) Application.RemoveMessageFilter(_activityFilter);
         base.OnFormClosed(e);
     }
@@ -361,6 +403,7 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         await _viewModel.LoadServersAsync();
         UpdateDashboard();
         await LoadUserBadgeAsync();
+        ToastForm.ShowToast(this, $"Signed in as {AppServices.Session.Username} ({AppServices.Session.Role}).", ToastKind.Success);
     }
 
     private async Task LoadUserBadgeAsync()
@@ -503,6 +546,33 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         trayShow_Click(sender, e);
         using var change = new SubViews.ChangePasswordView();
         change.ShowDialog(this);
+    }
+
+    private void trayLock_Click(object? sender, EventArgs e)
+    {
+        trayShow_Click(sender, e);
+        LockSession();
+    }
+
+    private void LockSession()
+    {
+        if (_lockView is { IsDisposed: false }) return;
+        string? user = AppServices.Session.Username ?? "unknown";
+        _ = AppServices.AuditLogger.LogAsync(Core.Enums.LogAction.SessionLocked, $"User {user} locked the screen.");
+        ToastForm.ShowToast(this, "Screen locked.", ToastKind.Warning);
+        _lockView = new SubViews.LockView();
+        try
+        {
+            if (_lockView.ShowDialog(this) == DialogResult.OK)
+            {
+                _ = AppServices.AuditLogger.LogAsync(Core.Enums.LogAction.SessionUnlocked, $"User {user} unlocked the screen.");
+                ToastForm.ShowToast(this, "Screen unlocked.", ToastKind.Success);
+            }
+        }
+        finally
+        {
+            _lockView = null;
+        }
     }
 
     private void btnNavToggle_Click(object? sender, EventArgs e)

@@ -412,6 +412,10 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.trayChangePassword.Text = "Change Password";
         this.trayChangePassword.Click += new System.EventHandler(this.trayChangePassword_Click);
         this.trayMenu.Items.Add(this.trayChangePassword);
+        this.trayLock = new System.Windows.Forms.ToolStripMenuItem();
+        this.trayLock.Text = "Lock Screen";
+        this.trayLock.Click += new System.EventHandler(this.trayLock_Click);
+        this.trayMenu.Items.Add(this.trayLock);
         this.notifyIcon.ContextMenuStrip = this.trayMenu;
         this.notifyIcon.DoubleClick += new System.EventHandler(this.trayShow_Click);
 
@@ -437,6 +441,12 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.themeLightItem.Click += new System.EventHandler(this.themeLightItem_Click);
         this.statusStrip.Items.Add(new System.Windows.Forms.ToolStripSeparator());
         this.statusStrip.Items.Add(this.btnTheme);
+
+        this.btnNotifications = new System.Windows.Forms.ToolStripDropDownButton();
+        this.btnNotifications.Name = "btnNotifications";
+        this.btnNotifications.Text = "Notifications";
+        this.btnNotifications.ToolTipText = "Recent notifications";
+        this.statusStrip.Items.Add(this.btnNotifications);
 
         this.txtFilter = new Krypton.Toolkit.KryptonTextBox();
         this.txtFilter.CueHint.CueHintText = "Type to filter files...";
@@ -1108,6 +1118,7 @@ partial class MainView : Krypton.Toolkit.KryptonForm
     private Krypton.Toolkit.KryptonStatusStrip statusStrip;
     private System.Windows.Forms.ToolStripStatusLabel lblServerInfo;
     private System.Windows.Forms.ToolStripDropDownButton btnTheme;
+    private System.Windows.Forms.ToolStripDropDownButton btnNotifications;
     private System.Windows.Forms.ToolStripMenuItem themeDarkItem;
     private System.Windows.Forms.ToolStripMenuItem themeLightItem;
     private Krypton.Toolkit.KryptonTextBox txtFilter;
@@ -1115,6 +1126,7 @@ partial class MainView : Krypton.Toolkit.KryptonForm
     private System.Windows.Forms.ToolTip toolTip;
     private System.Windows.Forms.ToolStripMenuItem trayAbout;
     private System.Windows.Forms.ToolStripMenuItem trayChangePassword;
+    private System.Windows.Forms.ToolStripMenuItem trayLock;
     private System.Windows.Forms.ContextMenuStrip trayMenu;
     private System.Windows.Forms.ToolStripMenuItem trayShow;
     private System.Windows.Forms.ToolStripMenuItem trayExit;

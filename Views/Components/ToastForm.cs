@@ -39,6 +39,7 @@ public partial class ToastForm : Form
 
     public static void ShowToast(Form owner, string message, ToastKind kind = ToastKind.Info)
     {
+        NotificationCenter.Push(message, kind);
         try
         {
             if (!AppServices.Settings.Notifications) return;

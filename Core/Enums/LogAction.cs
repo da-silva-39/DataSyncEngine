@@ -14,5 +14,7 @@ public enum LogAction
     MasterKeyPrompted,
     CachePurged,
     UserUpdated,
+    SessionLocked,
+    SessionUnlocked,
     Error
 }

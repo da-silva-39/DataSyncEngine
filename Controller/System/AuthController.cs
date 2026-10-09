@@ -2,7 +2,6 @@ using Controller.Security;
 using Core.Enums;
 using Core.Interfaces;
 using Model.Entities;
-using Model.Entities;
 using Model.Repositories;
 
 namespace Controller.System;
