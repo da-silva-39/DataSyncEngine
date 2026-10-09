@@ -24,6 +24,8 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.cardPending = new Krypton.Toolkit.KryptonPanel();
         this.cardServers = new Krypton.Toolkit.KryptonPanel();
         this.lblDashTitle = new Krypton.Toolkit.KryptonLabel();
+        this.picUserAvatar = new System.Windows.Forms.PictureBox();
+        this.lblUserBadge = new Krypton.Toolkit.KryptonLabel();
         this.tabDashboard = new System.Windows.Forms.TabPage();
         this.tabSync = new System.Windows.Forms.TabPage();
         this.tabServers = new System.Windows.Forms.TabPage();
@@ -218,6 +220,24 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.lblDashTitle.Location = new System.Drawing.Point(25, 20);
         this.lblDashTitle.Name = "lblDashTitle";
         this.lblDashTitle.Text = "Overview";
+
+        ((System.ComponentModel.ISupportInitialize)(this.picUserAvatar)).BeginInit();
+        this.picUserAvatar.Location = new System.Drawing.Point(905, 15);
+        this.picUserAvatar.Name = "picUserAvatar";
+        this.picUserAvatar.Size = new System.Drawing.Size(48, 48);
+        this.picUserAvatar.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+        this.picUserAvatar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+        this.picUserAvatar.TabIndex = 10;
+        this.picUserAvatar.TabStop = false;
+        ((System.ComponentModel.ISupportInitialize)(this.picUserAvatar)).EndInit();
+
+        this.lblUserBadge.AutoSize = false;
+        this.lblUserBadge.Location = new System.Drawing.Point(700, 22);
+        this.lblUserBadge.Name = "lblUserBadge";
+        this.lblUserBadge.Size = new System.Drawing.Size(195, 45);
+        this.lblUserBadge.Text = "";
+        this.tabDashboard.Controls.Add(this.picUserAvatar);
+        this.tabDashboard.Controls.Add(this.lblUserBadge);
 
         this.lblFilesCap = new Krypton.Toolkit.KryptonLabel();
         this.lblFilesVal = new System.Windows.Forms.Label();
@@ -828,6 +848,38 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.swAutoSync.CheckedChanged += new System.EventHandler(this.swAutoSync_CheckedChanged);
         this.tabSettings.Controls.Add(this.swAutoSync);
 
+        this.lblSetIdle = new Krypton.Toolkit.KryptonLabel();
+        this.lblSetIdle.AutoSize = true;
+        this.lblSetIdle.Location = new System.Drawing.Point(480, 400);
+        this.lblSetIdle.Name = "lblSetIdle";
+        this.lblSetIdle.Text = "Auto-logout when idle (minutes)";
+        this.tabSettings.Controls.Add(this.lblSetIdle);
+
+        this.cmbIdle = new Krypton.Toolkit.KryptonComboBox();
+        this.cmbIdle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+        this.cmbIdle.Location = new System.Drawing.Point(480, 428);
+        this.cmbIdle.Name = "cmbIdle";
+        this.cmbIdle.Size = new System.Drawing.Size(250, 48);
+        this.cmbIdle.TabIndex = 13;
+        this.cmbIdle.SelectedIndexChanged += new System.EventHandler(this.cmbIdle_SelectedIndexChanged);
+        this.tabSettings.Controls.Add(this.cmbIdle);
+
+        this.lblSetAutoBackup = new Krypton.Toolkit.KryptonLabel();
+        this.lblSetAutoBackup.AutoSize = true;
+        this.lblSetAutoBackup.Location = new System.Drawing.Point(480, 484);
+        this.lblSetAutoBackup.Name = "lblSetAutoBackup";
+        this.lblSetAutoBackup.Text = "Automatic backup (hours, 0 = off)";
+        this.tabSettings.Controls.Add(this.lblSetAutoBackup);
+
+        this.cmbAutoBackup = new Krypton.Toolkit.KryptonComboBox();
+        this.cmbAutoBackup.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+        this.cmbAutoBackup.Location = new System.Drawing.Point(480, 512);
+        this.cmbAutoBackup.Name = "cmbAutoBackup";
+        this.cmbAutoBackup.Size = new System.Drawing.Size(250, 48);
+        this.cmbAutoBackup.TabIndex = 14;
+        this.cmbAutoBackup.SelectedIndexChanged += new System.EventHandler(this.cmbAutoBackup_SelectedIndexChanged);
+        this.tabSettings.Controls.Add(this.cmbAutoBackup);
+
         this.lblExcludeCap = new Krypton.Toolkit.KryptonLabel();
         this.lblExcludeCap.AutoSize = true;
         this.lblExcludeCap.Location = new System.Drawing.Point(20, 360);
@@ -929,6 +981,15 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.btnResetPassword.ButtonStyle = Krypton.Toolkit.ButtonStyle.Alternate;
         this.tabUsers.Controls.Add(this.btnResetPassword);
 
+        this.btnExportUsers = new Krypton.Toolkit.KryptonButton();
+        this.btnExportUsers.Location = new System.Drawing.Point(645, 15);
+        this.btnExportUsers.Name = "btnExportUsers";
+        this.btnExportUsers.Size = new System.Drawing.Size(150, 36);
+        this.btnExportUsers.TabIndex = 5;
+        this.btnExportUsers.Text = "Export CSV";
+        this.btnExportUsers.ButtonStyle = Krypton.Toolkit.ButtonStyle.Alternate;
+        this.tabUsers.Controls.Add(this.btnExportUsers);
+
         this.gridUsers.AllowUserToAddRows = false;
         this.gridUsers.AllowUserToDeleteRows = false;
         this.gridUsers.ReadOnly = true;
@@ -1005,6 +1066,10 @@ partial class MainView : Krypton.Toolkit.KryptonForm
     private Krypton.Toolkit.KryptonToggleSwitch swAutoSync;
     private Krypton.Toolkit.KryptonLabel lblExcludeCap;
     private Krypton.Toolkit.KryptonTextBox txtExclude;
+    private Krypton.Toolkit.KryptonLabel lblSetIdle;
+    private Krypton.Toolkit.KryptonComboBox cmbIdle;
+    private Krypton.Toolkit.KryptonLabel lblSetAutoBackup;
+    private Krypton.Toolkit.KryptonComboBox cmbAutoBackup;
     private Krypton.Toolkit.KryptonButton btnResetSettings;
     private Krypton.Toolkit.KryptonPanel cardFiles;
     private Krypton.Toolkit.KryptonLabel lblFilesCap;
@@ -1019,6 +1084,8 @@ partial class MainView : Krypton.Toolkit.KryptonForm
     private Krypton.Toolkit.KryptonLabel lblServersCap;
     private System.Windows.Forms.Label lblServersVal;
     private Krypton.Toolkit.KryptonLabel lblDashTitle;
+    private System.Windows.Forms.PictureBox picUserAvatar;
+    private Krypton.Toolkit.KryptonLabel lblUserBadge;
     private System.Windows.Forms.TabPage tabServers;
     private System.Windows.Forms.TabPage tabAudit;
     private System.Windows.Forms.TabPage tabAnalytics;
@@ -1032,6 +1099,7 @@ partial class MainView : Krypton.Toolkit.KryptonForm
     private Krypton.Toolkit.KryptonButton btnDeleteUser;
     private Krypton.Toolkit.KryptonButton btnViewProfile;
     private Krypton.Toolkit.KryptonButton btnResetPassword;
+    private Krypton.Toolkit.KryptonButton btnExportUsers;
     private Krypton.Toolkit.KryptonDataGridView gridUsers;
     private System.Windows.Forms.TabPage tabUsers;
     private Krypton.Toolkit.KryptonButton btnEditServer;

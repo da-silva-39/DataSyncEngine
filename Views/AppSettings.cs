@@ -23,6 +23,9 @@ public class AppSettings
     public string LastBackupAt { get; set; } = string.Empty;
     public bool AutoSync { get; set; } = false;
     public string ExcludePatterns { get; set; } = "*.tmp;*.log;~$*;*.bak;*.swp";
+    public int IdleLogoutMinutes { get; set; } = 15;
+    public int AutoBackupHours { get; set; } = 0;
+    public string AutoBackupFolder { get; set; } = string.Empty;
 
     private static readonly string FilePath = Path.Combine(AppContext.BaseDirectory, "appsettings.json");
 

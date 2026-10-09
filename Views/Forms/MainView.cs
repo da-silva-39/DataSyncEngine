@@ -13,6 +13,28 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
     private readonly System.Windows.Forms.Timer _animTimer = new() { Interval = 400 };
     private string _busyBaseText = string.Empty;
     private Controller.Sync.DirectoryWatchController? _watcher;
+    private DateTime _lastActivity = DateTime.UtcNow;
+    private ActivityMessageFilter? _activityFilter;
+    private readonly System.Windows.Forms.Timer _maintenanceTimer = new() { Interval = 60_000 };
+    private bool _backupRunning;
+
+    private sealed class ActivityMessageFilter(Action onActivity) : IMessageFilter
+    {
+        public bool PreFilterMessage(ref Message m)
+        {
+            switch (m.Msg)
+            {
+                case 0x0200: // WM_MOUSEMOVE
+                case 0x0100: // WM_KEYDOWN
+                case 0x0201: // WM_LBUTTONDOWN
+                case 0x020A: // WM_MOUSEWHEEL
+                case 0x0104: // WM_SYSKEYDOWN
+                    onActivity();
+                    break;
+            }
+            return false;
+        }
+    }
 
     private void EnsureWatcher()
     {
@@ -177,10 +199,23 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
 
     private async void MainView_KeyDown(object? sender, KeyEventArgs e)
     {
-        if (e.KeyCode == Keys.F5 && _lastFolder != null)
+        if (e.KeyCode == Keys.F5)
         {
             e.Handled = true;
-            await RefreshFolderAsync(_lastFolder);
+            if (tabControl.SelectedTab == tabSync && _lastFolder != null)
+                await RefreshFolderAsync(_lastFolder);
+            else
+                await RefreshCurrentTabAsync();
+        }
+        else if (e.Control && e.Shift && e.KeyCode == Keys.E)
+        {
+            e.Handled = true;
+            if (tabControl.TabPages.Contains(tabAudit)) btnExportAudit_Click(this, EventArgs.Empty);
+        }
+        else if (e.Control && e.Shift && e.KeyCode == Keys.U)
+        {
+            e.Handled = true;
+            if (tabControl.TabPages.Contains(tabUsers)) ExportUsersCsv();
         }
         else if (e.Control && e.KeyCode == Keys.S)
         {
@@ -254,6 +289,70 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         UpdateServerInfo();
         AppServices.HotSwap.ServerChanged += _ => UpdateServerInfo();
         _animTimer.Tick += AnimTimer_Tick;
+        _lastActivity = DateTime.UtcNow;
+        _activityFilter = new ActivityMessageFilter(() => _lastActivity = DateTime.UtcNow);
+        Application.AddMessageFilter(_activityFilter);
+        _maintenanceTimer.Tick += MaintenanceTimer_Tick;
+        _maintenanceTimer.Start();
+    }
+
+    private async void MaintenanceTimer_Tick(object? sender, EventArgs e)
+    {
+        try
+        {
+            int idleMinutes = AppServices.Settings.IdleLogoutMinutes;
+            if (idleMinutes > 0 && !_exitRequested && (DateTime.UtcNow - _lastActivity).TotalMinutes >= idleMinutes)
+            {
+                await LogoutAsync($"auto-logout after {idleMinutes} minutes of inactivity");
+                return;
+            }
+            if (AutoBackupDue())
+            {
+                await RunBackupAsync(ResolveAutoBackupFolder(), manual: false);
+            }
+        }
+        catch
+        {
+        }
+    }
+
+    private static string ResolveAutoBackupFolder()
+    {
+        string folder = AppServices.Settings.AutoBackupFolder;
+        if (string.IsNullOrWhiteSpace(folder))
+        {
+            folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DataSyncEngineBackup");
+            AppServices.Settings.AutoBackupFolder = folder;
+            AppServices.SaveSettings();
+        }
+        Directory.CreateDirectory(folder);
+        return folder;
+    }
+
+    private bool AutoBackupDue()
+    {
+        int hours = AppServices.Settings.AutoBackupHours;
+        if (hours <= 0) return false;
+        if (!DateTime.TryParse(AppServices.Settings.LastBackupAt, out DateTime last)) return true;
+        return DateTime.Now - last >= TimeSpan.FromHours(hours);
+    }
+
+    private async Task LogoutAsync(string reason)
+    {
+        string? user = AppServices.Session.Username;
+        if (user != null)
+            await AppServices.AuditLogger.LogAsync(Core.Enums.LogAction.Logout, $"User {user} logged out ({reason}).");
+        AppServices.Auth.Logout();
+        _exitRequested = true;
+        Close();
+    }
+
+    protected override void OnFormClosed(FormClosedEventArgs e)
+    {
+        _maintenanceTimer.Stop();
+        _maintenanceTimer.Dispose();
+        if (_activityFilter != null) Application.RemoveMessageFilter(_activityFilter);
+        base.OnFormClosed(e);
     }
 
     protected override async void OnShown(EventArgs e)
@@ -261,6 +360,30 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         base.OnShown(e);
         await _viewModel.LoadServersAsync();
         UpdateDashboard();
+        await LoadUserBadgeAsync();
+    }
+
+    private async Task LoadUserBadgeAsync()
+    {
+        try
+        {
+            string? username = AppServices.Session.Username;
+            if (username == null) return;
+            string role = AppServices.Session.Role?.ToString() ?? "User";
+            lblUserBadge.Text = $"{username}\n{role}";
+            var user = await AppServices.Users.GetByUsernameAsync(username);
+            if (user?.Avatar is { Length: > 0 })
+            {
+                using var ms = new MemoryStream(user.Avatar);
+                using var img = Image.FromStream(ms);
+                Image? old = picUserAvatar.Image;
+                picUserAvatar.Image = new Bitmap(img);
+                old?.Dispose();
+            }
+        }
+        catch
+        {
+        }
     }
 
     private static void HideColumns(DataGridView grid, params string[] names)
@@ -528,6 +651,9 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         s.MinimizeToTray = true;
         s.AutoSync = false;
         s.ExcludePatterns = "*.tmp;*.log;~$*;*.bak;*.swp";
+        s.IdleLogoutMinutes = 15;
+        s.AutoBackupHours = 0;
+        s.AutoBackupFolder = string.Empty;
         AppServices.SaveSettings();
         KryptonThemeModule.SetAccent("Blue");
         KryptonThemeModule.SetTheme(true);
@@ -541,18 +667,26 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
     {
         using var dialog = new FolderBrowserDialog { Description = "Select backup destination folder" };
         if (dialog.ShowDialog(this) != DialogResult.OK) return;
+        await RunBackupAsync(dialog.SelectedPath, manual: true);
+    }
+
+    private async Task RunBackupAsync(string destination, bool manual)
+    {
+        if (_backupRunning) return;
+        _backupRunning = true;
         btnBackupNow.Enabled = false;
         lblBackupInfo.Text = "Backing up...";
         try
         {
             var backup = new Controller.Sync.BackupController(AppServices.Files, AppServices.Aes, AppServices.Compressor,
                 () => AppServices.Aes.DeriveKey(AppServices.MasterKey));
-            var (ok, fail) = await Task.Run(() => backup.ExportAsync(dialog.SelectedPath));
+            var (ok, fail) = await Task.Run(() => backup.ExportAsync(destination));
             AppServices.Settings.LastBackupAt = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
             AppServices.SaveSettings();
             lblBackupInfo.Text = $"Backup finished: {ok} exported, {fail} failed.";
             lblLastBackup.Text = $"Last backup: {AppServices.Settings.LastBackupAt}";
-            await AppServices.AuditLogger.LogAsync(Core.Enums.LogAction.SyncCompleted, $"Backup: {ok} exported, {fail} failed to {dialog.SelectedPath}.");
+            await AppServices.AuditLogger.LogAsync(Core.Enums.LogAction.SyncCompleted,
+                $"Backup{(manual ? "" : " (automatic)")}: {ok} exported, {fail} failed to {destination}.");
             ToastForm.ShowToast(this, $"Backup finished: {ok} exported.", fail > 0 ? ToastKind.Warning : ToastKind.Success);
         }
         catch (Exception ex)
@@ -562,6 +696,7 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         }
         finally
         {
+            _backupRunning = false;
             btnBackupNow.Enabled = true;
         }
     }
@@ -804,14 +939,7 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
             }
         };
 
-        btnLogout.Click += async (_, _) =>
-        {
-            string? user = AppServices.Session.Username;
-            AppServices.Auth.Logout();
-            if (user != null) await AppServices.AuditLogger.LogLogoutAsync(user);
-            _exitRequested = true;
-            Close();
-        };
+        btnLogout.Click += async (_, _) => await LogoutAsync("manual logout");
 
         btnDelete.Click += async (_, _) =>
         {
@@ -852,37 +980,13 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
             }
         };
 
-        tabAnalytics.Enter += async (_, _) =>
-        {
-            lblAnaTotal.Text = $"Total files: {_viewModel.Files.Count}";
-            lblAnaSynced.Text = $"Synced: {_viewModel.Files.Count(f => f.Status == Core.Enums.SyncStatus.Synced)}";
-            lblAnaPending.Text = $"Pending: {_viewModel.Files.Count(f => f.Status == Core.Enums.SyncStatus.Pending)}";
-            lblAnaModified.Text = $"Modified: {_viewModel.Files.Count(f => f.Status == Core.Enums.SyncStatus.Modified)}";
-            lblAnaBytes.Text = $"Total size: {_viewModel.Files.Sum(f => f.SizeBytes)} bytes";
-            try
-            {
-                var serverFiles = await AppServices.Files.GetAllAsync();
-                lblAnaServer.Text = $"Server files: {serverFiles.Count} ({serverFiles.Sum(f => f.SizeBytes)} bytes)";
-            }
-            catch
-            {
-                lblAnaServer.Text = "Server files: unavailable";
-            }
-        };
+        tabAnalytics.Enter += async (_, _) => await LoadAnalyticsTabAsync();
 
-        tabAudit.Enter += async (_, _) =>
-        {
-            await _viewModel.LoadAuditAsync();
-            BindAuditGrid();
-        };
+        tabAudit.Enter += async (_, _) => await LoadAuditTabAsync();
 
-        tabUsers.Enter += async (_, _) =>
-        {
-            await _viewModel.LoadUsersAsync();
-            gridUsers.DataSource = null;
-            gridUsers.DataSource = _viewModel.Users;
-            HideColumns(gridUsers, "PasswordHash", "Salt", "Avatar");
-        };
+        tabUsers.Enter += async (_, _) => await LoadUsersTabAsync();
+
+        btnExportUsers.Click += (_, _) => ExportUsersCsv();
 
         btnViewProfile.Click += async (_, _) =>
         {
@@ -958,23 +1062,11 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
             gridServers.DataSource = _viewModel.Servers;
         };
 
-        tabServers.Enter += async (_, _) =>
-        {
-            await _viewModel.LoadServersAsync();
-            gridServers.DataSource = null;
-            gridServers.DataSource = _viewModel.Servers;
-            UpdateDashboard();
-            HideColumns(gridServers, "Password");
-        };
+        tabServers.Enter += async (_, _) => await LoadServersTabAsync();
 
         gridFiles.CellFormatting += GridFiles_CellFormatting;
 
-        tabBackup.Enter += (_, _) =>
-        {
-            lblLastBackup.Text = string.IsNullOrWhiteSpace(AppServices.Settings.LastBackupAt)
-                ? "Last backup: never"
-                : $"Last backup: {AppServices.Settings.LastBackupAt}";
-        };
+        tabBackup.Enter += (_, _) => LoadBackupTab();
 
         tabTrash.Enter += async (_, _) => await RefreshTrashAsync();
 
@@ -987,6 +1079,93 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
     {
         if (e.RowIndex < 0 || gridTrash.Rows[e.RowIndex].DataBoundItem is not Model.Entities.TrashEntry) return;
         e.CellStyle.ForeColor = DarkThemeModule.WarningColor;
+    }
+
+    private async Task LoadAnalyticsTabAsync()
+    {
+        lblAnaTotal.Text = $"Total files: {_viewModel.Files.Count}";
+        lblAnaSynced.Text = $"Synced: {_viewModel.Files.Count(f => f.Status == Core.Enums.SyncStatus.Synced)}";
+        lblAnaPending.Text = $"Pending: {_viewModel.Files.Count(f => f.Status == Core.Enums.SyncStatus.Pending)}";
+        lblAnaModified.Text = $"Modified: {_viewModel.Files.Count(f => f.Status == Core.Enums.SyncStatus.Modified)}";
+        lblAnaBytes.Text = $"Total size: {_viewModel.Files.Sum(f => f.SizeBytes)} bytes";
+        try
+        {
+            var serverFiles = await AppServices.Files.GetAllAsync();
+            lblAnaServer.Text = $"Server files: {serverFiles.Count} ({serverFiles.Sum(f => f.SizeBytes)} bytes)";
+        }
+        catch
+        {
+            lblAnaServer.Text = "Server files: unavailable";
+        }
+    }
+
+    private async Task LoadAuditTabAsync()
+    {
+        await _viewModel.LoadAuditAsync();
+        BindAuditGrid();
+    }
+
+    private async Task LoadUsersTabAsync()
+    {
+        await _viewModel.LoadUsersAsync();
+        gridUsers.DataSource = null;
+        gridUsers.DataSource = _viewModel.Users;
+        HideColumns(gridUsers, "PasswordHash", "Salt", "Avatar");
+    }
+
+    private async Task LoadServersTabAsync()
+    {
+        await _viewModel.LoadServersAsync();
+        gridServers.DataSource = null;
+        gridServers.DataSource = _viewModel.Servers;
+        UpdateDashboard();
+        HideColumns(gridServers, "Password");
+    }
+
+    private void LoadBackupTab()
+    {
+        lblLastBackup.Text = string.IsNullOrWhiteSpace(AppServices.Settings.LastBackupAt)
+            ? "Last backup: never"
+            : $"Last backup: {AppServices.Settings.LastBackupAt}";
+    }
+
+    private async Task RefreshCurrentTabAsync()
+    {
+        var tab = tabControl.SelectedTab;
+        if (tab == tabSync && _lastFolder != null) await RefreshFolderAsync(_lastFolder);
+        else if (tab == tabAudit) await LoadAuditTabAsync();
+        else if (tab == tabUsers) await LoadUsersTabAsync();
+        else if (tab == tabServers) await LoadServersTabAsync();
+        else if (tab == tabTrash) await RefreshTrashAsync();
+        else if (tab == tabAnalytics) await LoadAnalyticsTabAsync();
+        else if (tab == tabBackup) LoadBackupTab();
+        else if (tab == tabSettings) LoadSettingsIntoControls();
+        else UpdateDashboard();
+        SetStatus("Refreshed.", ToastKind.Info);
+    }
+
+    private void ExportUsersCsv()
+    {
+        using var dialog = new SaveFileDialog
+        {
+            Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*",
+            FileName = $"users_{DateTime.Now:yyyyMMdd_HHmmss}.csv",
+            Title = "Export users"
+        };
+        if (dialog.ShowDialog(this) != DialogResult.OK) return;
+        try
+        {
+            var sb = new System.Text.StringBuilder();
+            sb.AppendLine("Id;Username;Role;Active");
+            foreach (var u in _viewModel.Users)
+                sb.AppendLine($"{u.Id};{u.Username};{u.Role};{(u.IsActive ? "yes" : "no")}");
+            File.WriteAllText(dialog.FileName, sb.ToString(), System.Text.Encoding.UTF8);
+            ToastForm.ShowToast(this, $"Exported {_viewModel.Users.Count} users.", ToastKind.Success);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Export failed: {ex.Message}", "Export", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
     }
 
     private void LoadSettingsIntoControls()
@@ -1008,6 +1187,36 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         swMinimizeToTray.Checked = s.MinimizeToTray;
         swAutoSync.Checked = s.AutoSync;
         txtExclude.Text = s.ExcludePatterns;
+        if (cmbIdle.Items.Count == 0) cmbIdle.Items.AddRange(new object[] { "0", "5", "15", "30", "60" });
+        string idleValue = s.IdleLogoutMinutes.ToString();
+        if (!cmbIdle.Items.Contains(idleValue)) cmbIdle.Items.Add(idleValue);
+        cmbIdle.SelectedItem = idleValue;
+        if (cmbAutoBackup.Items.Count == 0) cmbAutoBackup.Items.AddRange(new object[] { "0", "1", "6", "12", "24" });
+        string backupValue = s.AutoBackupHours.ToString();
+        if (!cmbAutoBackup.Items.Contains(backupValue)) cmbAutoBackup.Items.Add(backupValue);
+        cmbAutoBackup.SelectedItem = backupValue;
+    }
+
+    private void cmbIdle_SelectedIndexChanged(object? sender, EventArgs e)
+    {
+        if (cmbIdle.SelectedItem is not string value || !int.TryParse(value, out int minutes)) return;
+        if (minutes == AppServices.Settings.IdleLogoutMinutes) return;
+        AppServices.Settings.IdleLogoutMinutes = minutes;
+        AppServices.SaveSettings();
+        ToastForm.ShowToast(this, minutes == 0
+            ? "Auto-logout disabled."
+            : $"Auto-logout after {minutes} minutes of inactivity.", ToastKind.Info);
+    }
+
+    private void cmbAutoBackup_SelectedIndexChanged(object? sender, EventArgs e)
+    {
+        if (cmbAutoBackup.SelectedItem is not string value || !int.TryParse(value, out int hours)) return;
+        if (hours == AppServices.Settings.AutoBackupHours) return;
+        AppServices.Settings.AutoBackupHours = hours;
+        AppServices.SaveSettings();
+        ToastForm.ShowToast(this, hours == 0
+            ? "Automatic backup disabled."
+            : $"Automatic backup every {hours}h to Documents\\DataSyncEngineBackup.", ToastKind.Info);
     }
 
     private void UpdateFontPreview()
