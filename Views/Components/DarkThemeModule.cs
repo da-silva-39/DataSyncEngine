@@ -46,68 +46,79 @@ public static class DarkThemeModule
         AssignTabIndexes(root, ref tabIndex);
     }
 
+    private static bool IsMaterialControl(Control control)
+    {
+        return control.GetType().Namespace == "MaterialSkin.Controls";
+    }
+
     private static void ApplyControl(Control control)
     {
-        switch (control)
+        if (!IsMaterialControl(control))
         {
-            case Form form:
-                form.BackColor = BackgroundColor;
-                form.ForeColor = TextColor;
-                form.Font = new Font("Segoe UI", 9.5F);
-                SetDarkTitleBar(form);
-                break;
-            case Panel or GroupBox or TabControl or TabPage:
-                control.BackColor = PanelColor;
-                control.ForeColor = TextColor;
-                break;
-            case Button button:
-                button.BackColor = AccentColor;
-                button.ForeColor = TextColor;
-                button.FlatStyle = FlatStyle.Flat;
-                button.FlatAppearance.BorderSize = 0;
-                button.Cursor = Cursors.Hand;
-                button.Padding = new Padding(4);
-                break;
-            case TextBox textBox:
-                textBox.BackColor = PanelColor;
-                textBox.ForeColor = TextColor;
-                textBox.BorderStyle = BorderStyle.FixedSingle;
-                break;
-            case Label label:
-                label.ForeColor = TextColor;
-                label.BackColor = Color.Transparent;
-                break;
-            case DataGridView grid:
-                grid.BackgroundColor = BackgroundColor;
-                grid.ForeColor = TextColor;
-                grid.GridColor = PanelColor;
-                grid.EnableHeadersVisualStyles = false;
-                grid.ColumnHeadersDefaultCellStyle.BackColor = PanelColor;
-                grid.ColumnHeadersDefaultCellStyle.ForeColor = TextColor;
-                grid.DefaultCellStyle.BackColor = BackgroundColor;
-                grid.DefaultCellStyle.ForeColor = TextColor;
-                grid.DefaultCellStyle.SelectionBackColor = AccentColor;
-                grid.AlternatingRowsDefaultCellStyle.BackColor = PanelColor;
-                grid.AlternatingRowsDefaultCellStyle.ForeColor = TextColor;
-                grid.RowTemplate.Height = 28;
-                grid.BorderStyle = BorderStyle.None;
-                break;
-            case ComboBox combo:
-                combo.BackColor = PanelColor;
-                combo.ForeColor = TextColor;
-                break;
-            case StatusStrip strip:
-                strip.BackColor = PanelColor;
-                strip.ForeColor = TextColor;
-                break;
-            case ToolStrip ts:
-                ts.BackColor = PanelColor;
-                ts.ForeColor = TextColor;
-                break;
-            default:
-                control.BackColor = BackgroundColor;
-                break;
+            switch (control)
+            {
+                case Form form when form.GetType().Namespace != "MaterialSkin.Controls":
+                    form.BackColor = BackgroundColor;
+                    form.ForeColor = TextColor;
+                    form.Font = new Font("Segoe UI", 9.5F);
+                    break;
+                case Panel or GroupBox or TabControl or TabPage:
+                    control.BackColor = PanelColor;
+                    control.ForeColor = TextColor;
+                    break;
+                case Button button:
+                    button.BackColor = AccentColor;
+                    button.ForeColor = TextColor;
+                    button.FlatStyle = FlatStyle.Flat;
+                    button.FlatAppearance.BorderSize = 0;
+                    button.Cursor = Cursors.Hand;
+                    button.Padding = new Padding(4);
+                    break;
+                case TextBox textBox:
+                    textBox.BackColor = PanelColor;
+                    textBox.ForeColor = TextColor;
+                    textBox.BorderStyle = BorderStyle.FixedSingle;
+                    break;
+                case Label label:
+                    if (label.ForeColor == SystemColors.ControlText)
+                        label.ForeColor = TextColor;
+                    label.BackColor = Color.Transparent;
+                    break;
+                case DataGridView grid:
+                    grid.BackgroundColor = BackgroundColor;
+                    grid.ForeColor = TextColor;
+                    grid.GridColor = PanelColor;
+                    grid.EnableHeadersVisualStyles = false;
+                    grid.ColumnHeadersDefaultCellStyle.BackColor = PanelColor;
+                    grid.ColumnHeadersDefaultCellStyle.ForeColor = TextColor;
+                    grid.DefaultCellStyle.BackColor = BackgroundColor;
+                    grid.DefaultCellStyle.ForeColor = TextColor;
+                    grid.DefaultCellStyle.SelectionBackColor = AccentColor;
+                    grid.AlternatingRowsDefaultCellStyle.BackColor = PanelColor;
+                    grid.AlternatingRowsDefaultCellStyle.ForeColor = TextColor;
+                    grid.RowTemplate.Height = 28;
+                    grid.BorderStyle = BorderStyle.None;
+                    break;
+                case ComboBox combo:
+                    combo.BackColor = PanelColor;
+                    combo.ForeColor = TextColor;
+                    break;
+                case StatusStrip strip:
+                    strip.BackColor = PanelColor;
+                    strip.ForeColor = TextColor;
+                    break;
+                case ToolStrip ts:
+                    ts.BackColor = PanelColor;
+                    ts.ForeColor = TextColor;
+                    break;
+                default:
+                    control.BackColor = BackgroundColor;
+                    break;
+            }
         }
+
+        if (control is Form anyForm)
+            SetDarkTitleBar(anyForm);
 
         foreach (Control child in control.Controls)
         {

@@ -1,6 +1,6 @@
 namespace Views.Forms.SubViews;
 
-partial class FileExplorerView : Form
+partial class FileExplorerView : MaterialSkin.Controls.MaterialForm
 {
     private System.ComponentModel.IContainer components = null;
 
@@ -15,47 +15,54 @@ partial class FileExplorerView : Form
 
     private void InitializeComponent()
     {
-        this.lblFolder = new System.Windows.Forms.Label();
-        this.txtPath = new System.Windows.Forms.TextBox();
-        this.btnBrowse = new System.Windows.Forms.Button();
+        this.lblFolder = new MaterialSkin.Controls.MaterialLabel();
+        this.txtPath = new MaterialSkin.Controls.MaterialTextBox2();
+        this.btnBrowse = new MaterialSkin.Controls.MaterialButton();
         this.grid = new System.Windows.Forms.DataGridView();
-        this.lblStatus = new System.Windows.Forms.Label();
-        this.ctxSync = new System.Windows.Forms.ToolStripMenuItem();
-        this.ctxHash = new System.Windows.Forms.ToolStripMenuItem();
-        this.ctxProps = new System.Windows.Forms.ToolStripMenuItem();
-        this.ctxResume = new System.Windows.Forms.ToolStripMenuItem();
-        this.ctxDelete = new System.Windows.Forms.ToolStripMenuItem();
-        this.ctxRefresh = new System.Windows.Forms.ToolStripMenuItem();
+        this.lblStatus = new MaterialSkin.Controls.MaterialLabel();
+        this.ctxSync = new MaterialSkin.Controls.MaterialToolStripMenuItem();
+        this.ctxHash = new MaterialSkin.Controls.MaterialToolStripMenuItem();
+        this.ctxProps = new MaterialSkin.Controls.MaterialToolStripMenuItem();
+        this.ctxResume = new MaterialSkin.Controls.MaterialToolStripMenuItem();
+        this.ctxDelete = new MaterialSkin.Controls.MaterialToolStripMenuItem();
+        this.ctxRefresh = new MaterialSkin.Controls.MaterialToolStripMenuItem();
         this.SuspendLayout();
         this.components = new System.ComponentModel.Container();
-        this.ctxMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+        this.ctxMenu = new MaterialSkin.Controls.MaterialContextMenuStrip();
         ((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
 
         this.lblFolder.AutoSize = true;
-        this.lblFolder.Location = new System.Drawing.Point(15, 20);
+        this.lblFolder.Location = new System.Drawing.Point(15, 85);
         this.lblFolder.Name = "lblFolder";
         this.lblFolder.Text = "Folder:";
 
-        this.txtPath.Location = new System.Drawing.Point(70, 17);
+        this.txtPath.Hint = "Select a folder to explore...";
+        this.txtPath.Location = new System.Drawing.Point(85, 75);
+        this.txtPath.MaxLength = 32767;
         this.txtPath.Name = "txtPath";
-        this.txtPath.Size = new System.Drawing.Size(620, 27);
+        this.txtPath.ReadOnly = true;
+        this.txtPath.Size = new System.Drawing.Size(600, 36);
         this.txtPath.TabIndex = 0;
+        this.txtPath.UseTallSize = false;
 
-        this.btnBrowse.Location = new System.Drawing.Point(700, 15);
+        this.btnBrowse.AutoSize = false;
+        this.btnBrowse.HighEmphasis = true;
+        this.btnBrowse.Location = new System.Drawing.Point(700, 76);
         this.btnBrowse.Name = "btnBrowse";
-        this.btnBrowse.Size = new System.Drawing.Size(110, 30);
+        this.btnBrowse.Size = new System.Drawing.Size(110, 36);
         this.btnBrowse.TabIndex = 1;
         this.btnBrowse.Text = "Browse...";
-        this.btnBrowse.UseVisualStyleBackColor = false;
+        this.btnBrowse.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+        this.btnBrowse.UseAccentColor = false;
         this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
 
         this.grid.AllowUserToAddRows = false;
         this.grid.AllowUserToDeleteRows = false;
         this.grid.ReadOnly = true;
         this.grid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-        this.grid.Location = new System.Drawing.Point(15, 60);
+        this.grid.Location = new System.Drawing.Point(15, 125);
         this.grid.Name = "grid";
-        this.grid.Size = new System.Drawing.Size(900, 460);
+        this.grid.Size = new System.Drawing.Size(900, 395);
         this.grid.TabIndex = 2;
         this.grid.ContextMenuStrip = this.ctxMenu;
 
@@ -86,7 +93,6 @@ partial class FileExplorerView : Form
         this.Controls.Add(this.btnBrowse);
         this.Controls.Add(this.grid);
         this.Controls.Add(this.lblStatus);
-        this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
         this.Name = "FileExplorerView";
         this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
         this.Text = "DataSyncEngine - Explorer";
@@ -95,16 +101,16 @@ partial class FileExplorerView : Form
         this.PerformLayout();
     }
 
-    private System.Windows.Forms.Label lblFolder;
-    private System.Windows.Forms.TextBox txtPath;
-    private System.Windows.Forms.Button btnBrowse;
+    private MaterialSkin.Controls.MaterialLabel lblFolder;
+    private MaterialSkin.Controls.MaterialTextBox2 txtPath;
+    private MaterialSkin.Controls.MaterialButton btnBrowse;
     private System.Windows.Forms.DataGridView grid;
-    private System.Windows.Forms.Label lblStatus;
-    private System.Windows.Forms.ContextMenuStrip ctxMenu;
-    private System.Windows.Forms.ToolStripMenuItem ctxSync;
-    private System.Windows.Forms.ToolStripMenuItem ctxHash;
-    private System.Windows.Forms.ToolStripMenuItem ctxProps;
-    private System.Windows.Forms.ToolStripMenuItem ctxResume;
-    private System.Windows.Forms.ToolStripMenuItem ctxDelete;
-    private System.Windows.Forms.ToolStripMenuItem ctxRefresh;
+    private MaterialSkin.Controls.MaterialLabel lblStatus;
+    private MaterialSkin.Controls.MaterialContextMenuStrip ctxMenu;
+    private MaterialSkin.Controls.MaterialToolStripMenuItem ctxSync;
+    private MaterialSkin.Controls.MaterialToolStripMenuItem ctxHash;
+    private MaterialSkin.Controls.MaterialToolStripMenuItem ctxProps;
+    private MaterialSkin.Controls.MaterialToolStripMenuItem ctxResume;
+    private MaterialSkin.Controls.MaterialToolStripMenuItem ctxDelete;
+    private MaterialSkin.Controls.MaterialToolStripMenuItem ctxRefresh;
 }

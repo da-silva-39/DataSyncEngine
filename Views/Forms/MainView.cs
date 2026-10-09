@@ -3,7 +3,7 @@ using Views.ViewModels;
 
 namespace Views.Forms;
 
-public partial class MainView : Form
+public partial class MainView : MaterialSkin.Controls.MaterialForm
 {
     private readonly MainViewModel _viewModel;
     private bool _exitRequested;
@@ -89,7 +89,7 @@ public partial class MainView : Form
     public MainView()
     {
         InitializeComponent();
-        DarkThemeModule.Apply(this);
+        MaterialThemeModule.Apply(this);
         if (!DarkThemeModule.IsDesignTime)
         {
             Icon = AppIcon.Create();
@@ -137,14 +137,12 @@ public partial class MainView : Form
 
     private void themeDarkItem_Click(object? sender, EventArgs e)
     {
-        DarkThemeModule.SetTheme(true);
-        foreach (Form f in Application.OpenForms) DarkThemeModule.Apply(f);
+        MaterialThemeModule.SetTheme(true);
     }
 
     private void themeLightItem_Click(object? sender, EventArgs e)
     {
-        DarkThemeModule.SetTheme(false);
-        foreach (Form f in Application.OpenForms) DarkThemeModule.Apply(f);
+        MaterialThemeModule.SetTheme(false);
     }
 
     private void txtFilter_TextChanged(object? sender, EventArgs e)

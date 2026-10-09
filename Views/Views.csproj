@@ -6,6 +6,10 @@
     <ProjectReference Include="..\Controller\Controller.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MaterialSkin.2" Version="2.3.1" />
+  </ItemGroup>
+
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net10.0-windows</TargetFramework>

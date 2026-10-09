@@ -3,14 +3,14 @@ using Views.ViewModels;
 
 namespace Views.Forms;
 
-public partial class LoginView : Form
+public partial class LoginView : MaterialSkin.Controls.MaterialForm
 {
     private readonly LoginViewModel _viewModel = new();
 
     public LoginView()
     {
         InitializeComponent();
-        DarkThemeModule.Apply(this);
+        MaterialThemeModule.Apply(this);
         AcceptButton = btnLogin;
         if (!DarkThemeModule.IsDesignTime)
         {

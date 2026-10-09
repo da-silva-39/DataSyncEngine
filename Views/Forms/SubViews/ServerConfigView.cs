@@ -2,14 +2,14 @@ using Views.Components;
 
 namespace Views.Forms.SubViews;
 
-public partial class ServerConfigView : Form
+public partial class ServerConfigView : MaterialSkin.Controls.MaterialForm
 {
     private readonly Model.Entities.ServerModel? _editing;
 
     public ServerConfigView()
     {
         InitializeComponent();
-        DarkThemeModule.Apply(this);
+        MaterialThemeModule.Apply(this);
     }
 
     public ServerConfigView(Model.Entities.ServerModel server) : this()

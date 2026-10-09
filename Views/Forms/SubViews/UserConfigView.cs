@@ -2,12 +2,12 @@ using Views.Components;
 
 namespace Views.Forms.SubViews;
 
-public partial class UserConfigView : Form
+public partial class UserConfigView : MaterialSkin.Controls.MaterialForm
 {
     public UserConfigView()
     {
         InitializeComponent();
-        DarkThemeModule.Apply(this);
+        MaterialThemeModule.Apply(this);
         cmbRole.Items.AddRange(new object[] { Core.Enums.UserRole.Admin, Core.Enums.UserRole.Operator });
         cmbRole.SelectedIndex = 1;
     }

@@ -6,6 +6,7 @@ static class Program
     static void Main()
     {
         ApplicationConfiguration.Initialize();
+        Components.MaterialThemeModule.Initialize();
         AppServices.Initialize();
         while (true)
         {

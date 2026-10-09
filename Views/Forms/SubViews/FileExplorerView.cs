@@ -2,14 +2,14 @@ using Views.Components;
 
 namespace Views.Forms.SubViews;
 
-public partial class FileExplorerView : Form
+public partial class FileExplorerView : MaterialSkin.Controls.MaterialForm
 {
     private readonly List<Model.Entities.FileModel> _files = new();
 
     public FileExplorerView()
     {
         InitializeComponent();
-        DarkThemeModule.Apply(this);
+        MaterialThemeModule.Apply(this);
     }
 
     private async void btnBrowse_Click(object? sender, EventArgs e)

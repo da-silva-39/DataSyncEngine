@@ -3,7 +3,7 @@ using Views.ViewModels;
 
 namespace Views.Forms.SubViews;
 
-public partial class MasterKeyPopUpView : Form
+public partial class MasterKeyPopUpView : MaterialSkin.Controls.MaterialForm
 {
     private readonly MasterKeyViewModel _viewModel = new();
 
@@ -12,7 +12,7 @@ public partial class MasterKeyPopUpView : Form
     public MasterKeyPopUpView()
     {
         InitializeComponent();
-        DarkThemeModule.Apply(this);
+        MaterialThemeModule.Apply(this);
     }
 
     private void btnOk_Click(object? sender, EventArgs e)

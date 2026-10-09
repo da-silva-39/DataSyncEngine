@@ -2,12 +2,12 @@ using Views.Components;
 
 namespace Views.Forms.SubViews;
 
-public partial class AboutView : Form
+public partial class AboutView : MaterialSkin.Controls.MaterialForm
 {
     public AboutView()
     {
         InitializeComponent();
-        DarkThemeModule.Apply(this);
+        MaterialThemeModule.Apply(this);
         lblVersion.Text = $"Version {Application.ProductVersion}";
     }
 

@@ -1,6 +1,6 @@
 namespace Views.Forms;
 
-partial class MainView : Form
+partial class MainView : MaterialSkin.Controls.MaterialForm
 {
     private System.ComponentModel.IContainer components = null;
 
@@ -15,37 +15,40 @@ partial class MainView : Form
 
     private void InitializeComponent()
     {
-        this.tabControl = new System.Windows.Forms.TabControl();
-        this.cardFiles = new System.Windows.Forms.Panel();
-        this.cardSynced = new System.Windows.Forms.Panel();
-        this.cardPending = new System.Windows.Forms.Panel();
-        this.cardServers = new System.Windows.Forms.Panel();
-        this.lblDashTitle = new System.Windows.Forms.Label();
+        this.tabControl = new MaterialSkin.Controls.MaterialTabControl();
+        this.tabSelector = new MaterialSkin.Controls.MaterialTabSelector();
+        this.topSpacer = new System.Windows.Forms.Panel();
+        this.cardFiles = new MaterialSkin.Controls.MaterialCard();
+        this.cardSynced = new MaterialSkin.Controls.MaterialCard();
+        this.cardPending = new MaterialSkin.Controls.MaterialCard();
+        this.cardServers = new MaterialSkin.Controls.MaterialCard();
+        this.lblDashTitle = new MaterialSkin.Controls.MaterialLabel();
         this.tabDashboard = new System.Windows.Forms.TabPage();
         this.tabSync = new System.Windows.Forms.TabPage();
         this.tabServers = new System.Windows.Forms.TabPage();
         this.tabAudit = new System.Windows.Forms.TabPage();
         this.tabAnalytics = new System.Windows.Forms.TabPage();
         this.tabUsers = new System.Windows.Forms.TabPage();
-        this.btnEditServer = new System.Windows.Forms.Button();
-        this.btnSetActive = new System.Windows.Forms.Button();
-        this.btnDeleteServer = new System.Windows.Forms.Button();
-        this.btnAddUser = new System.Windows.Forms.Button();
-        this.btnDeleteUser = new System.Windows.Forms.Button();
+        this.btnEditServer = new MaterialSkin.Controls.MaterialButton();
+        this.btnSetActive = new MaterialSkin.Controls.MaterialButton();
+        this.btnDeleteServer = new MaterialSkin.Controls.MaterialButton();
+        this.btnAddUser = new MaterialSkin.Controls.MaterialButton();
+        this.btnDeleteUser = new MaterialSkin.Controls.MaterialButton();
         this.gridUsers = new System.Windows.Forms.DataGridView();
-        this.btnSelectFolder = new System.Windows.Forms.Button();
-        this.btnSync = new System.Windows.Forms.Button();
-        this.btnDelete = new System.Windows.Forms.Button();
-        this.btnResume = new System.Windows.Forms.Button();
-        this.btnLogout = new System.Windows.Forms.Button();
-        this.lblStatus = new System.Windows.Forms.Label();
+        this.btnSelectFolder = new MaterialSkin.Controls.MaterialButton();
+        this.btnSync = new MaterialSkin.Controls.MaterialButton();
+        this.btnDelete = new MaterialSkin.Controls.MaterialButton();
+        this.btnResume = new MaterialSkin.Controls.MaterialButton();
+        this.btnExplorer = new MaterialSkin.Controls.MaterialButton();
+        this.btnLogout = new MaterialSkin.Controls.MaterialButton();
+        this.lblStatus = new MaterialSkin.Controls.MaterialLabel();
         this.gridFiles = new System.Windows.Forms.DataGridView();
         this.notifyIcon = new System.Windows.Forms.NotifyIcon();
         this.components = new System.ComponentModel.Container();
-        this.btnAddServer = new System.Windows.Forms.Button();
+        this.btnAddServer = new MaterialSkin.Controls.MaterialButton();
         this.gridServers = new System.Windows.Forms.DataGridView();
         this.gridAudit = new System.Windows.Forms.DataGridView();
-        this.lblAnalytics = new System.Windows.Forms.Label();
+        this.lblAnalytics = new MaterialSkin.Controls.MaterialLabel();
         this.tabControl.SuspendLayout();
         this.tabDashboard.SuspendLayout();
         this.tabSync.SuspendLayout();
@@ -57,6 +60,19 @@ partial class MainView : Form
         ((System.ComponentModel.ISupportInitialize)(this.gridAudit)).BeginInit();
         ((System.ComponentModel.ISupportInitialize)(this.gridUsers)).BeginInit();
         this.SuspendLayout();
+
+        this.topSpacer.Dock = System.Windows.Forms.DockStyle.Top;
+        this.topSpacer.Location = new System.Drawing.Point(0, 0);
+        this.topSpacer.Name = "topSpacer";
+        this.topSpacer.Size = new System.Drawing.Size(980, 64);
+        this.topSpacer.TabIndex = 3;
+
+        this.tabSelector.BaseTabControl = this.tabControl;
+        this.tabSelector.Dock = System.Windows.Forms.DockStyle.Top;
+        this.tabSelector.Location = new System.Drawing.Point(0, 0);
+        this.tabSelector.Name = "tabSelector";
+        this.tabSelector.Size = new System.Drawing.Size(980, 48);
+        this.tabSelector.TabIndex = 2;
 
         this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
         this.tabControl.Location = new System.Drawing.Point(0, 0);
@@ -84,22 +100,20 @@ partial class MainView : Form
         this.tabDashboard.Text = "Dashboard";
 
         this.lblDashTitle.AutoSize = true;
-        this.lblDashTitle.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
         this.lblDashTitle.Location = new System.Drawing.Point(25, 20);
         this.lblDashTitle.Name = "lblDashTitle";
         this.lblDashTitle.Text = "Overview";
 
-        this.lblFilesCap = new System.Windows.Forms.Label();
+        this.lblFilesCap = new MaterialSkin.Controls.MaterialLabel();
         this.lblFilesVal = new System.Windows.Forms.Label();
-        this.lblSyncedCap = new System.Windows.Forms.Label();
+        this.lblSyncedCap = new MaterialSkin.Controls.MaterialLabel();
         this.lblSyncedVal = new System.Windows.Forms.Label();
-        this.lblPendingCap = new System.Windows.Forms.Label();
+        this.lblPendingCap = new MaterialSkin.Controls.MaterialLabel();
         this.lblPendingVal = new System.Windows.Forms.Label();
-        this.lblServersCap = new System.Windows.Forms.Label();
+        this.lblServersCap = new MaterialSkin.Controls.MaterialLabel();
         this.lblServersVal = new System.Windows.Forms.Label();
 
         this.cardFiles.Location = new System.Drawing.Point(25, 70);
-        this.cardFiles.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
         this.cardFiles.Name = "cardFiles";
         this.cardFiles.Size = new System.Drawing.Size(220, 110);
         this.cardFiles.TabIndex = 1;
@@ -117,7 +131,6 @@ partial class MainView : Form
         this.cardFiles.Controls.Add(this.lblFilesVal);
 
         this.cardSynced.Location = new System.Drawing.Point(268, 70);
-        this.cardSynced.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
         this.cardSynced.Name = "cardSynced";
         this.cardSynced.Size = new System.Drawing.Size(220, 110);
         this.cardSynced.TabIndex = 2;
@@ -135,7 +148,6 @@ partial class MainView : Form
         this.cardSynced.Controls.Add(this.lblSyncedVal);
 
         this.cardPending.Location = new System.Drawing.Point(511, 70);
-        this.cardPending.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
         this.cardPending.Name = "cardPending";
         this.cardPending.Size = new System.Drawing.Size(220, 110);
         this.cardPending.TabIndex = 3;
@@ -153,7 +165,6 @@ partial class MainView : Form
         this.cardPending.Controls.Add(this.lblPendingVal);
 
         this.cardServers.Location = new System.Drawing.Point(754, 70);
-        this.cardServers.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
         this.cardServers.Name = "cardServers";
         this.cardServers.Size = new System.Drawing.Size(220, 110);
         this.cardServers.TabIndex = 4;
@@ -185,12 +196,15 @@ partial class MainView : Form
         this.tabSync.TabIndex = 0;
         this.tabSync.Text = "Sync";
 
+        this.btnSelectFolder.AutoSize = false;
+        this.btnSelectFolder.HighEmphasis = true;
         this.btnSelectFolder.Location = new System.Drawing.Point(15, 15);
         this.btnSelectFolder.Name = "btnSelectFolder";
-        this.btnSelectFolder.Size = new System.Drawing.Size(150, 32);
+        this.btnSelectFolder.Size = new System.Drawing.Size(150, 36);
         this.btnSelectFolder.TabIndex = 0;
         this.btnSelectFolder.Text = "Select Folder";
-        this.btnSelectFolder.UseVisualStyleBackColor = false;
+        this.btnSelectFolder.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+        this.btnSelectFolder.UseAccentColor = false;
         this.btnSelectFolder.AccessibleName = "Select folder to scan";
 
         this.lblStatus.AutoSize = true;
@@ -199,61 +213,75 @@ partial class MainView : Form
         this.lblStatus.TabIndex = 1;
         this.lblStatus.Text = "Ready.";
 
+        this.btnSync.AutoSize = false;
+        this.btnSync.HighEmphasis = true;
         this.btnSync.Location = new System.Drawing.Point(180, 15);
         this.btnSync.Name = "btnSync";
-        this.btnSync.Size = new System.Drawing.Size(110, 32);
+        this.btnSync.Size = new System.Drawing.Size(110, 36);
         this.btnSync.TabIndex = 3;
         this.btnSync.Text = "Sync";
+        this.btnSync.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+        this.btnSync.UseAccentColor = false;
         this.btnSync.AccessibleName = "Synchronize pending files";
-        this.btnSync.UseVisualStyleBackColor = false;
 
+        this.btnDelete.AutoSize = false;
+        this.btnDelete.HighEmphasis = false;
         this.btnDelete.Location = new System.Drawing.Point(305, 15);
         this.btnDelete.Name = "btnDelete";
-        this.btnDelete.Size = new System.Drawing.Size(110, 32);
+        this.btnDelete.Size = new System.Drawing.Size(110, 36);
         this.btnDelete.TabIndex = 4;
         this.btnDelete.Text = "Delete";
+        this.btnDelete.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Outlined;
+        this.btnDelete.UseAccentColor = false;
         this.btnDelete.AccessibleName = "Delete selected file";
-        this.btnDelete.UseVisualStyleBackColor = false;
 
+        this.btnResume.AutoSize = false;
+        this.btnResume.HighEmphasis = false;
         this.btnResume.Location = new System.Drawing.Point(430, 15);
         this.btnResume.Name = "btnResume";
-        this.btnResume.Size = new System.Drawing.Size(110, 32);
+        this.btnResume.Size = new System.Drawing.Size(110, 36);
         this.btnResume.TabIndex = 5;
         this.btnResume.Text = "Resume";
+        this.btnResume.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Outlined;
+        this.btnResume.UseAccentColor = false;
         this.btnResume.AccessibleName = "Resume failed uploads";
-        this.btnResume.UseVisualStyleBackColor = false;
 
-        this.btnExplorer = new System.Windows.Forms.Button();
+        this.btnExplorer.AutoSize = false;
+        this.btnExplorer.HighEmphasis = false;
         this.btnExplorer.Location = new System.Drawing.Point(555, 15);
         this.btnExplorer.Name = "btnExplorer";
-        this.btnExplorer.Size = new System.Drawing.Size(110, 32);
+        this.btnExplorer.Size = new System.Drawing.Size(110, 36);
         this.btnExplorer.TabIndex = 9;
         this.btnExplorer.Text = "Explorer";
+        this.btnExplorer.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Outlined;
+        this.btnExplorer.UseAccentColor = false;
         this.btnExplorer.AccessibleName = "Open file explorer";
-        this.btnExplorer.UseVisualStyleBackColor = false;
 
+        this.btnLogout.AutoSize = false;
+        this.btnLogout.HighEmphasis = false;
         this.btnLogout.Location = new System.Drawing.Point(850, 15);
         this.btnLogout.Name = "btnLogout";
-        this.btnLogout.Size = new System.Drawing.Size(110, 32);
+        this.btnLogout.Size = new System.Drawing.Size(110, 36);
         this.btnLogout.TabIndex = 6;
         this.btnLogout.Text = "Logout";
+        this.btnLogout.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Outlined;
+        this.btnLogout.UseAccentColor = false;
         this.btnLogout.AccessibleName = "Log out";
-        this.btnLogout.UseVisualStyleBackColor = false;
 
         this.notifyIcon.Icon = System.Drawing.SystemIcons.Application;
         this.notifyIcon.Text = "DataSyncEngine";
         this.notifyIcon.Visible = true;
 
-        this.trayMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-        this.trayShow = new System.Windows.Forms.ToolStripMenuItem();
-        this.trayExit = new System.Windows.Forms.ToolStripMenuItem();
+        this.trayMenu = new MaterialSkin.Controls.MaterialContextMenuStrip();
+        this.trayShow = new MaterialSkin.Controls.MaterialToolStripMenuItem();
+        this.trayExit = new MaterialSkin.Controls.MaterialToolStripMenuItem();
         this.trayMenu.Items.Add(this.trayShow);
         this.trayMenu.Items.Add(this.trayExit);
         this.trayShow.Text = "Show";
         this.trayExit.Text = "Exit";
         this.trayShow.Click += new System.EventHandler(this.trayShow_Click);
         this.trayExit.Click += new System.EventHandler(this.trayExit_Click);
-        this.trayAbout = new System.Windows.Forms.ToolStripMenuItem();
+        this.trayAbout = new MaterialSkin.Controls.MaterialToolStripMenuItem();
         this.trayAbout.Text = "About";
         this.trayAbout.Click += new System.EventHandler(this.trayAbout_Click);
         this.trayMenu.Items.Add(this.trayAbout);
@@ -283,17 +311,19 @@ partial class MainView : Form
         this.statusStrip.Items.Add(new System.Windows.Forms.ToolStripSeparator());
         this.statusStrip.Items.Add(this.btnTheme);
 
-        this.txtFilter = new System.Windows.Forms.TextBox();
+        this.txtFilter = new MaterialSkin.Controls.MaterialTextBox2();
+        this.txtFilter.Hint = "Type to filter files...";
         this.txtFilter.Location = new System.Drawing.Point(15, 58);
+        this.txtFilter.MaxLength = 32767;
         this.txtFilter.Name = "txtFilter";
-        this.txtFilter.Size = new System.Drawing.Size(250, 27);
+        this.txtFilter.Size = new System.Drawing.Size(250, 36);
         this.txtFilter.TabIndex = 7;
+        this.txtFilter.UseTallSize = false;
         this.txtFilter.AccessibleName = "Filter files";
-        this.txtFilter.PlaceholderText = "Type to filter files...";
         this.txtFilter.TextChanged += new System.EventHandler(this.txtFilter_TextChanged);
         this.tabSync.Controls.Add(this.txtFilter);
 
-        this.progressBar = new System.Windows.Forms.ProgressBar();
+        this.progressBar = new MaterialSkin.Controls.MaterialProgressBar();
         this.progressBar.Location = new System.Drawing.Point(280, 61);
         this.progressBar.Name = "progressBar";
         this.progressBar.Size = new System.Drawing.Size(210, 20);
@@ -319,35 +349,45 @@ partial class MainView : Form
         this.tabServers.TabIndex = 1;
         this.tabServers.Text = "Servers";
 
+        this.btnAddServer.AutoSize = false;
+        this.btnAddServer.HighEmphasis = true;
         this.btnAddServer.Location = new System.Drawing.Point(15, 15);
         this.btnAddServer.Name = "btnAddServer";
-        this.btnAddServer.Size = new System.Drawing.Size(150, 32);
+        this.btnAddServer.Size = new System.Drawing.Size(150, 36);
         this.btnAddServer.TabIndex = 0;
         this.btnAddServer.Text = "Add Server";
-        this.btnAddServer.UseVisualStyleBackColor = false;
+        this.btnAddServer.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+        this.btnAddServer.UseAccentColor = false;
 
-        this.btnAddServer.UseVisualStyleBackColor = false;
-
+        this.btnEditServer.AutoSize = false;
+        this.btnEditServer.HighEmphasis = false;
         this.btnEditServer.Location = new System.Drawing.Point(180, 15);
         this.btnEditServer.Name = "btnEditServer";
-        this.btnEditServer.Size = new System.Drawing.Size(140, 32);
+        this.btnEditServer.Size = new System.Drawing.Size(140, 36);
         this.btnEditServer.TabIndex = 2;
         this.btnEditServer.Text = "Edit Server";
-        this.btnEditServer.UseVisualStyleBackColor = false;
+        this.btnEditServer.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Outlined;
+        this.btnEditServer.UseAccentColor = false;
 
+        this.btnSetActive.AutoSize = false;
+        this.btnSetActive.HighEmphasis = false;
         this.btnSetActive.Location = new System.Drawing.Point(335, 15);
         this.btnSetActive.Name = "btnSetActive";
-        this.btnSetActive.Size = new System.Drawing.Size(140, 32);
+        this.btnSetActive.Size = new System.Drawing.Size(140, 36);
         this.btnSetActive.TabIndex = 3;
         this.btnSetActive.Text = "Set Active";
-        this.btnSetActive.UseVisualStyleBackColor = false;
+        this.btnSetActive.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Outlined;
+        this.btnSetActive.UseAccentColor = false;
 
+        this.btnDeleteServer.AutoSize = false;
+        this.btnDeleteServer.HighEmphasis = false;
         this.btnDeleteServer.Location = new System.Drawing.Point(490, 15);
         this.btnDeleteServer.Name = "btnDeleteServer";
-        this.btnDeleteServer.Size = new System.Drawing.Size(140, 32);
+        this.btnDeleteServer.Size = new System.Drawing.Size(140, 36);
         this.btnDeleteServer.TabIndex = 4;
         this.btnDeleteServer.Text = "Delete Server";
-        this.btnDeleteServer.UseVisualStyleBackColor = false;
+        this.btnDeleteServer.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Outlined;
+        this.btnDeleteServer.UseAccentColor = false;
 
         this.tabServers.Controls.Add(this.btnEditServer);
         this.tabServers.Controls.Add(this.btnSetActive);
@@ -382,16 +422,17 @@ partial class MainView : Form
         this.tabAnalytics.TabIndex = 3;
         this.tabAnalytics.Text = "Analytics";
 
+        this.lblAnalytics = new MaterialSkin.Controls.MaterialLabel();
         this.lblAnalytics.AutoSize = true;
         this.lblAnalytics.Location = new System.Drawing.Point(20, 20);
         this.lblAnalytics.Name = "lblAnalytics";
         this.lblAnalytics.Text = "Analytics dashboard (Admin only).";
 
-        this.lblAnaTotal = new System.Windows.Forms.Label();
-        this.lblAnaSynced = new System.Windows.Forms.Label();
-        this.lblAnaPending = new System.Windows.Forms.Label();
-        this.lblAnaModified = new System.Windows.Forms.Label();
-        this.lblAnaBytes = new System.Windows.Forms.Label();
+        this.lblAnaTotal = new MaterialSkin.Controls.MaterialLabel();
+        this.lblAnaSynced = new MaterialSkin.Controls.MaterialLabel();
+        this.lblAnaPending = new MaterialSkin.Controls.MaterialLabel();
+        this.lblAnaModified = new MaterialSkin.Controls.MaterialLabel();
+        this.lblAnaBytes = new MaterialSkin.Controls.MaterialLabel();
         this.lblAnaTotal.AutoSize = true;
         this.lblAnaTotal.Location = new System.Drawing.Point(20, 60);
         this.lblAnaTotal.Name = "lblAnaTotal";
@@ -422,6 +463,8 @@ partial class MainView : Form
         this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
         this.ClientSize = new System.Drawing.Size(980, 620);
         this.Controls.Add(this.tabControl);
+        this.Controls.Add(this.tabSelector);
+        this.Controls.Add(this.topSpacer);
         this.Name = "MainView";
         this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
         this.Text = "DataSyncEngine";
@@ -456,19 +499,25 @@ partial class MainView : Form
         this.tabUsers.TabIndex = 4;
         this.tabUsers.Text = "Users";
 
+        this.btnAddUser.AutoSize = false;
+        this.btnAddUser.HighEmphasis = true;
         this.btnAddUser.Location = new System.Drawing.Point(15, 15);
         this.btnAddUser.Name = "btnAddUser";
-        this.btnAddUser.Size = new System.Drawing.Size(140, 32);
+        this.btnAddUser.Size = new System.Drawing.Size(140, 36);
         this.btnAddUser.TabIndex = 0;
         this.btnAddUser.Text = "Add User";
-        this.btnAddUser.UseVisualStyleBackColor = false;
+        this.btnAddUser.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+        this.btnAddUser.UseAccentColor = false;
 
+        this.btnDeleteUser.AutoSize = false;
+        this.btnDeleteUser.HighEmphasis = false;
         this.btnDeleteUser.Location = new System.Drawing.Point(170, 15);
         this.btnDeleteUser.Name = "btnDeleteUser";
-        this.btnDeleteUser.Size = new System.Drawing.Size(140, 32);
+        this.btnDeleteUser.Size = new System.Drawing.Size(140, 36);
         this.btnDeleteUser.TabIndex = 1;
         this.btnDeleteUser.Text = "Delete User";
-        this.btnDeleteUser.UseVisualStyleBackColor = false;
+        this.btnDeleteUser.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Outlined;
+        this.btnDeleteUser.UseAccentColor = false;
 
         this.gridUsers.AllowUserToAddRows = false;
         this.gridUsers.AllowUserToDeleteRows = false;
@@ -486,60 +535,62 @@ partial class MainView : Form
         this.ResumeLayout(false);
     }
 
-    private System.Windows.Forms.TabControl tabControl;
+    private MaterialSkin.Controls.MaterialTabControl tabControl;
+    private MaterialSkin.Controls.MaterialTabSelector tabSelector;
+    private System.Windows.Forms.Panel topSpacer;
     private System.Windows.Forms.TabPage tabDashboard;
     private System.Windows.Forms.TabPage tabSync;
-    private System.Windows.Forms.Panel cardFiles;
-    private System.Windows.Forms.Label lblFilesCap;
+    private MaterialSkin.Controls.MaterialCard cardFiles;
+    private MaterialSkin.Controls.MaterialLabel lblFilesCap;
     private System.Windows.Forms.Label lblFilesVal;
-    private System.Windows.Forms.Panel cardSynced;
-    private System.Windows.Forms.Label lblSyncedCap;
+    private MaterialSkin.Controls.MaterialCard cardSynced;
+    private MaterialSkin.Controls.MaterialLabel lblSyncedCap;
     private System.Windows.Forms.Label lblSyncedVal;
-    private System.Windows.Forms.Panel cardPending;
-    private System.Windows.Forms.Label lblPendingCap;
+    private MaterialSkin.Controls.MaterialCard cardPending;
+    private MaterialSkin.Controls.MaterialLabel lblPendingCap;
     private System.Windows.Forms.Label lblPendingVal;
-    private System.Windows.Forms.Panel cardServers;
-    private System.Windows.Forms.Label lblServersCap;
+    private MaterialSkin.Controls.MaterialCard cardServers;
+    private MaterialSkin.Controls.MaterialLabel lblServersCap;
     private System.Windows.Forms.Label lblServersVal;
-    private System.Windows.Forms.Label lblDashTitle;
+    private MaterialSkin.Controls.MaterialLabel lblDashTitle;
     private System.Windows.Forms.TabPage tabServers;
     private System.Windows.Forms.TabPage tabAudit;
     private System.Windows.Forms.TabPage tabAnalytics;
-    private System.Windows.Forms.Button btnSelectFolder;
-    private System.Windows.Forms.Button btnSync;
-    private System.Windows.Forms.Button btnDelete;
-    private System.Windows.Forms.Button btnResume;
-    private System.Windows.Forms.Button btnExplorer;
-    private System.Windows.Forms.Button btnLogout;
-    private System.Windows.Forms.Button btnAddUser;
-    private System.Windows.Forms.Button btnDeleteUser;
+    private MaterialSkin.Controls.MaterialButton btnSelectFolder;
+    private MaterialSkin.Controls.MaterialButton btnSync;
+    private MaterialSkin.Controls.MaterialButton btnDelete;
+    private MaterialSkin.Controls.MaterialButton btnResume;
+    private MaterialSkin.Controls.MaterialButton btnExplorer;
+    private MaterialSkin.Controls.MaterialButton btnLogout;
+    private MaterialSkin.Controls.MaterialButton btnAddUser;
+    private MaterialSkin.Controls.MaterialButton btnDeleteUser;
     private System.Windows.Forms.DataGridView gridUsers;
     private System.Windows.Forms.TabPage tabUsers;
-    private System.Windows.Forms.Button btnEditServer;
-    private System.Windows.Forms.Button btnSetActive;
-    private System.Windows.Forms.Button btnDeleteServer;
+    private MaterialSkin.Controls.MaterialButton btnEditServer;
+    private MaterialSkin.Controls.MaterialButton btnSetActive;
+    private MaterialSkin.Controls.MaterialButton btnDeleteServer;
     private System.Windows.Forms.StatusStrip statusStrip;
     private System.Windows.Forms.ToolStripStatusLabel lblServerInfo;
     private System.Windows.Forms.ToolStripDropDownButton btnTheme;
     private System.Windows.Forms.ToolStripMenuItem themeDarkItem;
     private System.Windows.Forms.ToolStripMenuItem themeLightItem;
-    private System.Windows.Forms.TextBox txtFilter;
-    private System.Windows.Forms.ProgressBar progressBar;
+    private MaterialSkin.Controls.MaterialTextBox2 txtFilter;
+    private MaterialSkin.Controls.MaterialProgressBar progressBar;
     private System.Windows.Forms.ToolTip toolTip;
-    private System.Windows.Forms.ToolStripMenuItem trayAbout;
-    private System.Windows.Forms.ContextMenuStrip trayMenu;
-    private System.Windows.Forms.ToolStripMenuItem trayShow;
-    private System.Windows.Forms.ToolStripMenuItem trayExit;
+    private MaterialSkin.Controls.MaterialToolStripMenuItem trayAbout;
+    private MaterialSkin.Controls.MaterialContextMenuStrip trayMenu;
+    private MaterialSkin.Controls.MaterialToolStripMenuItem trayShow;
+    private MaterialSkin.Controls.MaterialToolStripMenuItem trayExit;
     private System.Windows.Forms.NotifyIcon notifyIcon;
-    private System.Windows.Forms.Label lblStatus;
+    private MaterialSkin.Controls.MaterialLabel lblStatus;
     private System.Windows.Forms.DataGridView gridFiles;
-    private System.Windows.Forms.Button btnAddServer;
+    private MaterialSkin.Controls.MaterialButton btnAddServer;
     private System.Windows.Forms.DataGridView gridServers;
     private System.Windows.Forms.DataGridView gridAudit;
-    private System.Windows.Forms.Label lblAnalytics;
-    private System.Windows.Forms.Label lblAnaTotal;
-    private System.Windows.Forms.Label lblAnaSynced;
-    private System.Windows.Forms.Label lblAnaPending;
-    private System.Windows.Forms.Label lblAnaModified;
-    private System.Windows.Forms.Label lblAnaBytes;
+    private MaterialSkin.Controls.MaterialLabel lblAnalytics;
+    private MaterialSkin.Controls.MaterialLabel lblAnaTotal;
+    private MaterialSkin.Controls.MaterialLabel lblAnaSynced;
+    private MaterialSkin.Controls.MaterialLabel lblAnaPending;
+    private MaterialSkin.Controls.MaterialLabel lblAnaModified;
+    private MaterialSkin.Controls.MaterialLabel lblAnaBytes;
 }

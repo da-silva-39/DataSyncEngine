@@ -1,6 +1,6 @@
 namespace Views.Forms.SubViews;
 
-partial class UserConfigView : Form
+partial class UserConfigView : MaterialSkin.Controls.MaterialForm
 {
     private System.ComponentModel.IContainer components = null;
 
@@ -15,35 +15,63 @@ partial class UserConfigView : Form
 
     private void InitializeComponent()
     {
-        this.lblUsername = new System.Windows.Forms.Label();
-        this.txtUsername = new System.Windows.Forms.TextBox();
-        this.lblPassword = new System.Windows.Forms.Label();
-        this.txtPassword = new System.Windows.Forms.TextBox();
-        this.lblRole = new System.Windows.Forms.Label();
-        this.cmbRole = new System.Windows.Forms.ComboBox();
-        this.chkActive = new System.Windows.Forms.CheckBox();
-        this.btnSave = new System.Windows.Forms.Button();
+        this.txtUsername = new MaterialSkin.Controls.MaterialTextBox2();
+        this.txtPassword = new MaterialSkin.Controls.MaterialTextBox2();
+        this.cmbRole = new MaterialSkin.Controls.MaterialComboBox();
+        this.chkActive = new MaterialSkin.Controls.MaterialCheckbox();
+        this.btnSave = new MaterialSkin.Controls.MaterialButton();
         this.SuspendLayout();
 
-        this.lblUsername.AutoSize = true; this.lblUsername.Location = new System.Drawing.Point(20, 20); this.lblUsername.Text = "Username:";
-        this.txtUsername.Location = new System.Drawing.Point(140, 17); this.txtUsername.Size = new System.Drawing.Size(200, 27); this.txtUsername.TabIndex = 0;
-        this.lblPassword.AutoSize = true; this.lblPassword.Location = new System.Drawing.Point(20, 60); this.lblPassword.Text = "Password:";
-        this.txtPassword.Location = new System.Drawing.Point(140, 57); this.txtPassword.Size = new System.Drawing.Size(200, 27); this.txtPassword.TabIndex = 1; this.txtPassword.UseSystemPasswordChar = true;
-        this.lblRole.AutoSize = true; this.lblRole.Location = new System.Drawing.Point(20, 100); this.lblRole.Text = "Role:";
-        this.cmbRole.Location = new System.Drawing.Point(140, 97); this.cmbRole.Size = new System.Drawing.Size(200, 28); this.cmbRole.TabIndex = 2; this.cmbRole.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-        this.chkActive.AutoSize = true; this.chkActive.Location = new System.Drawing.Point(140, 140); this.chkActive.Text = "Active"; this.chkActive.TabIndex = 3; this.chkActive.Checked = true;
-        this.btnSave.Location = new System.Drawing.Point(140, 180); this.btnSave.Size = new System.Drawing.Size(110, 32); this.btnSave.TabIndex = 4; this.btnSave.Text = "Save"; this.btnSave.UseVisualStyleBackColor = false;
+        this.txtUsername.Hint = "Username";
+        this.txtUsername.Location = new System.Drawing.Point(20, 80);
+        this.txtUsername.MaxLength = 32767;
+        this.txtUsername.Name = "txtUsername";
+        this.txtUsername.Size = new System.Drawing.Size(340, 48);
+        this.txtUsername.TabIndex = 0;
+
+        this.txtPassword.Hint = "Password";
+        this.txtPassword.Location = new System.Drawing.Point(20, 140);
+        this.txtPassword.MaxLength = 32767;
+        this.txtPassword.Name = "txtPassword";
+        this.txtPassword.Size = new System.Drawing.Size(340, 48);
+        this.txtPassword.TabIndex = 1;
+        this.txtPassword.UseSystemPasswordChar = true;
+
+        this.cmbRole.AutoResize = false;
+        this.cmbRole.Hint = "Role";
+        this.cmbRole.Location = new System.Drawing.Point(20, 200);
+        this.cmbRole.Name = "cmbRole";
+        this.cmbRole.Size = new System.Drawing.Size(340, 48);
+        this.cmbRole.TabIndex = 2;
+        this.cmbRole.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+
+        this.chkActive.AutoSize = true;
+        this.chkActive.Location = new System.Drawing.Point(20, 260);
+        this.chkActive.Name = "chkActive";
+        this.chkActive.Size = new System.Drawing.Size(100, 37);
+        this.chkActive.TabIndex = 3;
+        this.chkActive.Text = "Active";
+        this.chkActive.Checked = true;
+
+        this.btnSave.AutoSize = false;
+        this.btnSave.HighEmphasis = true;
+        this.btnSave.Location = new System.Drawing.Point(20, 310);
+        this.btnSave.Name = "btnSave";
+        this.btnSave.Size = new System.Drawing.Size(340, 36);
+        this.btnSave.TabIndex = 4;
+        this.btnSave.Text = "Save";
+        this.btnSave.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+        this.btnSave.UseAccentColor = false;
         this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
 
         this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
         this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-        this.ClientSize = new System.Drawing.Size(380, 240);
-        this.Controls.Add(this.lblUsername); this.Controls.Add(this.txtUsername);
-        this.Controls.Add(this.lblPassword); this.Controls.Add(this.txtPassword);
-        this.Controls.Add(this.lblRole); this.Controls.Add(this.cmbRole);
-        this.Controls.Add(this.chkActive); this.Controls.Add(this.btnSave);
-        this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-        this.MaximizeBox = false;
+        this.ClientSize = new System.Drawing.Size(380, 370);
+        this.Controls.Add(this.txtUsername);
+        this.Controls.Add(this.txtPassword);
+        this.Controls.Add(this.cmbRole);
+        this.Controls.Add(this.chkActive);
+        this.Controls.Add(this.btnSave);
         this.Name = "UserConfigView";
         this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
         this.Text = "User Configuration";
@@ -51,12 +79,9 @@ partial class UserConfigView : Form
         this.PerformLayout();
     }
 
-    private System.Windows.Forms.Label lblUsername;
-    private System.Windows.Forms.TextBox txtUsername;
-    private System.Windows.Forms.Label lblPassword;
-    private System.Windows.Forms.TextBox txtPassword;
-    private System.Windows.Forms.Label lblRole;
-    private System.Windows.Forms.ComboBox cmbRole;
-    private System.Windows.Forms.CheckBox chkActive;
-    private System.Windows.Forms.Button btnSave;
+    private MaterialSkin.Controls.MaterialTextBox2 txtUsername;
+    private MaterialSkin.Controls.MaterialTextBox2 txtPassword;
+    private MaterialSkin.Controls.MaterialComboBox cmbRole;
+    private MaterialSkin.Controls.MaterialCheckbox chkActive;
+    private MaterialSkin.Controls.MaterialButton btnSave;
 }
