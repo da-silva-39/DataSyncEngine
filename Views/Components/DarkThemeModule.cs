@@ -55,18 +55,18 @@ public static class DarkThemeModule
         AssignTabIndexes(root, ref tabIndex);
     }
 
-    private static bool IsMaterialControl(Control control)
+    private static bool IsSkinnedControl(Control control)
     {
-        return control.GetType().Namespace == "MaterialSkin.Controls";
+        return control.GetType().Namespace == "Krypton.Toolkit";
     }
 
     private static void ApplyControl(Control control)
     {
-        if (!IsMaterialControl(control))
+        if (!IsSkinnedControl(control))
         {
             switch (control)
             {
-                case Form form when form.GetType().Namespace != "MaterialSkin.Controls":
+                case Form form when form.GetType().Namespace != "Krypton.Toolkit":
                     form.BackColor = BackgroundColor;
                     form.ForeColor = TextColor;
                     form.Font = new Font("Segoe UI", 9.5F);
@@ -111,6 +111,10 @@ public static class DarkThemeModule
                 case ComboBox combo:
                     combo.BackColor = PanelColor;
                     combo.ForeColor = TextColor;
+                    break;
+                case ListBox list:
+                    list.BackColor = PanelColor;
+                    list.ForeColor = TextColor;
                     break;
                 case StatusStrip strip:
                     strip.BackColor = PanelColor;

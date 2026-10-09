@@ -1,6 +1,6 @@
 namespace Views.Forms.SubViews;
 
-partial class ServerConfigView : MaterialSkin.Controls.MaterialForm
+partial class ServerConfigView : Krypton.Toolkit.KryptonForm
 {
     private System.ComponentModel.IContainer components = null;
 
@@ -15,32 +15,32 @@ partial class ServerConfigView : MaterialSkin.Controls.MaterialForm
 
     private void InitializeComponent()
     {
-        this.txtName = new MaterialSkin.Controls.MaterialTextBox2();
-        this.txtHost = new MaterialSkin.Controls.MaterialTextBox2();
-        this.txtPort = new MaterialSkin.Controls.MaterialTextBox2();
-        this.txtDatabase = new MaterialSkin.Controls.MaterialTextBox2();
-        this.txtUser = new MaterialSkin.Controls.MaterialTextBox2();
-        this.txtPassword = new MaterialSkin.Controls.MaterialTextBox2();
-        this.chkActive = new MaterialSkin.Controls.MaterialCheckbox();
-        this.btnSave = new MaterialSkin.Controls.MaterialButton();
-        this.btnTest = new MaterialSkin.Controls.MaterialButton();
+        this.txtName = new Krypton.Toolkit.KryptonTextBox();
+        this.txtHost = new Krypton.Toolkit.KryptonTextBox();
+        this.txtPort = new Krypton.Toolkit.KryptonTextBox();
+        this.txtDatabase = new Krypton.Toolkit.KryptonTextBox();
+        this.txtUser = new Krypton.Toolkit.KryptonTextBox();
+        this.txtPassword = new Krypton.Toolkit.KryptonTextBox();
+        this.chkActive = new Krypton.Toolkit.KryptonCheckBox();
+        this.btnSave = new Krypton.Toolkit.KryptonButton();
+        this.btnTest = new Krypton.Toolkit.KryptonButton();
         this.SuspendLayout();
 
-        this.txtName.Hint = "Name";
+        this.txtName.CueHint.CueHintText = "Name";
         this.txtName.Location = new System.Drawing.Point(20, 80);
         this.txtName.MaxLength = 32767;
         this.txtName.Name = "txtName";
         this.txtName.Size = new System.Drawing.Size(360, 48);
         this.txtName.TabIndex = 0;
 
-        this.txtHost.Hint = "Host";
+        this.txtHost.CueHint.CueHintText = "Host";
         this.txtHost.Location = new System.Drawing.Point(20, 140);
         this.txtHost.MaxLength = 32767;
         this.txtHost.Name = "txtHost";
         this.txtHost.Size = new System.Drawing.Size(360, 48);
         this.txtHost.TabIndex = 1;
 
-        this.txtPort.Hint = "Port";
+        this.txtPort.CueHint.CueHintText = "Port";
         this.txtPort.Location = new System.Drawing.Point(20, 200);
         this.txtPort.MaxLength = 32767;
         this.txtPort.Name = "txtPort";
@@ -48,21 +48,21 @@ partial class ServerConfigView : MaterialSkin.Controls.MaterialForm
         this.txtPort.TabIndex = 2;
         this.txtPort.Text = "3306";
 
-        this.txtDatabase.Hint = "Database";
+        this.txtDatabase.CueHint.CueHintText = "Database";
         this.txtDatabase.Location = new System.Drawing.Point(20, 260);
         this.txtDatabase.MaxLength = 32767;
         this.txtDatabase.Name = "txtDatabase";
         this.txtDatabase.Size = new System.Drawing.Size(360, 48);
         this.txtDatabase.TabIndex = 3;
 
-        this.txtUser.Hint = "User";
+        this.txtUser.CueHint.CueHintText = "User";
         this.txtUser.Location = new System.Drawing.Point(20, 320);
         this.txtUser.MaxLength = 32767;
         this.txtUser.Name = "txtUser";
         this.txtUser.Size = new System.Drawing.Size(360, 48);
         this.txtUser.TabIndex = 4;
 
-        this.txtPassword.Hint = "Password";
+        this.txtPassword.CueHint.CueHintText = "Password";
         this.txtPassword.Location = new System.Drawing.Point(20, 380);
         this.txtPassword.MaxLength = 32767;
         this.txtPassword.Name = "txtPassword";
@@ -78,25 +78,21 @@ partial class ServerConfigView : MaterialSkin.Controls.MaterialForm
         this.chkActive.Text = "Set as active server";
 
         this.btnTest.AutoSize = false;
-        this.btnTest.HighEmphasis = false;
         this.btnTest.Location = new System.Drawing.Point(20, 490);
         this.btnTest.Name = "btnTest";
         this.btnTest.Size = new System.Drawing.Size(165, 36);
         this.btnTest.TabIndex = 7;
         this.btnTest.Text = "Test";
-        this.btnTest.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Outlined;
-        this.btnTest.UseAccentColor = false;
+        this.btnTest.ButtonStyle = Krypton.Toolkit.ButtonStyle.Alternate;
         this.btnTest.Click += new System.EventHandler(this.btnTest_Click);
 
         this.btnSave.AutoSize = false;
-        this.btnSave.HighEmphasis = true;
         this.btnSave.Location = new System.Drawing.Point(215, 490);
         this.btnSave.Name = "btnSave";
         this.btnSave.Size = new System.Drawing.Size(165, 36);
         this.btnSave.TabIndex = 8;
         this.btnSave.Text = "Save";
-        this.btnSave.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-        this.btnSave.UseAccentColor = false;
+        this.btnSave.ButtonStyle = Krypton.Toolkit.ButtonStyle.Standalone;
         this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
 
         this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -118,13 +114,13 @@ partial class ServerConfigView : MaterialSkin.Controls.MaterialForm
         this.PerformLayout();
     }
 
-    private MaterialSkin.Controls.MaterialTextBox2 txtName;
-    private MaterialSkin.Controls.MaterialTextBox2 txtHost;
-    private MaterialSkin.Controls.MaterialTextBox2 txtPort;
-    private MaterialSkin.Controls.MaterialTextBox2 txtDatabase;
-    private MaterialSkin.Controls.MaterialTextBox2 txtUser;
-    private MaterialSkin.Controls.MaterialTextBox2 txtPassword;
-    private MaterialSkin.Controls.MaterialCheckbox chkActive;
-    private MaterialSkin.Controls.MaterialButton btnSave;
-    private MaterialSkin.Controls.MaterialButton btnTest;
+    private Krypton.Toolkit.KryptonTextBox txtName;
+    private Krypton.Toolkit.KryptonTextBox txtHost;
+    private Krypton.Toolkit.KryptonTextBox txtPort;
+    private Krypton.Toolkit.KryptonTextBox txtDatabase;
+    private Krypton.Toolkit.KryptonTextBox txtUser;
+    private Krypton.Toolkit.KryptonTextBox txtPassword;
+    private Krypton.Toolkit.KryptonCheckBox chkActive;
+    private Krypton.Toolkit.KryptonButton btnSave;
+    private Krypton.Toolkit.KryptonButton btnTest;
 }

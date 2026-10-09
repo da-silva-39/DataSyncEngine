@@ -27,7 +27,7 @@ public class UserRepository : IUserRepository<UserModel>
         using var timeout = Timeout();
         using var linked = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeout.Token);
         await using MySqlConnection conn = await DbConnectionFactory.OpenConnectionAsync(_serverProvider(), linked.Token);
-        await using var cmd = new MySqlCommand("SELECT id, username, password_hash, salt, role, is_active FROM users WHERE id=@id", conn);
+        await using var cmd = new MySqlCommand("SELECT id, username, password_hash, salt, role, is_active, avatar_blob FROM users WHERE id=@id", conn);
         cmd.Parameters.AddWithValue("@id", id);
         await using MySqlDataReader reader = await cmd.ExecuteReaderAsync(linked.Token);
         return reader.Read() ? Map(reader) : null;
@@ -39,7 +39,7 @@ public class UserRepository : IUserRepository<UserModel>
         using var timeout = Timeout();
         using var linked = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeout.Token);
         await using MySqlConnection conn = await DbConnectionFactory.OpenConnectionAsync(_serverProvider(), linked.Token);
-        await using var cmd = new MySqlCommand("SELECT id, username, password_hash, salt, role, is_active FROM users", conn);
+        await using var cmd = new MySqlCommand("SELECT id, username, password_hash, salt, role, is_active, avatar_blob FROM users", conn);
         await using MySqlDataReader reader = await cmd.ExecuteReaderAsync(linked.Token);
         while (reader.Read()) list.Add(Map(reader));
         return list;
@@ -51,12 +51,13 @@ public class UserRepository : IUserRepository<UserModel>
         using var linked = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeout.Token);
         await using MySqlConnection conn = await DbConnectionFactory.OpenConnectionAsync(_serverProvider(), linked.Token);
         await using var cmd = new MySqlCommand(
-            "INSERT INTO users (username, password_hash, salt, role, is_active) VALUES (@u,@h,@s,@r,@a); SELECT LAST_INSERT_ID();", conn);
+            "INSERT INTO users (username, password_hash, salt, role, is_active, avatar_blob) VALUES (@u,@h,@s,@r,@a,@av); SELECT LAST_INSERT_ID();", conn);
         cmd.Parameters.AddWithValue("@u", entity.Username);
         cmd.Parameters.AddWithValue("@h", entity.PasswordHash);
         cmd.Parameters.AddWithValue("@s", entity.Salt);
         cmd.Parameters.AddWithValue("@r", entity.Role.ToString());
         cmd.Parameters.AddWithValue("@a", entity.IsActive);
+        cmd.Parameters.AddWithValue("@av", (object?)entity.Avatar ?? DBNull.Value);
         object? result = await cmd.ExecuteScalarAsync(linked.Token);
         return Convert.ToInt32(result);
     }
@@ -67,12 +68,13 @@ public class UserRepository : IUserRepository<UserModel>
         using var linked = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeout.Token);
         await using MySqlConnection conn = await DbConnectionFactory.OpenConnectionAsync(_serverProvider(), linked.Token);
         await using var cmd = new MySqlCommand(
-            "UPDATE users SET username=@u, password_hash=@h, salt=@s, role=@r, is_active=@a WHERE id=@id", conn);
+            "UPDATE users SET username=@u, password_hash=@h, salt=@s, role=@r, is_active=@a, avatar_blob=@av WHERE id=@id", conn);
         cmd.Parameters.AddWithValue("@u", entity.Username);
         cmd.Parameters.AddWithValue("@h", entity.PasswordHash);
         cmd.Parameters.AddWithValue("@s", entity.Salt);
         cmd.Parameters.AddWithValue("@r", entity.Role.ToString());
         cmd.Parameters.AddWithValue("@a", entity.IsActive);
+        cmd.Parameters.AddWithValue("@av", (object?)entity.Avatar ?? DBNull.Value);
         cmd.Parameters.AddWithValue("@id", entity.Id);
         return await cmd.ExecuteNonQueryAsync(linked.Token) > 0;
     }
@@ -92,7 +94,7 @@ public class UserRepository : IUserRepository<UserModel>
         using var timeout = Timeout();
         using var linked = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeout.Token);
         await using MySqlConnection conn = await DbConnectionFactory.OpenConnectionAsync(_serverProvider(), linked.Token);
-        await using var cmd = new MySqlCommand("SELECT id, username, password_hash, salt, role, is_active FROM users WHERE username=@u", conn);
+        await using var cmd = new MySqlCommand("SELECT id, username, password_hash, salt, role, is_active, avatar_blob FROM users WHERE username=@u", conn);
         cmd.Parameters.AddWithValue("@u", username);
         await using MySqlDataReader reader = await cmd.ExecuteReaderAsync(linked.Token);
         return reader.Read() ? Map(reader) : null;
@@ -113,6 +115,7 @@ public class UserRepository : IUserRepository<UserModel>
             PasswordHash = reader.GetString(2),
             Salt = reader.GetString(3),
             Role = Enum.Parse<Core.Enums.UserRole>(reader.GetString(4)),
+            Avatar = reader.IsDBNull(6) ? null : (byte[])reader.GetValue(6),
             IsActive = reader.GetBoolean(5)
         };
     }

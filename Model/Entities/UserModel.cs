@@ -10,4 +10,5 @@ public class UserModel
     public string Salt { get; set; } = string.Empty;
     public UserRole Role { get; set; } = UserRole.Operator;
     public bool IsActive { get; set; } = true;
+    public byte[]? Avatar { get; set; }
 }

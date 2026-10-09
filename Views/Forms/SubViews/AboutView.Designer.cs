@@ -1,6 +1,6 @@
 namespace Views.Forms.SubViews;
 
-partial class AboutView : MaterialSkin.Controls.MaterialForm
+partial class AboutView : Krypton.Toolkit.KryptonForm
 {
     private System.ComponentModel.IContainer components = null;
 
@@ -15,10 +15,10 @@ partial class AboutView : MaterialSkin.Controls.MaterialForm
 
     private void InitializeComponent()
     {
-        this.lblProduct = new MaterialSkin.Controls.MaterialLabel();
-        this.lblVersion = new MaterialSkin.Controls.MaterialLabel();
-        this.lblDescription = new MaterialSkin.Controls.MaterialLabel();
-        this.btnOk = new MaterialSkin.Controls.MaterialButton();
+        this.lblProduct = new Krypton.Toolkit.KryptonLabel();
+        this.lblVersion = new Krypton.Toolkit.KryptonLabel();
+        this.lblDescription = new Krypton.Toolkit.KryptonLabel();
+        this.btnOk = new Krypton.Toolkit.KryptonButton();
         this.SuspendLayout();
 
         this.lblProduct.AutoSize = true;
@@ -40,14 +40,12 @@ partial class AboutView : MaterialSkin.Controls.MaterialForm
         this.lblDescription.Text = "Corporate file synchronization with AES-256 encryption,\r\ncompression and MariaDB persistence.";
 
         this.btnOk.AutoSize = false;
-        this.btnOk.HighEmphasis = true;
         this.btnOk.Location = new System.Drawing.Point(150, 230);
         this.btnOk.Name = "btnOk";
         this.btnOk.Size = new System.Drawing.Size(100, 36);
         this.btnOk.TabIndex = 3;
         this.btnOk.Text = "OK";
-        this.btnOk.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-        this.btnOk.UseAccentColor = false;
+        this.btnOk.ButtonStyle = Krypton.Toolkit.ButtonStyle.Standalone;
         this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
 
         this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -64,8 +62,8 @@ partial class AboutView : MaterialSkin.Controls.MaterialForm
         this.PerformLayout();
     }
 
-    private MaterialSkin.Controls.MaterialLabel lblProduct;
-    private MaterialSkin.Controls.MaterialLabel lblVersion;
-    private MaterialSkin.Controls.MaterialLabel lblDescription;
-    private MaterialSkin.Controls.MaterialButton btnOk;
+    private Krypton.Toolkit.KryptonLabel lblProduct;
+    private Krypton.Toolkit.KryptonLabel lblVersion;
+    private Krypton.Toolkit.KryptonLabel lblDescription;
+    private Krypton.Toolkit.KryptonButton btnOk;
 }

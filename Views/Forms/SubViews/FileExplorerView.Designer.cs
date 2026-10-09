@@ -1,6 +1,6 @@
 namespace Views.Forms.SubViews;
 
-partial class FileExplorerView : MaterialSkin.Controls.MaterialForm
+partial class FileExplorerView : Krypton.Toolkit.KryptonForm
 {
     private System.ComponentModel.IContainer components = null;
 
@@ -15,20 +15,20 @@ partial class FileExplorerView : MaterialSkin.Controls.MaterialForm
 
     private void InitializeComponent()
     {
-        this.lblFolder = new MaterialSkin.Controls.MaterialLabel();
-        this.txtPath = new MaterialSkin.Controls.MaterialTextBox2();
-        this.btnBrowse = new MaterialSkin.Controls.MaterialButton();
+        this.lblFolder = new Krypton.Toolkit.KryptonLabel();
+        this.txtPath = new Krypton.Toolkit.KryptonTextBox();
+        this.btnBrowse = new Krypton.Toolkit.KryptonButton();
         this.grid = new System.Windows.Forms.DataGridView();
-        this.lblStatus = new MaterialSkin.Controls.MaterialLabel();
-        this.ctxSync = new MaterialSkin.Controls.MaterialToolStripMenuItem();
-        this.ctxHash = new MaterialSkin.Controls.MaterialToolStripMenuItem();
-        this.ctxProps = new MaterialSkin.Controls.MaterialToolStripMenuItem();
-        this.ctxResume = new MaterialSkin.Controls.MaterialToolStripMenuItem();
-        this.ctxDelete = new MaterialSkin.Controls.MaterialToolStripMenuItem();
-        this.ctxRefresh = new MaterialSkin.Controls.MaterialToolStripMenuItem();
+        this.lblStatus = new Krypton.Toolkit.KryptonLabel();
+        this.ctxSync = new System.Windows.Forms.ToolStripMenuItem();
+        this.ctxHash = new System.Windows.Forms.ToolStripMenuItem();
+        this.ctxProps = new System.Windows.Forms.ToolStripMenuItem();
+        this.ctxResume = new System.Windows.Forms.ToolStripMenuItem();
+        this.ctxDelete = new System.Windows.Forms.ToolStripMenuItem();
+        this.ctxRefresh = new System.Windows.Forms.ToolStripMenuItem();
         this.SuspendLayout();
         this.components = new System.ComponentModel.Container();
-        this.ctxMenu = new MaterialSkin.Controls.MaterialContextMenuStrip();
+        this.ctxMenu = new System.Windows.Forms.ContextMenuStrip();
         ((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
 
         this.lblFolder.AutoSize = true;
@@ -36,24 +36,21 @@ partial class FileExplorerView : MaterialSkin.Controls.MaterialForm
         this.lblFolder.Name = "lblFolder";
         this.lblFolder.Text = "Folder:";
 
-        this.txtPath.Hint = "Select a folder to explore...";
+        this.txtPath.CueHint.CueHintText = "Select a folder to explore...";
         this.txtPath.Location = new System.Drawing.Point(85, 75);
         this.txtPath.MaxLength = 32767;
         this.txtPath.Name = "txtPath";
         this.txtPath.ReadOnly = true;
         this.txtPath.Size = new System.Drawing.Size(600, 36);
         this.txtPath.TabIndex = 0;
-        this.txtPath.UseTallSize = false;
 
         this.btnBrowse.AutoSize = false;
-        this.btnBrowse.HighEmphasis = true;
         this.btnBrowse.Location = new System.Drawing.Point(700, 76);
         this.btnBrowse.Name = "btnBrowse";
         this.btnBrowse.Size = new System.Drawing.Size(110, 36);
         this.btnBrowse.TabIndex = 1;
         this.btnBrowse.Text = "Browse...";
-        this.btnBrowse.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-        this.btnBrowse.UseAccentColor = false;
+        this.btnBrowse.ButtonStyle = Krypton.Toolkit.ButtonStyle.Standalone;
         this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
 
         this.grid.AllowUserToAddRows = false;
@@ -101,16 +98,16 @@ partial class FileExplorerView : MaterialSkin.Controls.MaterialForm
         this.PerformLayout();
     }
 
-    private MaterialSkin.Controls.MaterialLabel lblFolder;
-    private MaterialSkin.Controls.MaterialTextBox2 txtPath;
-    private MaterialSkin.Controls.MaterialButton btnBrowse;
+    private Krypton.Toolkit.KryptonLabel lblFolder;
+    private Krypton.Toolkit.KryptonTextBox txtPath;
+    private Krypton.Toolkit.KryptonButton btnBrowse;
     private System.Windows.Forms.DataGridView grid;
-    private MaterialSkin.Controls.MaterialLabel lblStatus;
-    private MaterialSkin.Controls.MaterialContextMenuStrip ctxMenu;
-    private MaterialSkin.Controls.MaterialToolStripMenuItem ctxSync;
-    private MaterialSkin.Controls.MaterialToolStripMenuItem ctxHash;
-    private MaterialSkin.Controls.MaterialToolStripMenuItem ctxProps;
-    private MaterialSkin.Controls.MaterialToolStripMenuItem ctxResume;
-    private MaterialSkin.Controls.MaterialToolStripMenuItem ctxDelete;
-    private MaterialSkin.Controls.MaterialToolStripMenuItem ctxRefresh;
+    private Krypton.Toolkit.KryptonLabel lblStatus;
+    private System.Windows.Forms.ContextMenuStrip ctxMenu;
+    private System.Windows.Forms.ToolStripMenuItem ctxSync;
+    private System.Windows.Forms.ToolStripMenuItem ctxHash;
+    private System.Windows.Forms.ToolStripMenuItem ctxProps;
+    private System.Windows.Forms.ToolStripMenuItem ctxResume;
+    private System.Windows.Forms.ToolStripMenuItem ctxDelete;
+    private System.Windows.Forms.ToolStripMenuItem ctxRefresh;
 }

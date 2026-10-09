@@ -3,7 +3,7 @@ using Views.ViewModels;
 
 namespace Views.Forms;
 
-public partial class MainView : MaterialSkin.Controls.MaterialForm
+public partial class MainView : Krypton.Toolkit.KryptonForm
 {
     private readonly MainViewModel _viewModel;
     private bool _exitRequested;
@@ -239,7 +239,7 @@ public partial class MainView : MaterialSkin.Controls.MaterialForm
     public MainView()
     {
         InitializeComponent();
-        MaterialThemeModule.Apply(this);
+        KryptonThemeModule.Apply(this);
         if (!DarkThemeModule.IsDesignTime)
         {
             Icon = LogoModule.GetIcon() ?? AppIcon.Create();
@@ -271,16 +271,13 @@ public partial class MainView : MaterialSkin.Controls.MaterialForm
         }
     }
 
-    private static void SetupNavButton(MaterialSkin.Controls.MaterialButton button, string name, string text, int y)
+    private static void SetupNavButton(Krypton.Toolkit.KryptonButton button, string name, string text, int y)
     {
-        button.AutoSize = false;
-        button.HighEmphasis = false;
         button.Location = new System.Drawing.Point(12, y);
         button.Name = name;
         button.Size = new System.Drawing.Size(216, 36);
         button.Text = text;
-        button.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Text;
-        button.UseAccentColor = false;
+        button.ButtonStyle = Krypton.Toolkit.ButtonStyle.ListItem;
     }
 
     private void UpdateDashboard()
@@ -303,12 +300,12 @@ public partial class MainView : MaterialSkin.Controls.MaterialForm
 
     private void themeDarkItem_Click(object? sender, EventArgs e)
     {
-        MaterialThemeModule.SetTheme(true);
+        KryptonThemeModule.SetTheme(true);
     }
 
     private void themeLightItem_Click(object? sender, EventArgs e)
     {
-        MaterialThemeModule.SetTheme(false);
+        KryptonThemeModule.SetTheme(false);
     }
 
     private void txtFilter_TextChanged(object? sender, EventArgs e)
@@ -378,7 +375,7 @@ public partial class MainView : MaterialSkin.Controls.MaterialForm
         if (!radDark.Checked) return;
         AppServices.Settings.ThemeDark = true;
         AppServices.SaveSettings();
-        MaterialThemeModule.SetTheme(true);
+        KryptonThemeModule.SetTheme(true);
     }
 
     private void radLight_CheckedChanged(object? sender, EventArgs e)
@@ -386,7 +383,7 @@ public partial class MainView : MaterialSkin.Controls.MaterialForm
         if (!radLight.Checked) return;
         AppServices.Settings.ThemeDark = false;
         AppServices.SaveSettings();
-        MaterialThemeModule.SetTheme(false);
+        KryptonThemeModule.SetTheme(false);
     }
 
     private void trkFontSize_ValueChanged(object? sender, EventArgs e)
@@ -395,7 +392,7 @@ public partial class MainView : MaterialSkin.Controls.MaterialForm
         UpdateFontPreview();
         AppServices.Settings.FontSize = trkFontSize.Value;
         AppServices.SaveSettings();
-        MaterialThemeModule.ApplyFontToOpenForms(AppServices.Settings.FontSize, AppServices.Settings.FontBold);
+        KryptonThemeModule.ApplyFontToOpenForms(AppServices.Settings.FontSize, AppServices.Settings.FontBold);
     }
 
     private void chkBold_CheckedChanged(object? sender, EventArgs e)
@@ -403,7 +400,7 @@ public partial class MainView : MaterialSkin.Controls.MaterialForm
         UpdateFontPreview();
         AppServices.Settings.FontBold = chkBold.Checked;
         AppServices.SaveSettings();
-        MaterialThemeModule.ApplyFontToOpenForms(AppServices.Settings.FontSize, AppServices.Settings.FontBold);
+        KryptonThemeModule.ApplyFontToOpenForms(AppServices.Settings.FontSize, AppServices.Settings.FontBold);
     }
 
     private void cmbAccent_SelectedIndexChanged(object? sender, EventArgs e)
@@ -411,7 +408,7 @@ public partial class MainView : MaterialSkin.Controls.MaterialForm
         if (cmbAccent.SelectedItem is not string name) return;
         AppServices.Settings.Accent = name;
         AppServices.SaveSettings();
-        MaterialThemeModule.SetAccent(name);
+        KryptonThemeModule.SetAccent(name);
     }
 
     private void swAnimations_CheckedChanged(object? sender, EventArgs e)
@@ -475,11 +472,11 @@ public partial class MainView : MaterialSkin.Controls.MaterialForm
         s.AutoSync = false;
         s.ExcludePatterns = "*.tmp;*.log;~$*;*.bak;*.swp";
         AppServices.SaveSettings();
-        MaterialThemeModule.SetAccent("Blue");
-        MaterialThemeModule.SetTheme(true);
+        KryptonThemeModule.SetAccent("Blue");
+        KryptonThemeModule.SetTheme(true);
         AppServices.SyncEngine.KeepColdStorage = true;
         LoadSettingsIntoControls();
-        MaterialThemeModule.ApplyFontToOpenForms(s.FontSize, s.FontBold);
+        KryptonThemeModule.ApplyFontToOpenForms(s.FontSize, s.FontBold);
         ToastForm.ShowToast(this, "Settings restored to defaults.", ToastKind.Info);
     }
 
@@ -828,7 +825,15 @@ public partial class MainView : MaterialSkin.Controls.MaterialForm
             await _viewModel.LoadUsersAsync();
             gridUsers.DataSource = null;
             gridUsers.DataSource = _viewModel.Users;
-            HideColumns(gridUsers, "PasswordHash", "Salt");
+            HideColumns(gridUsers, "PasswordHash", "Salt", "Avatar");
+        };
+
+        btnViewProfile.Click += async (_, _) =>
+        {
+            if (gridUsers.CurrentRow?.DataBoundItem is not Model.Entities.UserModel user) return;
+            var history = await AppServices.Audits.GetByUserAsync(user.Username);
+            using var profile = new SubViews.UserProfileView(user, history);
+            profile.ShowDialog(this);
         };
 
         btnAddUser.Click += (_, _) =>

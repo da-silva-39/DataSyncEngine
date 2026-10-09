@@ -1,6 +1,6 @@
 namespace Views.Forms.SubViews;
 
-partial class MasterKeyPopUpView : MaterialSkin.Controls.MaterialForm
+partial class MasterKeyPopUpView : Krypton.Toolkit.KryptonForm
 {
     private System.ComponentModel.IContainer components = null;
 
@@ -15,11 +15,11 @@ partial class MasterKeyPopUpView : MaterialSkin.Controls.MaterialForm
 
     private void InitializeComponent()
     {
-        this.lblPrompt = new MaterialSkin.Controls.MaterialLabel();
-        this.txtMasterKey = new MaterialSkin.Controls.MaterialTextBox2();
+        this.lblPrompt = new Krypton.Toolkit.KryptonLabel();
+        this.txtMasterKey = new Krypton.Toolkit.KryptonTextBox();
         this.lblError = new System.Windows.Forms.Label();
-        this.btnOk = new MaterialSkin.Controls.MaterialButton();
-        this.btnCancel = new MaterialSkin.Controls.MaterialButton();
+        this.btnOk = new Krypton.Toolkit.KryptonButton();
+        this.btnCancel = new Krypton.Toolkit.KryptonButton();
         this.SuspendLayout();
 
         this.lblPrompt.AutoSize = true;
@@ -28,7 +28,7 @@ partial class MasterKeyPopUpView : MaterialSkin.Controls.MaterialForm
         this.lblPrompt.TabIndex = 0;
         this.lblPrompt.Text = "Enter the master key to authorize this operation:";
 
-        this.txtMasterKey.Hint = "Master key";
+        this.txtMasterKey.CueHint.CueHintText = "Master key";
         this.txtMasterKey.Location = new System.Drawing.Point(20, 115);
         this.txtMasterKey.MaxLength = 32767;
         this.txtMasterKey.Name = "txtMasterKey";
@@ -44,25 +44,21 @@ partial class MasterKeyPopUpView : MaterialSkin.Controls.MaterialForm
         this.lblError.Text = "";
 
         this.btnOk.AutoSize = false;
-        this.btnOk.HighEmphasis = true;
         this.btnOk.Location = new System.Drawing.Point(140, 205);
         this.btnOk.Name = "btnOk";
         this.btnOk.Size = new System.Drawing.Size(100, 36);
         this.btnOk.TabIndex = 3;
         this.btnOk.Text = "OK";
-        this.btnOk.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-        this.btnOk.UseAccentColor = false;
+        this.btnOk.ButtonStyle = Krypton.Toolkit.ButtonStyle.Standalone;
         this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
 
         this.btnCancel.AutoSize = false;
-        this.btnCancel.HighEmphasis = false;
         this.btnCancel.Location = new System.Drawing.Point(260, 205);
         this.btnCancel.Name = "btnCancel";
         this.btnCancel.Size = new System.Drawing.Size(100, 36);
         this.btnCancel.TabIndex = 4;
         this.btnCancel.Text = "Cancel";
-        this.btnCancel.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Outlined;
-        this.btnCancel.UseAccentColor = false;
+        this.btnCancel.ButtonStyle = Krypton.Toolkit.ButtonStyle.Alternate;
         this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
 
         this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -81,9 +77,9 @@ partial class MasterKeyPopUpView : MaterialSkin.Controls.MaterialForm
         this.PerformLayout();
     }
 
-    private MaterialSkin.Controls.MaterialLabel lblPrompt;
-    private MaterialSkin.Controls.MaterialTextBox2 txtMasterKey;
+    private Krypton.Toolkit.KryptonLabel lblPrompt;
+    private Krypton.Toolkit.KryptonTextBox txtMasterKey;
     private System.Windows.Forms.Label lblError;
-    private MaterialSkin.Controls.MaterialButton btnOk;
-    private MaterialSkin.Controls.MaterialButton btnCancel;
+    private Krypton.Toolkit.KryptonButton btnOk;
+    private Krypton.Toolkit.KryptonButton btnCancel;
 }

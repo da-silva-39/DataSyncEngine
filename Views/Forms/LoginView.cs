@@ -3,14 +3,14 @@ using Views.ViewModels;
 
 namespace Views.Forms;
 
-public partial class LoginView : MaterialSkin.Controls.MaterialForm
+public partial class LoginView : Krypton.Toolkit.KryptonForm
 {
     private readonly LoginViewModel _viewModel = new();
 
     public LoginView()
     {
         InitializeComponent();
-        MaterialThemeModule.Apply(this);
+        KryptonThemeModule.Apply(this);
         AcceptButton = btnLogin;
         if (!DarkThemeModule.IsDesignTime)
         {

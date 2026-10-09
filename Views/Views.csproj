@@ -7,7 +7,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MaterialSkin.2" Version="2.3.1" />
+    <PackageReference Include="Krypton.Toolkit" Version="105.26.7.201" />
   </ItemGroup>
 
   <PropertyGroup>

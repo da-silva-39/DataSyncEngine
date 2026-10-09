@@ -3,7 +3,7 @@ using Views.ViewModels;
 
 namespace Views.Forms.SubViews;
 
-public partial class MasterKeyPopUpView : MaterialSkin.Controls.MaterialForm
+public partial class MasterKeyPopUpView : Krypton.Toolkit.KryptonForm
 {
     private readonly MasterKeyViewModel _viewModel = new();
 
@@ -12,7 +12,7 @@ public partial class MasterKeyPopUpView : MaterialSkin.Controls.MaterialForm
     public MasterKeyPopUpView()
     {
         InitializeComponent();
-        MaterialThemeModule.Apply(this);
+        KryptonThemeModule.Apply(this);
     }
 
     private void btnOk_Click(object? sender, EventArgs e)

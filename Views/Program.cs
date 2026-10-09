@@ -6,7 +6,7 @@ static class Program
     static void Main()
     {
         ApplicationConfiguration.Initialize();
-        Components.MaterialThemeModule.Initialize();
+        Components.KryptonThemeModule.Initialize();
         AppServices.Initialize();
         using (var splash = new Forms.SplashView())
         {

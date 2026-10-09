@@ -1,6 +1,6 @@
 namespace Views.Forms;
 
-partial class LoginView : MaterialSkin.Controls.MaterialForm
+partial class LoginView : Krypton.Toolkit.KryptonForm
 {
     private System.ComponentModel.IContainer components = null;
 
@@ -18,9 +18,9 @@ partial class LoginView : MaterialSkin.Controls.MaterialForm
         this.picLogo = new System.Windows.Forms.PictureBox();
         this.lblTitle = new System.Windows.Forms.Label();
         this.lblSubtitle = new System.Windows.Forms.Label();
-        this.txtUsername = new MaterialSkin.Controls.MaterialTextBox2();
-        this.txtPassword = new MaterialSkin.Controls.MaterialTextBox2();
-        this.btnLogin = new MaterialSkin.Controls.MaterialButton();
+        this.txtUsername = new Krypton.Toolkit.KryptonTextBox();
+        this.txtPassword = new Krypton.Toolkit.KryptonTextBox();
+        this.btnLogin = new Krypton.Toolkit.KryptonButton();
         this.lblError = new System.Windows.Forms.Label();
         this.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)(this.picLogo)).BeginInit();
@@ -49,14 +49,14 @@ partial class LoginView : MaterialSkin.Controls.MaterialForm
         this.lblSubtitle.TabIndex = 1;
         this.lblSubtitle.Text = "Sign in to continue";
 
-        this.txtUsername.Hint = "Username";
+        this.txtUsername.CueHint.CueHintText = "Username";
         this.txtUsername.Location = new System.Drawing.Point(60, 190);
         this.txtUsername.MaxLength = 32767;
         this.txtUsername.Name = "txtUsername";
         this.txtUsername.Size = new System.Drawing.Size(360, 50);
         this.txtUsername.TabIndex = 2;
 
-        this.txtPassword.Hint = "Password";
+        this.txtPassword.CueHint.CueHintText = "Password";
         this.txtPassword.Location = new System.Drawing.Point(60, 252);
         this.txtPassword.MaxLength = 32767;
         this.txtPassword.Name = "txtPassword";
@@ -65,16 +65,13 @@ partial class LoginView : MaterialSkin.Controls.MaterialForm
         this.txtPassword.UseSystemPasswordChar = true;
 
         this.btnLogin.AutoSize = false;
-        this.btnLogin.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
         this.btnLogin.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-        this.btnLogin.HighEmphasis = true;
         this.btnLogin.Location = new System.Drawing.Point(60, 320);
         this.btnLogin.Name = "btnLogin";
         this.btnLogin.Size = new System.Drawing.Size(360, 42);
         this.btnLogin.TabIndex = 4;
         this.btnLogin.Text = "LOGIN";
-        this.btnLogin.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-        this.btnLogin.UseAccentColor = false;
+        this.btnLogin.ButtonStyle = Krypton.Toolkit.ButtonStyle.Standalone;
         this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
 
         this.lblError.AutoSize = true;
@@ -105,8 +102,8 @@ partial class LoginView : MaterialSkin.Controls.MaterialForm
     private System.Windows.Forms.PictureBox picLogo;
     private System.Windows.Forms.Label lblTitle;
     private System.Windows.Forms.Label lblSubtitle;
-    private MaterialSkin.Controls.MaterialTextBox2 txtUsername;
-    private MaterialSkin.Controls.MaterialTextBox2 txtPassword;
-    private MaterialSkin.Controls.MaterialButton btnLogin;
+    private Krypton.Toolkit.KryptonTextBox txtUsername;
+    private Krypton.Toolkit.KryptonTextBox txtPassword;
+    private Krypton.Toolkit.KryptonButton btnLogin;
     private System.Windows.Forms.Label lblError;
 }

@@ -2,14 +2,14 @@ using Views.Components;
 
 namespace Views.Forms.SubViews;
 
-public partial class FileExplorerView : MaterialSkin.Controls.MaterialForm
+public partial class FileExplorerView : Krypton.Toolkit.KryptonForm
 {
     private readonly List<Model.Entities.FileModel> _files = new();
 
     public FileExplorerView()
     {
         InitializeComponent();
-        MaterialThemeModule.Apply(this);
+        KryptonThemeModule.Apply(this);
         grid.CellFormatting += Grid_CellFormatting;
     }
 

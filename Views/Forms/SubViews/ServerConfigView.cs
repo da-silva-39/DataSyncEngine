@@ -2,14 +2,14 @@ using Views.Components;
 
 namespace Views.Forms.SubViews;
 
-public partial class ServerConfigView : MaterialSkin.Controls.MaterialForm
+public partial class ServerConfigView : Krypton.Toolkit.KryptonForm
 {
     private readonly Model.Entities.ServerModel? _editing;
 
     public ServerConfigView()
     {
         InitializeComponent();
-        MaterialThemeModule.Apply(this);
+        KryptonThemeModule.Apply(this);
     }
 
     public ServerConfigView(Model.Entities.ServerModel server) : this()

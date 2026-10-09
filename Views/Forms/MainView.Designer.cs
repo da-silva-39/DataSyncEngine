@@ -1,6 +1,6 @@
 namespace Views.Forms;
 
-partial class MainView : MaterialSkin.Controls.MaterialForm
+partial class MainView : Krypton.Toolkit.KryptonForm
 {
     private System.ComponentModel.IContainer components = null;
 
@@ -15,16 +15,15 @@ partial class MainView : MaterialSkin.Controls.MaterialForm
 
     private void InitializeComponent()
     {
-        this.tabControl = new MaterialSkin.Controls.MaterialTabControl();
-        this.tabSelector = new MaterialSkin.Controls.MaterialTabSelector();
-        this.topSpacer = new System.Windows.Forms.Panel();
-        this.sideBar = new System.Windows.Forms.Panel();
-        this.sideStrip = new System.Windows.Forms.Panel();
-        this.cardFiles = new MaterialSkin.Controls.MaterialCard();
-        this.cardSynced = new MaterialSkin.Controls.MaterialCard();
-        this.cardPending = new MaterialSkin.Controls.MaterialCard();
-        this.cardServers = new MaterialSkin.Controls.MaterialCard();
-        this.lblDashTitle = new MaterialSkin.Controls.MaterialLabel();
+        this.tabControl = new System.Windows.Forms.TabControl();
+        this.topSpacer = new Krypton.Toolkit.KryptonPanel();
+        this.sideBar = new Krypton.Toolkit.KryptonPanel();
+        this.sideStrip = new Krypton.Toolkit.KryptonPanel();
+        this.cardFiles = new Krypton.Toolkit.KryptonPanel();
+        this.cardSynced = new Krypton.Toolkit.KryptonPanel();
+        this.cardPending = new Krypton.Toolkit.KryptonPanel();
+        this.cardServers = new Krypton.Toolkit.KryptonPanel();
+        this.lblDashTitle = new Krypton.Toolkit.KryptonLabel();
         this.tabDashboard = new System.Windows.Forms.TabPage();
         this.tabSync = new System.Windows.Forms.TabPage();
         this.tabServers = new System.Windows.Forms.TabPage();
@@ -34,26 +33,26 @@ partial class MainView : MaterialSkin.Controls.MaterialForm
         this.tabBackup = new System.Windows.Forms.TabPage();
         this.tabTrash = new System.Windows.Forms.TabPage();
         this.tabSettings = new System.Windows.Forms.TabPage();
-        this.btnEditServer = new MaterialSkin.Controls.MaterialButton();
-        this.btnSetActive = new MaterialSkin.Controls.MaterialButton();
-        this.btnDeleteServer = new MaterialSkin.Controls.MaterialButton();
-        this.btnAddUser = new MaterialSkin.Controls.MaterialButton();
-        this.btnDeleteUser = new MaterialSkin.Controls.MaterialButton();
-        this.gridUsers = new System.Windows.Forms.DataGridView();
-        this.btnSelectFolder = new MaterialSkin.Controls.MaterialButton();
-        this.btnSync = new MaterialSkin.Controls.MaterialButton();
-        this.btnDelete = new MaterialSkin.Controls.MaterialButton();
-        this.btnResume = new MaterialSkin.Controls.MaterialButton();
-        this.btnExplorer = new MaterialSkin.Controls.MaterialButton();
-        this.btnLogout = new MaterialSkin.Controls.MaterialButton();
-        this.lblStatus = new MaterialSkin.Controls.MaterialLabel();
-        this.gridFiles = new System.Windows.Forms.DataGridView();
+        this.btnEditServer = new Krypton.Toolkit.KryptonButton();
+        this.btnSetActive = new Krypton.Toolkit.KryptonButton();
+        this.btnDeleteServer = new Krypton.Toolkit.KryptonButton();
+        this.btnAddUser = new Krypton.Toolkit.KryptonButton();
+        this.btnDeleteUser = new Krypton.Toolkit.KryptonButton();
+        this.gridUsers = new Krypton.Toolkit.KryptonDataGridView();
+        this.btnSelectFolder = new Krypton.Toolkit.KryptonButton();
+        this.btnSync = new Krypton.Toolkit.KryptonButton();
+        this.btnDelete = new Krypton.Toolkit.KryptonButton();
+        this.btnResume = new Krypton.Toolkit.KryptonButton();
+        this.btnExplorer = new Krypton.Toolkit.KryptonButton();
+        this.btnLogout = new Krypton.Toolkit.KryptonButton();
+        this.lblStatus = new Krypton.Toolkit.KryptonLabel();
+        this.gridFiles = new Krypton.Toolkit.KryptonDataGridView();
         this.notifyIcon = new System.Windows.Forms.NotifyIcon();
         this.components = new System.ComponentModel.Container();
-        this.btnAddServer = new MaterialSkin.Controls.MaterialButton();
-        this.gridServers = new System.Windows.Forms.DataGridView();
-        this.gridAudit = new System.Windows.Forms.DataGridView();
-        this.lblAnalytics = new MaterialSkin.Controls.MaterialLabel();
+        this.btnAddServer = new Krypton.Toolkit.KryptonButton();
+        this.gridServers = new Krypton.Toolkit.KryptonDataGridView();
+        this.gridAudit = new Krypton.Toolkit.KryptonDataGridView();
+        this.lblAnalytics = new Krypton.Toolkit.KryptonLabel();
         this.tabControl.SuspendLayout();
         this.tabDashboard.SuspendLayout();
         this.tabSync.SuspendLayout();
@@ -102,33 +101,31 @@ partial class MainView : MaterialSkin.Controls.MaterialForm
         this.picSideLogo.TabStop = false;
         ((System.ComponentModel.ISupportInitialize)(this.picSideLogo)).EndInit();
 
-        this.lblSideTitle = new MaterialSkin.Controls.MaterialLabel();
+        this.lblSideTitle = new Krypton.Toolkit.KryptonLabel();
         this.lblSideTitle.AutoSize = true;
         this.lblSideTitle.Location = new System.Drawing.Point(58, 80);
         this.lblSideTitle.Name = "lblSideTitle";
         this.lblSideTitle.Text = "DataSync";
 
-        this.btnNavToggle = new MaterialSkin.Controls.MaterialButton();
+        this.btnNavToggle = new Krypton.Toolkit.KryptonButton();
         this.btnNavToggle.AutoSize = false;
-        this.btnNavToggle.HighEmphasis = false;
         this.btnNavToggle.Location = new System.Drawing.Point(196, 72);
         this.btnNavToggle.Name = "btnNavToggle";
         this.btnNavToggle.Size = new System.Drawing.Size(32, 36);
         this.btnNavToggle.TabIndex = 1;
         this.btnNavToggle.Text = "«";
-        this.btnNavToggle.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Text;
-        this.btnNavToggle.UseAccentColor = false;
+        this.btnNavToggle.ButtonStyle = Krypton.Toolkit.ButtonStyle.ListItem;
         this.btnNavToggle.Click += new System.EventHandler(this.btnNavToggle_Click);
 
-        this.navDashboard = new MaterialSkin.Controls.MaterialButton();
-        this.navSync = new MaterialSkin.Controls.MaterialButton();
-        this.navBackup = new MaterialSkin.Controls.MaterialButton();
-        this.navTrash = new MaterialSkin.Controls.MaterialButton();
-        this.navServers = new MaterialSkin.Controls.MaterialButton();
-        this.navAudit = new MaterialSkin.Controls.MaterialButton();
-        this.navAnalytics = new MaterialSkin.Controls.MaterialButton();
-        this.navUsers = new MaterialSkin.Controls.MaterialButton();
-        this.navSettings = new MaterialSkin.Controls.MaterialButton();
+        this.navDashboard = new Krypton.Toolkit.KryptonButton();
+        this.navSync = new Krypton.Toolkit.KryptonButton();
+        this.navBackup = new Krypton.Toolkit.KryptonButton();
+        this.navTrash = new Krypton.Toolkit.KryptonButton();
+        this.navServers = new Krypton.Toolkit.KryptonButton();
+        this.navAudit = new Krypton.Toolkit.KryptonButton();
+        this.navAnalytics = new Krypton.Toolkit.KryptonButton();
+        this.navUsers = new Krypton.Toolkit.KryptonButton();
+        this.navSettings = new Krypton.Toolkit.KryptonButton();
         SetupNavButton(this.navDashboard, "navDashboard", "Dashboard", 124);
         SetupNavButton(this.navSync, "navSync", "Sync", 162);
         SetupNavButton(this.navBackup, "navBackup", "Backup", 200);
@@ -148,13 +145,13 @@ partial class MainView : MaterialSkin.Controls.MaterialForm
         this.navUsers.Click += new System.EventHandler(this.navUsers_Click);
         this.navSettings.Click += new System.EventHandler(this.navSettings_Click);
 
-        this.lblTreeCap = new MaterialSkin.Controls.MaterialLabel();
+        this.lblTreeCap = new Krypton.Toolkit.KryptonLabel();
         this.lblTreeCap.AutoSize = true;
         this.lblTreeCap.Location = new System.Drawing.Point(12, 470);
         this.lblTreeCap.Name = "lblTreeCap";
         this.lblTreeCap.Text = "Files";
 
-        this.treeFiles = new System.Windows.Forms.TreeView();
+        this.treeFiles = new Krypton.Toolkit.KryptonTreeView();
         this.treeFiles.Location = new System.Drawing.Point(12, 494);
         this.treeFiles.Name = "treeFiles";
         this.treeFiles.Size = new System.Drawing.Size(216, 112);
@@ -162,7 +159,7 @@ partial class MainView : MaterialSkin.Controls.MaterialForm
         this.treeFiles.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeFiles_AfterSelect);
         this.treeFiles.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeFiles_DoubleClick);
 
-        this.sideStrip = new System.Windows.Forms.Panel();
+        this.sideStrip = new Krypton.Toolkit.KryptonPanel();
         this.sideStrip.Controls.Add(this.btnExpand);
         this.sideStrip.Dock = System.Windows.Forms.DockStyle.Left;
         this.sideStrip.Location = new System.Drawing.Point(0, 0);
@@ -171,16 +168,14 @@ partial class MainView : MaterialSkin.Controls.MaterialForm
         this.sideStrip.TabIndex = 5;
         this.sideStrip.Visible = false;
 
-        this.btnExpand = new MaterialSkin.Controls.MaterialButton();
+        this.btnExpand = new Krypton.Toolkit.KryptonButton();
         this.btnExpand.AutoSize = false;
-        this.btnExpand.HighEmphasis = false;
         this.btnExpand.Location = new System.Drawing.Point(4, 72);
         this.btnExpand.Name = "btnExpand";
         this.btnExpand.Size = new System.Drawing.Size(32, 36);
         this.btnExpand.TabIndex = 0;
         this.btnExpand.Text = "»";
-        this.btnExpand.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Text;
-        this.btnExpand.UseAccentColor = false;
+        this.btnExpand.ButtonStyle = Krypton.Toolkit.ButtonStyle.ListItem;
         this.btnExpand.Click += new System.EventHandler(this.btnExpand_Click);
 
         this.topSpacer.Dock = System.Windows.Forms.DockStyle.Top;
@@ -188,13 +183,6 @@ partial class MainView : MaterialSkin.Controls.MaterialForm
         this.topSpacer.Name = "topSpacer";
         this.topSpacer.Size = new System.Drawing.Size(1210, 64);
         this.topSpacer.TabIndex = 3;
-
-        this.tabSelector.BaseTabControl = this.tabControl;
-        this.tabSelector.Dock = System.Windows.Forms.DockStyle.Top;
-        this.tabSelector.Location = new System.Drawing.Point(0, 0);
-        this.tabSelector.Name = "tabSelector";
-        this.tabSelector.Size = new System.Drawing.Size(1210, 48);
-        this.tabSelector.TabIndex = 2;
 
         this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
         this.tabControl.Location = new System.Drawing.Point(0, 0);
@@ -229,13 +217,13 @@ partial class MainView : MaterialSkin.Controls.MaterialForm
         this.lblDashTitle.Name = "lblDashTitle";
         this.lblDashTitle.Text = "Overview";
 
-        this.lblFilesCap = new MaterialSkin.Controls.MaterialLabel();
+        this.lblFilesCap = new Krypton.Toolkit.KryptonLabel();
         this.lblFilesVal = new System.Windows.Forms.Label();
-        this.lblSyncedCap = new MaterialSkin.Controls.MaterialLabel();
+        this.lblSyncedCap = new Krypton.Toolkit.KryptonLabel();
         this.lblSyncedVal = new System.Windows.Forms.Label();
-        this.lblPendingCap = new MaterialSkin.Controls.MaterialLabel();
+        this.lblPendingCap = new Krypton.Toolkit.KryptonLabel();
         this.lblPendingVal = new System.Windows.Forms.Label();
-        this.lblServersCap = new MaterialSkin.Controls.MaterialLabel();
+        this.lblServersCap = new Krypton.Toolkit.KryptonLabel();
         this.lblServersVal = new System.Windows.Forms.Label();
 
         this.cardFiles.Location = new System.Drawing.Point(25, 70);
@@ -322,14 +310,12 @@ partial class MainView : MaterialSkin.Controls.MaterialForm
         this.tabSync.Text = "Sync";
 
         this.btnSelectFolder.AutoSize = false;
-        this.btnSelectFolder.HighEmphasis = true;
         this.btnSelectFolder.Location = new System.Drawing.Point(15, 15);
         this.btnSelectFolder.Name = "btnSelectFolder";
         this.btnSelectFolder.Size = new System.Drawing.Size(150, 36);
         this.btnSelectFolder.TabIndex = 0;
         this.btnSelectFolder.Text = "Select Folder";
-        this.btnSelectFolder.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-        this.btnSelectFolder.UseAccentColor = false;
+        this.btnSelectFolder.ButtonStyle = Krypton.Toolkit.ButtonStyle.Standalone;
         this.btnSelectFolder.AccessibleName = "Select folder to scan";
 
         this.lblStatus.AutoSize = true;
@@ -339,81 +325,71 @@ partial class MainView : MaterialSkin.Controls.MaterialForm
         this.lblStatus.Text = "Ready.";
 
         this.btnSync.AutoSize = false;
-        this.btnSync.HighEmphasis = true;
         this.btnSync.Location = new System.Drawing.Point(180, 15);
         this.btnSync.Name = "btnSync";
         this.btnSync.Size = new System.Drawing.Size(110, 36);
         this.btnSync.TabIndex = 3;
         this.btnSync.Text = "Sync";
-        this.btnSync.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-        this.btnSync.UseAccentColor = false;
+        this.btnSync.ButtonStyle = Krypton.Toolkit.ButtonStyle.Standalone;
         this.btnSync.AccessibleName = "Synchronize pending files";
 
         this.btnDelete.AutoSize = false;
-        this.btnDelete.HighEmphasis = false;
         this.btnDelete.Location = new System.Drawing.Point(305, 15);
         this.btnDelete.Name = "btnDelete";
         this.btnDelete.Size = new System.Drawing.Size(110, 36);
         this.btnDelete.TabIndex = 4;
         this.btnDelete.Text = "Delete";
-        this.btnDelete.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Outlined;
-        this.btnDelete.UseAccentColor = false;
+        this.btnDelete.ButtonStyle = Krypton.Toolkit.ButtonStyle.Alternate;
         this.btnDelete.AccessibleName = "Delete selected file";
 
         this.btnResume.AutoSize = false;
-        this.btnResume.HighEmphasis = false;
         this.btnResume.Location = new System.Drawing.Point(430, 15);
         this.btnResume.Name = "btnResume";
         this.btnResume.Size = new System.Drawing.Size(110, 36);
         this.btnResume.TabIndex = 5;
         this.btnResume.Text = "Resume";
-        this.btnResume.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Outlined;
-        this.btnResume.UseAccentColor = false;
+        this.btnResume.ButtonStyle = Krypton.Toolkit.ButtonStyle.Alternate;
         this.btnResume.AccessibleName = "Resume failed uploads";
 
         this.btnExplorer.AutoSize = false;
-        this.btnExplorer.HighEmphasis = false;
         this.btnExplorer.Location = new System.Drawing.Point(555, 15);
         this.btnExplorer.Name = "btnExplorer";
         this.btnExplorer.Size = new System.Drawing.Size(110, 36);
         this.btnExplorer.TabIndex = 9;
         this.btnExplorer.Text = "Explorer";
-        this.btnExplorer.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Outlined;
-        this.btnExplorer.UseAccentColor = false;
+        this.btnExplorer.ButtonStyle = Krypton.Toolkit.ButtonStyle.Alternate;
         this.btnExplorer.AccessibleName = "Open file explorer";
 
         this.btnLogout.AutoSize = false;
-        this.btnLogout.HighEmphasis = false;
         this.btnLogout.Location = new System.Drawing.Point(850, 15);
         this.btnLogout.Name = "btnLogout";
         this.btnLogout.Size = new System.Drawing.Size(110, 36);
         this.btnLogout.TabIndex = 6;
         this.btnLogout.Text = "Logout";
-        this.btnLogout.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Outlined;
-        this.btnLogout.UseAccentColor = false;
+        this.btnLogout.ButtonStyle = Krypton.Toolkit.ButtonStyle.Alternate;
         this.btnLogout.AccessibleName = "Log out";
 
         this.notifyIcon.Icon = System.Drawing.SystemIcons.Application;
         this.notifyIcon.Text = "DataSyncEngine";
         this.notifyIcon.Visible = true;
 
-        this.trayMenu = new MaterialSkin.Controls.MaterialContextMenuStrip();
-        this.trayShow = new MaterialSkin.Controls.MaterialToolStripMenuItem();
-        this.trayExit = new MaterialSkin.Controls.MaterialToolStripMenuItem();
+        this.trayMenu = new System.Windows.Forms.ContextMenuStrip();
+        this.trayShow = new System.Windows.Forms.ToolStripMenuItem();
+        this.trayExit = new System.Windows.Forms.ToolStripMenuItem();
         this.trayMenu.Items.Add(this.trayShow);
         this.trayMenu.Items.Add(this.trayExit);
         this.trayShow.Text = "Show";
         this.trayExit.Text = "Exit";
         this.trayShow.Click += new System.EventHandler(this.trayShow_Click);
         this.trayExit.Click += new System.EventHandler(this.trayExit_Click);
-        this.trayAbout = new MaterialSkin.Controls.MaterialToolStripMenuItem();
+        this.trayAbout = new System.Windows.Forms.ToolStripMenuItem();
         this.trayAbout.Text = "About";
         this.trayAbout.Click += new System.EventHandler(this.trayAbout_Click);
         this.trayMenu.Items.Add(this.trayAbout);
         this.notifyIcon.ContextMenuStrip = this.trayMenu;
         this.notifyIcon.DoubleClick += new System.EventHandler(this.trayShow_Click);
 
-        this.statusStrip = new System.Windows.Forms.StatusStrip();
+        this.statusStrip = new Krypton.Toolkit.KryptonStatusStrip();
         this.lblServerInfo = new System.Windows.Forms.ToolStripStatusLabel();
         this.statusStrip.Items.Add(this.lblServerInfo);
         this.statusStrip.Location = new System.Drawing.Point(0, 618);
@@ -436,19 +412,18 @@ partial class MainView : MaterialSkin.Controls.MaterialForm
         this.statusStrip.Items.Add(new System.Windows.Forms.ToolStripSeparator());
         this.statusStrip.Items.Add(this.btnTheme);
 
-        this.txtFilter = new MaterialSkin.Controls.MaterialTextBox2();
-        this.txtFilter.Hint = "Type to filter files...";
+        this.txtFilter = new Krypton.Toolkit.KryptonTextBox();
+        this.txtFilter.CueHint.CueHintText = "Type to filter files...";
         this.txtFilter.Location = new System.Drawing.Point(15, 58);
         this.txtFilter.MaxLength = 32767;
         this.txtFilter.Name = "txtFilter";
         this.txtFilter.Size = new System.Drawing.Size(250, 36);
         this.txtFilter.TabIndex = 7;
-        this.txtFilter.UseTallSize = false;
         this.txtFilter.AccessibleName = "Filter files";
         this.txtFilter.TextChanged += new System.EventHandler(this.txtFilter_TextChanged);
         this.tabSync.Controls.Add(this.txtFilter);
 
-        this.progressBar = new MaterialSkin.Controls.MaterialProgressBar();
+        this.progressBar = new Krypton.Toolkit.KryptonProgressBar();
         this.progressBar.Location = new System.Drawing.Point(280, 61);
         this.progressBar.Name = "progressBar";
         this.progressBar.Size = new System.Drawing.Size(210, 20);
@@ -473,35 +448,33 @@ partial class MainView : MaterialSkin.Controls.MaterialForm
         this.tabBackup.TabIndex = 5;
         this.tabBackup.Text = "Backup";
 
-        this.lblBackupTitle = new MaterialSkin.Controls.MaterialLabel();
+        this.lblBackupTitle = new Krypton.Toolkit.KryptonLabel();
         this.lblBackupTitle.AutoSize = true;
         this.lblBackupTitle.Location = new System.Drawing.Point(20, 20);
         this.lblBackupTitle.Name = "lblBackupTitle";
         this.lblBackupTitle.Text = "Server backup (export decrypted files)";
         this.tabBackup.Controls.Add(this.lblBackupTitle);
 
-        this.btnBackupNow = new MaterialSkin.Controls.MaterialButton();
+        this.btnBackupNow = new Krypton.Toolkit.KryptonButton();
         this.btnBackupNow.AutoSize = false;
-        this.btnBackupNow.HighEmphasis = true;
         this.btnBackupNow.Location = new System.Drawing.Point(20, 60);
         this.btnBackupNow.Name = "btnBackupNow";
         this.btnBackupNow.Size = new System.Drawing.Size(220, 36);
         this.btnBackupNow.TabIndex = 0;
         this.btnBackupNow.Text = "Backup Now";
-        this.btnBackupNow.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-        this.btnBackupNow.UseAccentColor = false;
+        this.btnBackupNow.ButtonStyle = Krypton.Toolkit.ButtonStyle.Standalone;
         this.btnBackupNow.AccessibleName = "Export all server files to a folder";
         this.btnBackupNow.Click += new System.EventHandler(this.btnBackupNow_Click);
         this.tabBackup.Controls.Add(this.btnBackupNow);
 
-        this.lblBackupInfo = new MaterialSkin.Controls.MaterialLabel();
+        this.lblBackupInfo = new Krypton.Toolkit.KryptonLabel();
         this.lblBackupInfo.AutoSize = true;
         this.lblBackupInfo.Location = new System.Drawing.Point(20, 115);
         this.lblBackupInfo.Name = "lblBackupInfo";
         this.lblBackupInfo.Text = "No backup yet.";
         this.tabBackup.Controls.Add(this.lblBackupInfo);
 
-        this.lblLastBackup = new MaterialSkin.Controls.MaterialLabel();
+        this.lblLastBackup = new Krypton.Toolkit.KryptonLabel();
         this.lblLastBackup.AutoSize = true;
         this.lblLastBackup.Location = new System.Drawing.Point(20, 150);
         this.lblLastBackup.Name = "lblLastBackup";
@@ -515,42 +488,38 @@ partial class MainView : MaterialSkin.Controls.MaterialForm
         this.tabTrash.TabIndex = 6;
         this.tabTrash.Text = "Trash";
 
-        this.btnRestore = new MaterialSkin.Controls.MaterialButton();
+        this.btnRestore = new Krypton.Toolkit.KryptonButton();
         this.btnRestore.AutoSize = false;
-        this.btnRestore.HighEmphasis = true;
         this.btnRestore.Location = new System.Drawing.Point(15, 15);
         this.btnRestore.Name = "btnRestore";
         this.btnRestore.Size = new System.Drawing.Size(140, 36);
         this.btnRestore.TabIndex = 0;
         this.btnRestore.Text = "Restore";
-        this.btnRestore.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-        this.btnRestore.UseAccentColor = false;
+        this.btnRestore.ButtonStyle = Krypton.Toolkit.ButtonStyle.Standalone;
         this.btnRestore.AccessibleName = "Restore selected deleted file";
         this.btnRestore.Click += new System.EventHandler(this.btnRestore_Click);
         this.tabTrash.Controls.Add(this.btnRestore);
 
-        this.btnPurge = new MaterialSkin.Controls.MaterialButton();
+        this.btnPurge = new Krypton.Toolkit.KryptonButton();
         this.btnPurge.AutoSize = false;
-        this.btnPurge.HighEmphasis = false;
         this.btnPurge.Location = new System.Drawing.Point(170, 15);
         this.btnPurge.Name = "btnPurge";
         this.btnPurge.Size = new System.Drawing.Size(140, 36);
         this.btnPurge.TabIndex = 1;
         this.btnPurge.Text = "Delete Forever";
-        this.btnPurge.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Outlined;
-        this.btnPurge.UseAccentColor = false;
+        this.btnPurge.ButtonStyle = Krypton.Toolkit.ButtonStyle.Alternate;
         this.btnPurge.AccessibleName = "Permanently delete selected file";
         this.btnPurge.Click += new System.EventHandler(this.btnPurge_Click);
         this.tabTrash.Controls.Add(this.btnPurge);
 
-        this.lblTrashInfo = new MaterialSkin.Controls.MaterialLabel();
+        this.lblTrashInfo = new Krypton.Toolkit.KryptonLabel();
         this.lblTrashInfo.AutoSize = true;
         this.lblTrashInfo.Location = new System.Drawing.Point(330, 24);
         this.lblTrashInfo.Name = "lblTrashInfo";
         this.lblTrashInfo.Text = "Deleted files can be restored here.";
         this.tabTrash.Controls.Add(this.lblTrashInfo);
 
-        this.gridTrash = new System.Windows.Forms.DataGridView();
+        this.gridTrash = new Krypton.Toolkit.KryptonDataGridView();
         this.gridTrash.AllowUserToAddRows = false;
         this.gridTrash.AllowUserToDeleteRows = false;
         this.gridTrash.ReadOnly = true;
@@ -569,44 +538,36 @@ partial class MainView : MaterialSkin.Controls.MaterialForm
         this.tabServers.Text = "Servers";
 
         this.btnAddServer.AutoSize = false;
-        this.btnAddServer.HighEmphasis = true;
         this.btnAddServer.Location = new System.Drawing.Point(15, 15);
         this.btnAddServer.Name = "btnAddServer";
         this.btnAddServer.Size = new System.Drawing.Size(150, 36);
         this.btnAddServer.TabIndex = 0;
         this.btnAddServer.Text = "Add Server";
-        this.btnAddServer.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-        this.btnAddServer.UseAccentColor = false;
+        this.btnAddServer.ButtonStyle = Krypton.Toolkit.ButtonStyle.Standalone;
 
         this.btnEditServer.AutoSize = false;
-        this.btnEditServer.HighEmphasis = false;
         this.btnEditServer.Location = new System.Drawing.Point(180, 15);
         this.btnEditServer.Name = "btnEditServer";
         this.btnEditServer.Size = new System.Drawing.Size(140, 36);
         this.btnEditServer.TabIndex = 2;
         this.btnEditServer.Text = "Edit Server";
-        this.btnEditServer.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Outlined;
-        this.btnEditServer.UseAccentColor = false;
+        this.btnEditServer.ButtonStyle = Krypton.Toolkit.ButtonStyle.Alternate;
 
         this.btnSetActive.AutoSize = false;
-        this.btnSetActive.HighEmphasis = false;
         this.btnSetActive.Location = new System.Drawing.Point(335, 15);
         this.btnSetActive.Name = "btnSetActive";
         this.btnSetActive.Size = new System.Drawing.Size(140, 36);
         this.btnSetActive.TabIndex = 3;
         this.btnSetActive.Text = "Set Active";
-        this.btnSetActive.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Outlined;
-        this.btnSetActive.UseAccentColor = false;
+        this.btnSetActive.ButtonStyle = Krypton.Toolkit.ButtonStyle.Alternate;
 
         this.btnDeleteServer.AutoSize = false;
-        this.btnDeleteServer.HighEmphasis = false;
         this.btnDeleteServer.Location = new System.Drawing.Point(490, 15);
         this.btnDeleteServer.Name = "btnDeleteServer";
         this.btnDeleteServer.Size = new System.Drawing.Size(140, 36);
         this.btnDeleteServer.TabIndex = 4;
         this.btnDeleteServer.Text = "Delete Server";
-        this.btnDeleteServer.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Outlined;
-        this.btnDeleteServer.UseAccentColor = false;
+        this.btnDeleteServer.ButtonStyle = Krypton.Toolkit.ButtonStyle.Alternate;
 
         this.tabServers.Controls.Add(this.btnEditServer);
         this.tabServers.Controls.Add(this.btnSetActive);
@@ -641,17 +602,17 @@ partial class MainView : MaterialSkin.Controls.MaterialForm
         this.tabAnalytics.TabIndex = 3;
         this.tabAnalytics.Text = "Analytics";
 
-        this.lblAnalytics = new MaterialSkin.Controls.MaterialLabel();
+        this.lblAnalytics = new Krypton.Toolkit.KryptonLabel();
         this.lblAnalytics.AutoSize = true;
         this.lblAnalytics.Location = new System.Drawing.Point(20, 20);
         this.lblAnalytics.Name = "lblAnalytics";
         this.lblAnalytics.Text = "Analytics dashboard (Admin only).";
 
-        this.lblAnaTotal = new MaterialSkin.Controls.MaterialLabel();
-        this.lblAnaSynced = new MaterialSkin.Controls.MaterialLabel();
-        this.lblAnaPending = new MaterialSkin.Controls.MaterialLabel();
-        this.lblAnaModified = new MaterialSkin.Controls.MaterialLabel();
-        this.lblAnaBytes = new MaterialSkin.Controls.MaterialLabel();
+        this.lblAnaTotal = new Krypton.Toolkit.KryptonLabel();
+        this.lblAnaSynced = new Krypton.Toolkit.KryptonLabel();
+        this.lblAnaPending = new Krypton.Toolkit.KryptonLabel();
+        this.lblAnaModified = new Krypton.Toolkit.KryptonLabel();
+        this.lblAnaBytes = new Krypton.Toolkit.KryptonLabel();
         this.lblAnaTotal.AutoSize = true;
         this.lblAnaTotal.Location = new System.Drawing.Point(20, 60);
         this.lblAnaTotal.Name = "lblAnaTotal";
@@ -685,14 +646,14 @@ partial class MainView : MaterialSkin.Controls.MaterialForm
         this.tabSettings.TabIndex = 7;
         this.tabSettings.Text = "Settings";
 
-        this.lblSetTheme = new MaterialSkin.Controls.MaterialLabel();
+        this.lblSetTheme = new Krypton.Toolkit.KryptonLabel();
         this.lblSetTheme.AutoSize = true;
         this.lblSetTheme.Location = new System.Drawing.Point(20, 20);
         this.lblSetTheme.Name = "lblSetTheme";
         this.lblSetTheme.Text = "Theme";
         this.tabSettings.Controls.Add(this.lblSetTheme);
 
-        this.radDark = new MaterialSkin.Controls.MaterialRadioButton();
+        this.radDark = new Krypton.Toolkit.KryptonRadioButton();
         this.radDark.AutoSize = true;
         this.radDark.Location = new System.Drawing.Point(20, 50);
         this.radDark.Name = "radDark";
@@ -702,7 +663,7 @@ partial class MainView : MaterialSkin.Controls.MaterialForm
         this.radDark.CheckedChanged += new System.EventHandler(this.radDark_CheckedChanged);
         this.tabSettings.Controls.Add(this.radDark);
 
-        this.radLight = new MaterialSkin.Controls.MaterialRadioButton();
+        this.radLight = new Krypton.Toolkit.KryptonRadioButton();
         this.radLight.AutoSize = true;
         this.radLight.Location = new System.Drawing.Point(140, 50);
         this.radLight.Name = "radLight";
@@ -712,14 +673,14 @@ partial class MainView : MaterialSkin.Controls.MaterialForm
         this.radLight.CheckedChanged += new System.EventHandler(this.radLight_CheckedChanged);
         this.tabSettings.Controls.Add(this.radLight);
 
-        this.lblSetFont = new MaterialSkin.Controls.MaterialLabel();
+        this.lblSetFont = new Krypton.Toolkit.KryptonLabel();
         this.lblSetFont.AutoSize = true;
         this.lblSetFont.Location = new System.Drawing.Point(20, 105);
         this.lblSetFont.Name = "lblSetFont";
         this.lblSetFont.Text = "Font size";
         this.tabSettings.Controls.Add(this.lblSetFont);
 
-        this.trkFontSize = new System.Windows.Forms.TrackBar();
+        this.trkFontSize = new Krypton.Toolkit.KryptonTrackBar();
         ((System.ComponentModel.ISupportInitialize)(this.trkFontSize)).BeginInit();
         this.trkFontSize.Location = new System.Drawing.Point(20, 135);
         this.trkFontSize.Minimum = 8;
@@ -731,21 +692,21 @@ partial class MainView : MaterialSkin.Controls.MaterialForm
         ((System.ComponentModel.ISupportInitialize)(this.trkFontSize)).EndInit();
         this.tabSettings.Controls.Add(this.trkFontSize);
 
-        this.lblFontSizeVal = new MaterialSkin.Controls.MaterialLabel();
+        this.lblFontSizeVal = new Krypton.Toolkit.KryptonLabel();
         this.lblFontSizeVal.AutoSize = true;
         this.lblFontSizeVal.Location = new System.Drawing.Point(280, 145);
         this.lblFontSizeVal.Name = "lblFontSizeVal";
         this.lblFontSizeVal.Text = "9.5";
         this.tabSettings.Controls.Add(this.lblFontSizeVal);
 
-        this.lblFontPreview = new MaterialSkin.Controls.MaterialLabel();
+        this.lblFontPreview = new Krypton.Toolkit.KryptonLabel();
         this.lblFontPreview.AutoSize = true;
         this.lblFontPreview.Location = new System.Drawing.Point(20, 185);
         this.lblFontPreview.Name = "lblFontPreview";
         this.lblFontPreview.Text = "AaBbCcDd 123";
         this.tabSettings.Controls.Add(this.lblFontPreview);
 
-        this.chkBold = new MaterialSkin.Controls.MaterialCheckbox();
+        this.chkBold = new Krypton.Toolkit.KryptonCheckBox();
         this.chkBold.AutoSize = true;
         this.chkBold.Location = new System.Drawing.Point(20, 220);
         this.chkBold.Name = "chkBold";
@@ -755,16 +716,15 @@ partial class MainView : MaterialSkin.Controls.MaterialForm
         this.chkBold.CheckedChanged += new System.EventHandler(this.chkBold_CheckedChanged);
         this.tabSettings.Controls.Add(this.chkBold);
 
-        this.lblSetAccent = new MaterialSkin.Controls.MaterialLabel();
+        this.lblSetAccent = new Krypton.Toolkit.KryptonLabel();
         this.lblSetAccent.AutoSize = true;
         this.lblSetAccent.Location = new System.Drawing.Point(20, 270);
         this.lblSetAccent.Name = "lblSetAccent";
         this.lblSetAccent.Text = "Accent color";
         this.tabSettings.Controls.Add(this.lblSetAccent);
 
-        this.cmbAccent = new MaterialSkin.Controls.MaterialComboBox();
-        this.cmbAccent.AutoResize = false;
-        this.cmbAccent.Hint = "Accent";
+        this.cmbAccent = new Krypton.Toolkit.KryptonComboBox();
+        this.cmbAccent.CueHint.CueHintText = "Accent";
         this.cmbAccent.Location = new System.Drawing.Point(20, 300);
         this.cmbAccent.Name = "cmbAccent";
         this.cmbAccent.Size = new System.Drawing.Size(250, 48);
@@ -772,7 +732,7 @@ partial class MainView : MaterialSkin.Controls.MaterialForm
         this.cmbAccent.SelectedIndexChanged += new System.EventHandler(this.cmbAccent_SelectedIndexChanged);
         this.tabSettings.Controls.Add(this.cmbAccent);
 
-        this.swAnimations = new MaterialSkin.Controls.MaterialSwitch();
+        this.swAnimations = new Krypton.Toolkit.KryptonToggleSwitch();
         this.swAnimations.AutoSize = true;
         this.swAnimations.Location = new System.Drawing.Point(480, 50);
         this.swAnimations.Name = "swAnimations";
@@ -782,7 +742,7 @@ partial class MainView : MaterialSkin.Controls.MaterialForm
         this.swAnimations.CheckedChanged += new System.EventHandler(this.swAnimations_CheckedChanged);
         this.tabSettings.Controls.Add(this.swAnimations);
 
-        this.swConfirmDelete = new MaterialSkin.Controls.MaterialSwitch();
+        this.swConfirmDelete = new Krypton.Toolkit.KryptonToggleSwitch();
         this.swConfirmDelete.AutoSize = true;
         this.swConfirmDelete.Location = new System.Drawing.Point(480, 100);
         this.swConfirmDelete.Name = "swConfirmDelete";
@@ -792,7 +752,7 @@ partial class MainView : MaterialSkin.Controls.MaterialForm
         this.swConfirmDelete.CheckedChanged += new System.EventHandler(this.swConfirmDelete_CheckedChanged);
         this.tabSettings.Controls.Add(this.swConfirmDelete);
 
-        this.swNotifications = new MaterialSkin.Controls.MaterialSwitch();
+        this.swNotifications = new Krypton.Toolkit.KryptonToggleSwitch();
         this.swNotifications.AutoSize = true;
         this.swNotifications.Location = new System.Drawing.Point(480, 150);
         this.swNotifications.Name = "swNotifications";
@@ -802,7 +762,7 @@ partial class MainView : MaterialSkin.Controls.MaterialForm
         this.swNotifications.CheckedChanged += new System.EventHandler(this.swNotifications_CheckedChanged);
         this.tabSettings.Controls.Add(this.swNotifications);
 
-        this.swColdStorage = new MaterialSkin.Controls.MaterialSwitch();
+        this.swColdStorage = new Krypton.Toolkit.KryptonToggleSwitch();
         this.swColdStorage.AutoSize = true;
         this.swColdStorage.Location = new System.Drawing.Point(480, 200);
         this.swColdStorage.Name = "swColdStorage";
@@ -812,7 +772,7 @@ partial class MainView : MaterialSkin.Controls.MaterialForm
         this.swColdStorage.CheckedChanged += new System.EventHandler(this.swColdStorage_CheckedChanged);
         this.tabSettings.Controls.Add(this.swColdStorage);
 
-        this.swMinimizeToTray = new MaterialSkin.Controls.MaterialSwitch();
+        this.swMinimizeToTray = new Krypton.Toolkit.KryptonToggleSwitch();
         this.swMinimizeToTray.AutoSize = true;
         this.swMinimizeToTray.Location = new System.Drawing.Point(480, 250);
         this.swMinimizeToTray.Name = "swMinimizeToTray";
@@ -822,20 +782,18 @@ partial class MainView : MaterialSkin.Controls.MaterialForm
         this.swMinimizeToTray.CheckedChanged += new System.EventHandler(this.swMinimizeToTray_CheckedChanged);
         this.tabSettings.Controls.Add(this.swMinimizeToTray);
 
-        this.btnResetSettings = new MaterialSkin.Controls.MaterialButton();
+        this.btnResetSettings = new Krypton.Toolkit.KryptonButton();
         this.btnResetSettings.AutoSize = false;
-        this.btnResetSettings.HighEmphasis = false;
         this.btnResetSettings.Location = new System.Drawing.Point(480, 350);
         this.btnResetSettings.Name = "btnResetSettings";
         this.btnResetSettings.Size = new System.Drawing.Size(200, 36);
         this.btnResetSettings.TabIndex = 10;
         this.btnResetSettings.Text = "Reset Defaults";
-        this.btnResetSettings.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Outlined;
-        this.btnResetSettings.UseAccentColor = false;
+        this.btnResetSettings.ButtonStyle = Krypton.Toolkit.ButtonStyle.Alternate;
         this.btnResetSettings.Click += new System.EventHandler(this.btnResetSettings_Click);
         this.tabSettings.Controls.Add(this.btnResetSettings);
 
-        this.swAutoSync = new MaterialSkin.Controls.MaterialSwitch();
+        this.swAutoSync = new Krypton.Toolkit.KryptonToggleSwitch();
         this.swAutoSync.AutoSize = true;
         this.swAutoSync.Location = new System.Drawing.Point(480, 300);
         this.swAutoSync.Name = "swAutoSync";
@@ -845,25 +803,24 @@ partial class MainView : MaterialSkin.Controls.MaterialForm
         this.swAutoSync.CheckedChanged += new System.EventHandler(this.swAutoSync_CheckedChanged);
         this.tabSettings.Controls.Add(this.swAutoSync);
 
-        this.lblExcludeCap = new MaterialSkin.Controls.MaterialLabel();
+        this.lblExcludeCap = new Krypton.Toolkit.KryptonLabel();
         this.lblExcludeCap.AutoSize = true;
         this.lblExcludeCap.Location = new System.Drawing.Point(20, 360);
         this.lblExcludeCap.Name = "lblExcludeCap";
         this.lblExcludeCap.Text = "Exclude patterns (separated by ;)";
         this.tabSettings.Controls.Add(this.lblExcludeCap);
 
-        this.txtExclude = new MaterialSkin.Controls.MaterialTextBox2();
-        this.txtExclude.Hint = "*.tmp;*.log;~$*";
+        this.txtExclude = new Krypton.Toolkit.KryptonTextBox();
+        this.txtExclude.CueHint.CueHintText = "*.tmp;*.log;~$*";
         this.txtExclude.Location = new System.Drawing.Point(20, 390);
         this.txtExclude.MaxLength = 1024;
         this.txtExclude.Name = "txtExclude";
         this.txtExclude.Size = new System.Drawing.Size(450, 48);
         this.txtExclude.TabIndex = 12;
-        this.txtExclude.UseTallSize = false;
         this.txtExclude.Leave += new System.EventHandler(this.txtExclude_Leave);
         this.tabSettings.Controls.Add(this.txtExclude);
 
-        this.lblAnaServer = new MaterialSkin.Controls.MaterialLabel();
+        this.lblAnaServer = new Krypton.Toolkit.KryptonLabel();
         this.lblAnaServer.AutoSize = true;
         this.lblAnaServer.Location = new System.Drawing.Point(20, 210);
         this.lblAnaServer.Name = "lblAnaServer";
@@ -874,7 +831,6 @@ partial class MainView : MaterialSkin.Controls.MaterialForm
         this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
         this.ClientSize = new System.Drawing.Size(1210, 640);
         this.Controls.Add(this.tabControl);
-        this.Controls.Add(this.tabSelector);
         this.Controls.Add(this.topSpacer);
         this.Controls.Add(this.sideBar);
         this.Controls.Add(this.sideStrip);
@@ -915,24 +871,29 @@ partial class MainView : MaterialSkin.Controls.MaterialForm
         this.tabUsers.Text = "Users";
 
         this.btnAddUser.AutoSize = false;
-        this.btnAddUser.HighEmphasis = true;
         this.btnAddUser.Location = new System.Drawing.Point(15, 15);
         this.btnAddUser.Name = "btnAddUser";
         this.btnAddUser.Size = new System.Drawing.Size(140, 36);
         this.btnAddUser.TabIndex = 0;
         this.btnAddUser.Text = "Add User";
-        this.btnAddUser.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-        this.btnAddUser.UseAccentColor = false;
+        this.btnAddUser.ButtonStyle = Krypton.Toolkit.ButtonStyle.Standalone;
 
         this.btnDeleteUser.AutoSize = false;
-        this.btnDeleteUser.HighEmphasis = false;
         this.btnDeleteUser.Location = new System.Drawing.Point(170, 15);
         this.btnDeleteUser.Name = "btnDeleteUser";
         this.btnDeleteUser.Size = new System.Drawing.Size(140, 36);
         this.btnDeleteUser.TabIndex = 1;
         this.btnDeleteUser.Text = "Delete User";
-        this.btnDeleteUser.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Outlined;
-        this.btnDeleteUser.UseAccentColor = false;
+        this.btnDeleteUser.ButtonStyle = Krypton.Toolkit.ButtonStyle.Alternate;
+
+        this.btnViewProfile = new Krypton.Toolkit.KryptonButton();
+        this.btnViewProfile.Location = new System.Drawing.Point(325, 15);
+        this.btnViewProfile.Name = "btnViewProfile";
+        this.btnViewProfile.Size = new System.Drawing.Size(140, 36);
+        this.btnViewProfile.TabIndex = 3;
+        this.btnViewProfile.Text = "View Profile";
+        this.btnViewProfile.ButtonStyle = Krypton.Toolkit.ButtonStyle.Alternate;
+        this.tabUsers.Controls.Add(this.btnViewProfile);
 
         this.gridUsers.AllowUserToAddRows = false;
         this.gridUsers.AllowUserToDeleteRows = false;
@@ -960,110 +921,110 @@ partial class MainView : MaterialSkin.Controls.MaterialForm
         this.ResumeLayout(false);
     }
 
-    private MaterialSkin.Controls.MaterialTabControl tabControl;
-    private MaterialSkin.Controls.MaterialTabSelector tabSelector;
-    private System.Windows.Forms.Panel topSpacer;
-    private System.Windows.Forms.Panel sideBar;
-    private System.Windows.Forms.Panel sideStrip;
+    private System.Windows.Forms.TabControl tabControl;
+    private Krypton.Toolkit.KryptonPanel topSpacer;
+    private Krypton.Toolkit.KryptonPanel sideBar;
+    private Krypton.Toolkit.KryptonPanel sideStrip;
     private System.Windows.Forms.PictureBox picSideLogo;
-    private MaterialSkin.Controls.MaterialLabel lblSideTitle;
-    private MaterialSkin.Controls.MaterialButton btnNavToggle;
-    private MaterialSkin.Controls.MaterialButton btnExpand;
-    private MaterialSkin.Controls.MaterialButton navDashboard;
-    private MaterialSkin.Controls.MaterialButton navSync;
-    private MaterialSkin.Controls.MaterialButton navBackup;
-    private MaterialSkin.Controls.MaterialButton navTrash;
-    private MaterialSkin.Controls.MaterialButton navServers;
-    private MaterialSkin.Controls.MaterialButton navAudit;
-    private MaterialSkin.Controls.MaterialButton navAnalytics;
-    private MaterialSkin.Controls.MaterialButton navUsers;
-    private MaterialSkin.Controls.MaterialButton navSettings;
-    private MaterialSkin.Controls.MaterialLabel lblTreeCap;
-    private System.Windows.Forms.TreeView treeFiles;
+    private Krypton.Toolkit.KryptonLabel lblSideTitle;
+    private Krypton.Toolkit.KryptonButton btnNavToggle;
+    private Krypton.Toolkit.KryptonButton btnExpand;
+    private Krypton.Toolkit.KryptonButton navDashboard;
+    private Krypton.Toolkit.KryptonButton navSync;
+    private Krypton.Toolkit.KryptonButton navBackup;
+    private Krypton.Toolkit.KryptonButton navTrash;
+    private Krypton.Toolkit.KryptonButton navServers;
+    private Krypton.Toolkit.KryptonButton navAudit;
+    private Krypton.Toolkit.KryptonButton navAnalytics;
+    private Krypton.Toolkit.KryptonButton navUsers;
+    private Krypton.Toolkit.KryptonButton navSettings;
+    private Krypton.Toolkit.KryptonLabel lblTreeCap;
+    private Krypton.Toolkit.KryptonTreeView treeFiles;
     private System.Windows.Forms.TabPage tabDashboard;
     private System.Windows.Forms.TabPage tabSync;
     private System.Windows.Forms.TabPage tabBackup;
-    private MaterialSkin.Controls.MaterialLabel lblBackupTitle;
-    private MaterialSkin.Controls.MaterialButton btnBackupNow;
-    private MaterialSkin.Controls.MaterialLabel lblBackupInfo;
-    private MaterialSkin.Controls.MaterialLabel lblLastBackup;
+    private Krypton.Toolkit.KryptonLabel lblBackupTitle;
+    private Krypton.Toolkit.KryptonButton btnBackupNow;
+    private Krypton.Toolkit.KryptonLabel lblBackupInfo;
+    private Krypton.Toolkit.KryptonLabel lblLastBackup;
     private System.Windows.Forms.TabPage tabTrash;
-    private MaterialSkin.Controls.MaterialButton btnRestore;
-    private MaterialSkin.Controls.MaterialButton btnPurge;
-    private MaterialSkin.Controls.MaterialLabel lblTrashInfo;
-    private System.Windows.Forms.DataGridView gridTrash;
+    private Krypton.Toolkit.KryptonButton btnRestore;
+    private Krypton.Toolkit.KryptonButton btnPurge;
+    private Krypton.Toolkit.KryptonLabel lblTrashInfo;
+    private Krypton.Toolkit.KryptonDataGridView gridTrash;
     private System.Windows.Forms.TabPage tabSettings;
-    private MaterialSkin.Controls.MaterialLabel lblSetTheme;
-    private MaterialSkin.Controls.MaterialRadioButton radDark;
-    private MaterialSkin.Controls.MaterialRadioButton radLight;
-    private MaterialSkin.Controls.MaterialLabel lblSetFont;
-    private System.Windows.Forms.TrackBar trkFontSize;
-    private MaterialSkin.Controls.MaterialLabel lblFontSizeVal;
-    private MaterialSkin.Controls.MaterialLabel lblFontPreview;
-    private MaterialSkin.Controls.MaterialCheckbox chkBold;
-    private MaterialSkin.Controls.MaterialLabel lblSetAccent;
-    private MaterialSkin.Controls.MaterialComboBox cmbAccent;
-    private MaterialSkin.Controls.MaterialSwitch swAnimations;
-    private MaterialSkin.Controls.MaterialSwitch swConfirmDelete;
-    private MaterialSkin.Controls.MaterialSwitch swNotifications;
-    private MaterialSkin.Controls.MaterialSwitch swColdStorage;
-    private MaterialSkin.Controls.MaterialSwitch swMinimizeToTray;
-    private MaterialSkin.Controls.MaterialSwitch swAutoSync;
-    private MaterialSkin.Controls.MaterialLabel lblExcludeCap;
-    private MaterialSkin.Controls.MaterialTextBox2 txtExclude;
-    private MaterialSkin.Controls.MaterialButton btnResetSettings;
-    private MaterialSkin.Controls.MaterialCard cardFiles;
-    private MaterialSkin.Controls.MaterialLabel lblFilesCap;
+    private Krypton.Toolkit.KryptonLabel lblSetTheme;
+    private Krypton.Toolkit.KryptonRadioButton radDark;
+    private Krypton.Toolkit.KryptonRadioButton radLight;
+    private Krypton.Toolkit.KryptonLabel lblSetFont;
+    private Krypton.Toolkit.KryptonTrackBar trkFontSize;
+    private Krypton.Toolkit.KryptonLabel lblFontSizeVal;
+    private Krypton.Toolkit.KryptonLabel lblFontPreview;
+    private Krypton.Toolkit.KryptonCheckBox chkBold;
+    private Krypton.Toolkit.KryptonLabel lblSetAccent;
+    private Krypton.Toolkit.KryptonComboBox cmbAccent;
+    private Krypton.Toolkit.KryptonToggleSwitch swAnimations;
+    private Krypton.Toolkit.KryptonToggleSwitch swConfirmDelete;
+    private Krypton.Toolkit.KryptonToggleSwitch swNotifications;
+    private Krypton.Toolkit.KryptonToggleSwitch swColdStorage;
+    private Krypton.Toolkit.KryptonToggleSwitch swMinimizeToTray;
+    private Krypton.Toolkit.KryptonToggleSwitch swAutoSync;
+    private Krypton.Toolkit.KryptonLabel lblExcludeCap;
+    private Krypton.Toolkit.KryptonTextBox txtExclude;
+    private Krypton.Toolkit.KryptonButton btnResetSettings;
+    private Krypton.Toolkit.KryptonPanel cardFiles;
+    private Krypton.Toolkit.KryptonLabel lblFilesCap;
     private System.Windows.Forms.Label lblFilesVal;
-    private MaterialSkin.Controls.MaterialCard cardSynced;
-    private MaterialSkin.Controls.MaterialLabel lblSyncedCap;
+    private Krypton.Toolkit.KryptonPanel cardSynced;
+    private Krypton.Toolkit.KryptonLabel lblSyncedCap;
     private System.Windows.Forms.Label lblSyncedVal;
-    private MaterialSkin.Controls.MaterialCard cardPending;
-    private MaterialSkin.Controls.MaterialLabel lblPendingCap;
+    private Krypton.Toolkit.KryptonPanel cardPending;
+    private Krypton.Toolkit.KryptonLabel lblPendingCap;
     private System.Windows.Forms.Label lblPendingVal;
-    private MaterialSkin.Controls.MaterialCard cardServers;
-    private MaterialSkin.Controls.MaterialLabel lblServersCap;
+    private Krypton.Toolkit.KryptonPanel cardServers;
+    private Krypton.Toolkit.KryptonLabel lblServersCap;
     private System.Windows.Forms.Label lblServersVal;
-    private MaterialSkin.Controls.MaterialLabel lblDashTitle;
+    private Krypton.Toolkit.KryptonLabel lblDashTitle;
     private System.Windows.Forms.TabPage tabServers;
     private System.Windows.Forms.TabPage tabAudit;
     private System.Windows.Forms.TabPage tabAnalytics;
-    private MaterialSkin.Controls.MaterialButton btnSelectFolder;
-    private MaterialSkin.Controls.MaterialButton btnSync;
-    private MaterialSkin.Controls.MaterialButton btnDelete;
-    private MaterialSkin.Controls.MaterialButton btnResume;
-    private MaterialSkin.Controls.MaterialButton btnExplorer;
-    private MaterialSkin.Controls.MaterialButton btnLogout;
-    private MaterialSkin.Controls.MaterialButton btnAddUser;
-    private MaterialSkin.Controls.MaterialButton btnDeleteUser;
-    private System.Windows.Forms.DataGridView gridUsers;
+    private Krypton.Toolkit.KryptonButton btnSelectFolder;
+    private Krypton.Toolkit.KryptonButton btnSync;
+    private Krypton.Toolkit.KryptonButton btnDelete;
+    private Krypton.Toolkit.KryptonButton btnResume;
+    private Krypton.Toolkit.KryptonButton btnExplorer;
+    private Krypton.Toolkit.KryptonButton btnLogout;
+    private Krypton.Toolkit.KryptonButton btnAddUser;
+    private Krypton.Toolkit.KryptonButton btnDeleteUser;
+    private Krypton.Toolkit.KryptonButton btnViewProfile;
+    private Krypton.Toolkit.KryptonDataGridView gridUsers;
     private System.Windows.Forms.TabPage tabUsers;
-    private MaterialSkin.Controls.MaterialButton btnEditServer;
-    private MaterialSkin.Controls.MaterialButton btnSetActive;
-    private MaterialSkin.Controls.MaterialButton btnDeleteServer;
-    private System.Windows.Forms.StatusStrip statusStrip;
+    private Krypton.Toolkit.KryptonButton btnEditServer;
+    private Krypton.Toolkit.KryptonButton btnSetActive;
+    private Krypton.Toolkit.KryptonButton btnDeleteServer;
+    private Krypton.Toolkit.KryptonStatusStrip statusStrip;
     private System.Windows.Forms.ToolStripStatusLabel lblServerInfo;
     private System.Windows.Forms.ToolStripDropDownButton btnTheme;
     private System.Windows.Forms.ToolStripMenuItem themeDarkItem;
     private System.Windows.Forms.ToolStripMenuItem themeLightItem;
-    private MaterialSkin.Controls.MaterialTextBox2 txtFilter;
-    private MaterialSkin.Controls.MaterialProgressBar progressBar;
+    private Krypton.Toolkit.KryptonTextBox txtFilter;
+    private Krypton.Toolkit.KryptonProgressBar progressBar;
     private System.Windows.Forms.ToolTip toolTip;
-    private MaterialSkin.Controls.MaterialToolStripMenuItem trayAbout;
-    private MaterialSkin.Controls.MaterialContextMenuStrip trayMenu;
-    private MaterialSkin.Controls.MaterialToolStripMenuItem trayShow;
-    private MaterialSkin.Controls.MaterialToolStripMenuItem trayExit;
+    private System.Windows.Forms.ToolStripMenuItem trayAbout;
+    private System.Windows.Forms.ContextMenuStrip trayMenu;
+    private System.Windows.Forms.ToolStripMenuItem trayShow;
+    private System.Windows.Forms.ToolStripMenuItem trayExit;
     private System.Windows.Forms.NotifyIcon notifyIcon;
-    private MaterialSkin.Controls.MaterialLabel lblStatus;
-    private System.Windows.Forms.DataGridView gridFiles;
-    private MaterialSkin.Controls.MaterialButton btnAddServer;
-    private System.Windows.Forms.DataGridView gridServers;
-    private System.Windows.Forms.DataGridView gridAudit;
-    private MaterialSkin.Controls.MaterialLabel lblAnalytics;
-    private MaterialSkin.Controls.MaterialLabel lblAnaTotal;
-    private MaterialSkin.Controls.MaterialLabel lblAnaSynced;
-    private MaterialSkin.Controls.MaterialLabel lblAnaPending;
-    private MaterialSkin.Controls.MaterialLabel lblAnaModified;
-    private MaterialSkin.Controls.MaterialLabel lblAnaBytes;
-    private MaterialSkin.Controls.MaterialLabel lblAnaServer;
+    private Krypton.Toolkit.KryptonLabel lblStatus;
+    private Krypton.Toolkit.KryptonDataGridView gridFiles;
+    private Krypton.Toolkit.KryptonButton btnAddServer;
+    private Krypton.Toolkit.KryptonDataGridView gridServers;
+    private Krypton.Toolkit.KryptonDataGridView gridAudit;
+    private Krypton.Toolkit.KryptonLabel lblAnalytics;
+    private Krypton.Toolkit.KryptonLabel lblAnaTotal;
+    private Krypton.Toolkit.KryptonLabel lblAnaSynced;
+    private Krypton.Toolkit.KryptonLabel lblAnaPending;
+    private Krypton.Toolkit.KryptonLabel lblAnaModified;
+    private Krypton.Toolkit.KryptonLabel lblAnaBytes;
+    private Krypton.Toolkit.KryptonLabel lblAnaServer;
 }

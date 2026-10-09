@@ -1,24 +1,20 @@
-using MaterialSkin;
-using MaterialSkin.Controls;
+using Krypton.Toolkit;
 
 namespace Views.Components;
 
-public static class MaterialThemeModule
+public static class KryptonThemeModule
 {
-    public static readonly string[] AccentNames = { "Blue", "Green", "Red", "Purple" };
+    private static readonly KryptonManager _manager = new();    public static readonly string[] AccentNames = { "Blue", "Green", "Red", "Purple" };
 
     public static void Initialize()
     {
         var settings = AppSettings.Load();
-        SetAccent(settings.Accent, false);
         SetTheme(settings.ThemeDark, false);
         DarkThemeModule.SetTheme(settings.ThemeDark);
     }
 
     public static void Apply(Form form)
     {
-        if (form is MaterialForm materialForm)
-            MaterialSkinManager.Instance.AddFormToManage(materialForm);
         if (!DarkThemeModule.IsDesignTime)
         {
             try
@@ -40,9 +36,9 @@ public static class MaterialThemeModule
 
     private static void SetTheme(bool dark, bool reapply)
     {
-        MaterialSkinManager.Instance.Theme = dark
-            ? MaterialSkinManager.Themes.DARK
-            : MaterialSkinManager.Themes.LIGHT;
+        _manager.GlobalPaletteMode = dark
+            ? PaletteMode.Microsoft365BlackDarkMode
+            : PaletteMode.Microsoft365White;
         DarkThemeModule.SetTheme(dark);
         if (!reapply) return;
         foreach (Form form in Application.OpenForms)
@@ -56,18 +52,14 @@ public static class MaterialThemeModule
 
     private static void SetAccent(string name, bool reapply)
     {
-        Color primary = name switch
+        Color accent = name switch
         {
             "Green" => ColorTranslator.FromHtml("#2E7D32"),
             "Red" => ColorTranslator.FromHtml("#C62828"),
             "Purple" => ColorTranslator.FromHtml("#6A1B9A"),
             _ => ColorTranslator.FromHtml("#005A9E"),
         };
-        Color dark = ControlPaint.Dark(primary);
-        Color light = ControlPaint.Light(primary);
-        Color accent = ControlPaint.LightLight(primary);
-        MaterialSkinManager.Instance.ColorScheme = new ColorScheme(primary, dark, light, accent, TextShade.WHITE);
-        DarkThemeModule.SetAccent(primary);
+        DarkThemeModule.SetAccent(accent);
         if (!reapply) return;
         foreach (Form form in Application.OpenForms)
             DarkThemeModule.Apply(form);

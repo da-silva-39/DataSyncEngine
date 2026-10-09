@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS users (
     salt VARCHAR(128) NOT NULL,
     role VARCHAR(16) NOT NULL DEFAULT 'Operator',
     is_active TINYINT(1) NOT NULL DEFAULT 1,
+    avatar_blob LONGBLOB NULL,
     UNIQUE KEY ux_users_username (username)
 ) ENGINE=InnoDB;
 
