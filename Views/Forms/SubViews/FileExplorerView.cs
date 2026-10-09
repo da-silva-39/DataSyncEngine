@@ -10,6 +10,19 @@ public partial class FileExplorerView : MaterialSkin.Controls.MaterialForm
     {
         InitializeComponent();
         MaterialThemeModule.Apply(this);
+        grid.CellFormatting += Grid_CellFormatting;
+    }
+
+    private void Grid_CellFormatting(object? sender, DataGridViewCellFormattingEventArgs e)
+    {
+        if (e.RowIndex < 0 || grid.Rows[e.RowIndex].DataBoundItem is not Model.Entities.FileModel file) return;
+        e.CellStyle.ForeColor = file.Status switch
+        {
+            Core.Enums.SyncStatus.Synced => DarkThemeModule.SuccessColor,
+            Core.Enums.SyncStatus.Pending => DarkThemeModule.WarningColor,
+            Core.Enums.SyncStatus.Modified => DarkThemeModule.ModifiedColor,
+            _ => DarkThemeModule.TextColor,
+        };
     }
 
     private async void btnBrowse_Click(object? sender, EventArgs e)
@@ -40,6 +53,7 @@ public partial class FileExplorerView : MaterialSkin.Controls.MaterialForm
         bool ok = await Task.Run(() => engine.ProcessFileAsync(file, File.ReadAllBytes(file.FilePath)));
         grid.Refresh();
         lblStatus.Text = ok ? $"{file.FileName} synchronized." : $"{file.FileName} marked for resume.";
+        ToastForm.ShowToast(this, lblStatus.Text, ok ? ToastKind.Success : ToastKind.Warning);
     }
 
     private void ctxHash_Click(object? sender, EventArgs e)
@@ -83,12 +97,29 @@ public partial class FileExplorerView : MaterialSkin.Controls.MaterialForm
             await AppServices.AuditLogger.LogAsync(Core.Enums.LogAction.MasterKeyPrompted, $"Operator requested delete of {file.FilePath}.");
             if (masterKey.ShowDialog(this) != DialogResult.OK || !masterKey.Authorized) return;
         }
-        if (MessageBox.Show($"Delete {file.FileName} from server?", "Explorer", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
-        if (file.Id > 0) await AppServices.Files.DeleteAsync(file.Id);
+        if (AppServices.Settings.ConfirmDelete
+            && MessageBox.Show($"Delete {file.FileName} from server?", "Explorer", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
+        if (file.Id > 0)
+        {
+            try
+            {
+                byte[]? blob = await AppServices.Files.GetFileBlobAsync(file.Id);
+                if (blob != null && blob.Length > 0)
+                    await AppServices.Trash.MoveToTrashAsync(file, blob, AppServices.Session.Username ?? "unknown");
+                await AppServices.Files.DeleteAsync(file.Id);
+            }
+            catch (Exception ex)
+            {
+                lblStatus.Text = $"Delete failed: {ex.Message}";
+                ToastForm.ShowToast(this, "Delete failed.", ToastKind.Error);
+                return;
+            }
+        }
         _files.Remove(file);
         grid.DataSource = null;
         grid.DataSource = _files;
-        lblStatus.Text = "Deleted.";
+        lblStatus.Text = "Moved to trash.";
+        ToastForm.ShowToast(this, $"{file.FileName} moved to trash.", ToastKind.Warning);
     }
 
     private async void ctxRefresh_Click(object? sender, EventArgs e)

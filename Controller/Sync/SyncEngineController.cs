@@ -18,6 +18,8 @@ public class SyncEngineController
 
     public IReadOnlyList<string> PendingResume => _pendingResume;
 
+    public bool KeepColdStorage { get; set; } = true;
+
     public void MarkForResume(string path)
     {
         if (!_pendingResume.Contains(path)) _pendingResume.Add(path);
@@ -64,12 +66,15 @@ public class SyncEngineController
             byte[] encrypted = _aes.Encrypt(content, _masterKeyProvider());
             byte[] compressed = _compressor.Compress(encrypted);
             await _fileRepository.InsertWithBlobAsync(file, compressed, cancellationToken);
-            try
+            if (KeepColdStorage)
             {
-                await SaveColdStorageAsync(file, compressed, cancellationToken);
-            }
-            catch
-            {
+                try
+                {
+                    await SaveColdStorageAsync(file, compressed, cancellationToken);
+                }
+                catch
+                {
+                }
             }
             file.Status = SyncStatus.Synced;
             if (_pendingResume.Remove(file.FilePath)) SaveQueue();

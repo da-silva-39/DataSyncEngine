@@ -10,6 +10,7 @@ public class MainViewModel
     public List<FileModel> Files { get; } = new();
     public List<AuditLogModel> AuditEntries { get; } = new();
     public List<ServerModel> Servers { get; } = new();
+    public List<TrashEntry> TrashEntries { get; } = new();
 
     public List<UserModel> Users { get; } = new();
 
@@ -43,6 +44,18 @@ public class MainViewModel
         try
         {
             AuditEntries.AddRange(await AppServices.Audits.GetAllAsync());
+        }
+        catch
+        {
+        }
+    }
+
+    public async Task LoadTrashAsync()
+    {
+        TrashEntries.Clear();
+        try
+        {
+            TrashEntries.AddRange(await AppServices.Trash.GetAllAsync());
         }
         catch
         {

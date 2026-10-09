@@ -48,3 +48,17 @@ CREATE TABLE IF NOT EXISTS audit_logs (
     KEY ix_audit_username (username),
     KEY ix_audit_timestamp (timestamp)
 ) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS trash_files (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    file_name VARCHAR(512) NOT NULL,
+    file_path VARCHAR(1024) NOT NULL,
+    size_bytes BIGINT NOT NULL DEFAULT 0,
+    sha256_hash VARCHAR(64) NOT NULL,
+    status VARCHAR(16) NOT NULL DEFAULT 'Pending',
+    uploaded_at DATETIME NOT NULL,
+    content_blob LONGBLOB,
+    deleted_by VARCHAR(64) NOT NULL DEFAULT '',
+    deleted_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    KEY ix_trash_deleted_at (deleted_at)
+) ENGINE=InnoDB;

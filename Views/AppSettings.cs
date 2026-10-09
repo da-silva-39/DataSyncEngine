@@ -11,6 +11,16 @@ public class AppSettings
     public string User { get; set; } = "root";
     public string Password { get; set; } = "jose200739";
     public string MasterKey { get; set; } = "DataSyncEngine-MasterKey-2026";
+    public bool ThemeDark { get; set; } = true;
+    public string Accent { get; set; } = "Blue";
+    public float FontSize { get; set; } = 9.5f;
+    public bool FontBold { get; set; } = false;
+    public bool Animations { get; set; } = true;
+    public bool ConfirmDelete { get; set; } = true;
+    public bool Notifications { get; set; } = true;
+    public bool KeepColdStorage { get; set; } = true;
+    public bool MinimizeToTray { get; set; } = true;
+    public string LastBackupAt { get; set; } = string.Empty;
 
     private static readonly string FilePath = Path.Combine(AppContext.BaseDirectory, "appsettings.json");
 

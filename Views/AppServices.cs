@@ -11,6 +11,13 @@ public static class AppServices
 {
     public static string MasterKey { get; set; } = "DataSyncEngine-MasterKey-2026";
 
+    public static AppSettings Settings { get; } = AppSettings.Load();
+
+    public static void SaveSettings()
+    {
+        AppSettings.Save(Settings);
+    }
+
     public static ServerModel CurrentServer { get; set; } = LoadServer();
 
     private static ServerModel LoadServer()
@@ -41,6 +48,7 @@ public static class AppServices
     public static ServerRepository Servers => new(() => CurrentServer);
     public static FileRepository Files => new(() => CurrentServer);
     public static AuditRepository Audits => new(() => CurrentServer);
+    public static TrashRepository Trash => new(() => CurrentServer);
 
     public static AuditLoggerController AuditLogger => new(() => Audits, () => Session.Username);
 
@@ -52,5 +60,6 @@ public static class AppServices
         HotSwap = new HotSwapController(CurrentServer, Cache);
         HotSwap.ServerChanged += server => CurrentServer = server;
         SyncEngine = new Controller.Sync.SyncEngineController(Aes, Compressor, Files, () => Aes.DeriveKey(MasterKey));
+        SyncEngine.KeepColdStorage = Settings.KeepColdStorage;
     }
 }

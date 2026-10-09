@@ -21,10 +21,15 @@ public static class DarkThemeModule
     }
 
 
-    public static Color BackgroundColor { get; private set; } = ColorTranslator.FromHtml("#1E1E1E");
-    public static Color PanelColor { get; private set; } = ColorTranslator.FromHtml("#2D2D30");
+    public static Color BackgroundColor { get; private set; } = ColorTranslator.FromHtml("#000000");
+    public static Color PanelColor { get; private set; } = ColorTranslator.FromHtml("#161616");
     public static Color TextColor { get; private set; } = Color.White;
-    public static Color AccentColor { get; private set; } = ColorTranslator.FromHtml("#007ACC");
+    public static Color AccentColor { get; private set; } = ColorTranslator.FromHtml("#005A9E");
+
+    public static readonly Color SuccessColor = ColorTranslator.FromHtml("#4CAF50");
+    public static readonly Color WarningColor = ColorTranslator.FromHtml("#FFC107");
+    public static readonly Color ModifiedColor = ColorTranslator.FromHtml("#FF9800");
+    public static readonly Color DangerColor = ColorTranslator.FromHtml("#F44336");
 
     public static bool IsDark { get; private set; } = true;
 
@@ -33,10 +38,14 @@ public static class DarkThemeModule
     public static void SetTheme(bool dark)
     {
         IsDark = dark;
-        BackgroundColor = dark ? ColorTranslator.FromHtml("#1E1E1E") : ColorTranslator.FromHtml("#F3F3F3");
-        PanelColor = dark ? ColorTranslator.FromHtml("#2D2D30") : Color.White;
+        BackgroundColor = dark ? ColorTranslator.FromHtml("#000000") : ColorTranslator.FromHtml("#F3F3F3");
+        PanelColor = dark ? ColorTranslator.FromHtml("#161616") : Color.White;
         TextColor = dark ? Color.White : ColorTranslator.FromHtml("#1E1E1E");
-        AccentColor = ColorTranslator.FromHtml("#007ACC");
+    }
+
+    public static void SetAccent(Color accent)
+    {
+        AccentColor = accent;
     }
 
     public static void Apply(Control root)
@@ -106,6 +115,11 @@ public static class DarkThemeModule
                 case StatusStrip strip:
                     strip.BackColor = PanelColor;
                     strip.ForeColor = TextColor;
+                    break;
+                case TreeView tree:
+                    tree.BackColor = PanelColor;
+                    tree.ForeColor = TextColor;
+                    tree.BorderStyle = BorderStyle.None;
                     break;
                 case ToolStrip ts:
                     ts.BackColor = PanelColor;
