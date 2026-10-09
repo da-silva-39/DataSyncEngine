@@ -113,7 +113,7 @@ public partial class MainView : MaterialSkin.Controls.MaterialForm
     {
         foreach (string name in names)
         {
-            if (grid.Columns.Contains(name)) grid.Columns[name].Visible = false;
+            if (grid.Columns.Contains(name)) grid.Columns[name]?.Visible = false;
         }
     }
 
