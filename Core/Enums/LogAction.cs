@@ -13,5 +13,6 @@ public enum LogAction
     ServerSwitch,
     MasterKeyPrompted,
     CachePurged,
+    UserUpdated,
     Error
 }

@@ -26,6 +26,11 @@ public partial class LoginView : Krypton.Toolkit.KryptonForm
         txtUsername.Focus();
     }
 
+    private void chkShowPassword_CheckedChanged(object? sender, EventArgs e)
+    {
+        txtPassword.UseSystemPasswordChar = !chkShowPassword.Checked;
+    }
+
     private async void btnLogin_Click(object? sender, EventArgs e)
     {
         _viewModel.Username = txtUsername.Text.Trim();

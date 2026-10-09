@@ -318,11 +318,68 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         gridFiles.DataSource = term.Length == 0 ? _viewModel.Files : filtered;
     }
 
+    private void BindAuditGrid()
+    {
+        string term = txtAuditFilter.Text.Trim();
+        IEnumerable<Model.Entities.AuditLogModel> rows = _viewModel.AuditEntries;
+        if (term.Length > 0)
+        {
+            rows = rows.Where(a =>
+                (a.Username?.Contains(term, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                a.Action.ToString().Contains(term, StringComparison.OrdinalIgnoreCase) ||
+                (a.Details?.Contains(term, StringComparison.OrdinalIgnoreCase) ?? false));
+        }
+        gridAudit.DataSource = null;
+        gridAudit.DataSource = rows.ToList();
+    }
+
+    private void txtAuditFilter_TextChanged(object? sender, EventArgs e) => BindAuditGrid();
+
+    private void btnExportAudit_Click(object? sender, EventArgs e)
+    {
+        using var dialog = new SaveFileDialog
+        {
+            Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*",
+            FileName = $"audit_{DateTime.Now:yyyyMMdd_HHmmss}.csv",
+            Title = "Export audit log"
+        };
+        if (dialog.ShowDialog(this) != DialogResult.OK) return;
+        try
+        {
+            var rows = gridAudit.DataSource as List<Model.Entities.AuditLogModel> ?? _viewModel.AuditEntries;
+            var sb = new System.Text.StringBuilder();
+            sb.AppendLine("Id;Timestamp;User;Action;Details");
+            foreach (var a in rows)
+                sb.AppendLine($"{a.Id};{a.Timestamp:yyyy-MM-dd HH:mm:ss};{Escape(a.Username)};{a.Action};{Escape(a.Details)}");
+            File.WriteAllText(dialog.FileName, sb.ToString(), System.Text.Encoding.UTF8);
+            ToastForm.ShowToast(this, $"Exported {rows.Count} entries.", ToastKind.Success);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Export failed: {ex.Message}", "Export", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        static string Escape(string? value)
+        {
+            value ??= string.Empty;
+            return value.Contains(';') || value.Contains('"')
+                ? "\"" + value.Replace("\"", "\"\"") + "\""
+                : value;
+        }
+    }
+
     private void trayAbout_Click(object? sender, EventArgs e)
     {
         trayShow_Click(sender, e);
         using var about = new SubViews.AboutView();
         about.ShowDialog(this);
+    }
+
+    private void trayChangePassword_Click(object? sender, EventArgs e)
+    {
+        trayShow_Click(sender, e);
+        using var change = new SubViews.ChangePasswordView();
+        change.ShowDialog(this);
     }
 
     private void btnNavToggle_Click(object? sender, EventArgs e)
@@ -816,8 +873,7 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         tabAudit.Enter += async (_, _) =>
         {
             await _viewModel.LoadAuditAsync();
-            gridAudit.DataSource = null;
-            gridAudit.DataSource = _viewModel.AuditEntries;
+            BindAuditGrid();
         };
 
         tabUsers.Enter += async (_, _) =>
@@ -834,6 +890,19 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
             var history = await AppServices.Audits.GetByUserAsync(user.Username);
             using var profile = new SubViews.UserProfileView(user, history);
             profile.ShowDialog(this);
+        };
+
+        btnResetPassword.Click += (_, _) =>
+        {
+            if (gridUsers.CurrentRow?.DataBoundItem is not Model.Entities.UserModel user) return;
+            if (user.Username.Equals(AppServices.Session.Username, StringComparison.OrdinalIgnoreCase))
+            {
+                MessageBox.Show("Use the tray menu (Change Password) to change your own password.",
+                    "Reset Password", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            using var dialog = new SubViews.ChangePasswordView(user.Username);
+            dialog.ShowDialog(this);
         };
 
         btnAddUser.Click += (_, _) =>

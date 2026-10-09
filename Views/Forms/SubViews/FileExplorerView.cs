@@ -57,6 +57,32 @@ public partial class FileExplorerView : Krypton.Toolkit.KryptonForm
         ToastForm.ShowToast(this, lblStatus.Text, ok ? ToastKind.Success : ToastKind.Warning);
     }
 
+    private async void ctxDownload_Click(object? sender, EventArgs e)
+    {
+        if (SelectedFile is not { } file) return;
+        if (file.Id <= 0)
+        {
+            lblStatus.Text = "File is not on the server yet. Sync it first.";
+            ToastForm.ShowToast(this, "Sync the file before downloading.", ToastKind.Warning);
+            return;
+        }
+        using var dialog = new SaveFileDialog { FileName = file.FileName, Title = "Download file" };
+        if (dialog.ShowDialog(this) != DialogResult.OK) return;
+        try
+        {
+            var backup = new Controller.Sync.BackupController(AppServices.Files, AppServices.Aes, AppServices.Compressor,
+                () => AppServices.Aes.DeriveKey(AppServices.MasterKey));
+            await Task.Run(() => backup.ExportSingleAsync(file, dialog.FileName));
+            lblStatus.Text = $"Downloaded to {dialog.FileName}.";
+            ToastForm.ShowToast(this, $"{file.FileName} downloaded.", ToastKind.Success);
+        }
+        catch (Exception ex)
+        {
+            lblStatus.Text = $"Download failed: {ex.Message}";
+            ToastForm.ShowToast(this, "Download failed.", ToastKind.Error);
+        }
+    }
+
     private void ctxHash_Click(object? sender, EventArgs e)
     {
         if (SelectedFile is { } file)

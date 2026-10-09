@@ -52,6 +52,8 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.btnAddServer = new Krypton.Toolkit.KryptonButton();
         this.gridServers = new Krypton.Toolkit.KryptonDataGridView();
         this.gridAudit = new Krypton.Toolkit.KryptonDataGridView();
+        this.txtAuditFilter = new Krypton.Toolkit.KryptonTextBox();
+        this.btnExportAudit = new Krypton.Toolkit.KryptonButton();
         this.lblAnalytics = new Krypton.Toolkit.KryptonLabel();
         this.tabControl.SuspendLayout();
         this.tabDashboard.SuspendLayout();
@@ -386,6 +388,10 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.trayAbout.Text = "About";
         this.trayAbout.Click += new System.EventHandler(this.trayAbout_Click);
         this.trayMenu.Items.Add(this.trayAbout);
+        this.trayChangePassword = new System.Windows.Forms.ToolStripMenuItem();
+        this.trayChangePassword.Text = "Change Password";
+        this.trayChangePassword.Click += new System.EventHandler(this.trayChangePassword_Click);
+        this.trayMenu.Items.Add(this.trayChangePassword);
         this.notifyIcon.ContextMenuStrip = this.trayMenu;
         this.notifyIcon.DoubleClick += new System.EventHandler(this.trayShow_Click);
 
@@ -582,17 +588,36 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.gridServers.TabIndex = 1;
 
         this.tabAudit.Controls.Add(this.gridAudit);
+        this.tabAudit.Controls.Add(this.txtAuditFilter);
+        this.tabAudit.Controls.Add(this.btnExportAudit);
         this.tabAudit.Location = new System.Drawing.Point(4, 34);
         this.tabAudit.Name = "tabAudit";
         this.tabAudit.Size = new System.Drawing.Size(972, 582);
         this.tabAudit.TabIndex = 2;
         this.tabAudit.Text = "Audit";
 
+        this.txtAuditFilter.CueHint.CueHintText = "Filter audit entries...";
+        this.txtAuditFilter.Location = new System.Drawing.Point(15, 15);
+        this.txtAuditFilter.MaxLength = 32767;
+        this.txtAuditFilter.Name = "txtAuditFilter";
+        this.txtAuditFilter.Size = new System.Drawing.Size(320, 36);
+        this.txtAuditFilter.TabIndex = 1;
+        this.txtAuditFilter.TextChanged += new System.EventHandler(this.txtAuditFilter_TextChanged);
+
+        this.btnExportAudit.Location = new System.Drawing.Point(350, 15);
+        this.btnExportAudit.Name = "btnExportAudit";
+        this.btnExportAudit.Size = new System.Drawing.Size(160, 36);
+        this.btnExportAudit.TabIndex = 2;
+        this.btnExportAudit.Text = "Export CSV";
+        this.btnExportAudit.ButtonStyle = Krypton.Toolkit.ButtonStyle.Standalone;
+        this.btnExportAudit.Click += new System.EventHandler(this.btnExportAudit_Click);
+
         this.gridAudit.AllowUserToAddRows = false;
         this.gridAudit.AllowUserToDeleteRows = false;
         this.gridAudit.ReadOnly = true;
-        this.gridAudit.Dock = System.Windows.Forms.DockStyle.Fill;
+        this.gridAudit.Location = new System.Drawing.Point(15, 60);
         this.gridAudit.Name = "gridAudit";
+        this.gridAudit.Size = new System.Drawing.Size(940, 500);
         this.gridAudit.TabIndex = 0;
 
         this.tabAnalytics.Controls.Add(this.lblAnalytics);
@@ -895,6 +920,15 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.btnViewProfile.ButtonStyle = Krypton.Toolkit.ButtonStyle.Alternate;
         this.tabUsers.Controls.Add(this.btnViewProfile);
 
+        this.btnResetPassword = new Krypton.Toolkit.KryptonButton();
+        this.btnResetPassword.Location = new System.Drawing.Point(480, 15);
+        this.btnResetPassword.Name = "btnResetPassword";
+        this.btnResetPassword.Size = new System.Drawing.Size(150, 36);
+        this.btnResetPassword.TabIndex = 4;
+        this.btnResetPassword.Text = "Reset Password";
+        this.btnResetPassword.ButtonStyle = Krypton.Toolkit.ButtonStyle.Alternate;
+        this.tabUsers.Controls.Add(this.btnResetPassword);
+
         this.gridUsers.AllowUserToAddRows = false;
         this.gridUsers.AllowUserToDeleteRows = false;
         this.gridUsers.ReadOnly = true;
@@ -997,6 +1031,7 @@ partial class MainView : Krypton.Toolkit.KryptonForm
     private Krypton.Toolkit.KryptonButton btnAddUser;
     private Krypton.Toolkit.KryptonButton btnDeleteUser;
     private Krypton.Toolkit.KryptonButton btnViewProfile;
+    private Krypton.Toolkit.KryptonButton btnResetPassword;
     private Krypton.Toolkit.KryptonDataGridView gridUsers;
     private System.Windows.Forms.TabPage tabUsers;
     private Krypton.Toolkit.KryptonButton btnEditServer;
@@ -1011,6 +1046,7 @@ partial class MainView : Krypton.Toolkit.KryptonForm
     private Krypton.Toolkit.KryptonProgressBar progressBar;
     private System.Windows.Forms.ToolTip toolTip;
     private System.Windows.Forms.ToolStripMenuItem trayAbout;
+    private System.Windows.Forms.ToolStripMenuItem trayChangePassword;
     private System.Windows.Forms.ContextMenuStrip trayMenu;
     private System.Windows.Forms.ToolStripMenuItem trayShow;
     private System.Windows.Forms.ToolStripMenuItem trayExit;
@@ -1020,6 +1056,8 @@ partial class MainView : Krypton.Toolkit.KryptonForm
     private Krypton.Toolkit.KryptonButton btnAddServer;
     private Krypton.Toolkit.KryptonDataGridView gridServers;
     private Krypton.Toolkit.KryptonDataGridView gridAudit;
+    private Krypton.Toolkit.KryptonTextBox txtAuditFilter;
+    private Krypton.Toolkit.KryptonButton btnExportAudit;
     private Krypton.Toolkit.KryptonLabel lblAnalytics;
     private Krypton.Toolkit.KryptonLabel lblAnaTotal;
     private Krypton.Toolkit.KryptonLabel lblAnaSynced;

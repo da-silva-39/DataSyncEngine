@@ -21,6 +21,7 @@ partial class LoginView : Krypton.Toolkit.KryptonForm
         this.txtUsername = new Krypton.Toolkit.KryptonTextBox();
         this.txtPassword = new Krypton.Toolkit.KryptonTextBox();
         this.btnLogin = new Krypton.Toolkit.KryptonButton();
+        this.chkShowPassword = new Krypton.Toolkit.KryptonCheckBox();
         this.lblError = new System.Windows.Forms.Label();
         this.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)(this.picLogo)).BeginInit();
@@ -64,9 +65,17 @@ partial class LoginView : Krypton.Toolkit.KryptonForm
         this.txtPassword.TabIndex = 3;
         this.txtPassword.UseSystemPasswordChar = true;
 
+        this.chkShowPassword.Location = new System.Drawing.Point(60, 306);
+        this.chkShowPassword.Name = "chkShowPassword";
+        this.chkShowPassword.Size = new System.Drawing.Size(160, 24);
+        this.chkShowPassword.TabIndex = 6;
+        this.chkShowPassword.Text = "Show password";
+        this.chkShowPassword.ForeColor = System.Drawing.Color.FromArgb(0xB0, 0xB0, 0xB0);
+        this.chkShowPassword.CheckedChanged += new System.EventHandler(this.chkShowPassword_CheckedChanged);
+
         this.btnLogin.AutoSize = false;
         this.btnLogin.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-        this.btnLogin.Location = new System.Drawing.Point(60, 320);
+        this.btnLogin.Location = new System.Drawing.Point(60, 336);
         this.btnLogin.Name = "btnLogin";
         this.btnLogin.Size = new System.Drawing.Size(360, 42);
         this.btnLogin.TabIndex = 4;
@@ -77,20 +86,21 @@ partial class LoginView : Krypton.Toolkit.KryptonForm
         this.lblError.AutoSize = true;
         this.lblError.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular);
         this.lblError.ForeColor = System.Drawing.Color.OrangeRed;
-        this.lblError.Location = new System.Drawing.Point(60, 372);
+        this.lblError.Location = new System.Drawing.Point(60, 392);
         this.lblError.Name = "lblError";
         this.lblError.TabIndex = 5;
         this.lblError.Text = "";
 
         this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
         this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-        this.ClientSize = new System.Drawing.Size(480, 415);
+        this.ClientSize = new System.Drawing.Size(480, 435);
         this.Controls.Add(this.picLogo);
         this.Controls.Add(this.lblTitle);
         this.Controls.Add(this.lblSubtitle);
         this.Controls.Add(this.txtUsername);
         this.Controls.Add(this.txtPassword);
         this.Controls.Add(this.btnLogin);
+        this.Controls.Add(this.chkShowPassword);
         this.Controls.Add(this.lblError);
         this.Name = "LoginView";
         this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -105,5 +115,6 @@ partial class LoginView : Krypton.Toolkit.KryptonForm
     private Krypton.Toolkit.KryptonTextBox txtUsername;
     private Krypton.Toolkit.KryptonTextBox txtPassword;
     private Krypton.Toolkit.KryptonButton btnLogin;
+    private Krypton.Toolkit.KryptonCheckBox chkShowPassword;
     private System.Windows.Forms.Label lblError;
 }

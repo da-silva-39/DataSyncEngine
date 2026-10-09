@@ -49,6 +49,18 @@ public class BackupController
         return (ok, fail);
     }
 
+    public async Task ExportSingleAsync(FileModel file, string destPath, CancellationToken cancellationToken = default)
+    {
+        byte[]? blob = await _fileRepository.GetFileBlobAsync(file.Id, cancellationToken);
+        if (blob == null || blob.Length == 0) throw new InvalidOperationException("No content stored for this file.");
+        byte[] encrypted = _compressor.Decompress(blob);
+        byte[] plain = _aes.Decrypt(encrypted, _masterKeyProvider());
+        string? dir = Path.GetDirectoryName(destPath);
+        if (!string.IsNullOrEmpty(dir)) Directory.CreateDirectory(dir);
+        await File.WriteAllBytesAsync(destPath, plain, cancellationToken);
+        FileExported?.Invoke(file.FileName);
+    }
+
     private static string GetUniquePath(string folder, string fileName)
     {
         string dest = Path.Combine(folder, fileName);

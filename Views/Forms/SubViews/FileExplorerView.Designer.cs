@@ -21,6 +21,7 @@ partial class FileExplorerView : Krypton.Toolkit.KryptonForm
         this.grid = new System.Windows.Forms.DataGridView();
         this.lblStatus = new Krypton.Toolkit.KryptonLabel();
         this.ctxSync = new System.Windows.Forms.ToolStripMenuItem();
+        this.ctxDownload = new System.Windows.Forms.ToolStripMenuItem();
         this.ctxHash = new System.Windows.Forms.ToolStripMenuItem();
         this.ctxProps = new System.Windows.Forms.ToolStripMenuItem();
         this.ctxResume = new System.Windows.Forms.ToolStripMenuItem();
@@ -69,18 +70,20 @@ partial class FileExplorerView : Krypton.Toolkit.KryptonForm
         this.lblStatus.Text = "Ready.";
 
         this.ctxSync.Text = "Synchronize Now";
+        this.ctxDownload.Text = "Download...";
         this.ctxHash.Text = "Copy SHA-256";
         this.ctxProps.Text = "Properties";
         this.ctxResume.Text = "Mark for Resume";
         this.ctxDelete.Text = "Delete (restricted)";
         this.ctxRefresh.Text = "Refresh";
         this.ctxSync.Click += new System.EventHandler(this.ctxSync_Click);
+        this.ctxDownload.Click += new System.EventHandler(this.ctxDownload_Click);
         this.ctxHash.Click += new System.EventHandler(this.ctxHash_Click);
         this.ctxProps.Click += new System.EventHandler(this.ctxProps_Click);
         this.ctxResume.Click += new System.EventHandler(this.ctxResume_Click);
         this.ctxDelete.Click += new System.EventHandler(this.ctxDelete_Click);
         this.ctxRefresh.Click += new System.EventHandler(this.ctxRefresh_Click);
-        this.ctxMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { this.ctxSync, this.ctxHash, this.ctxProps, this.ctxResume, this.ctxDelete, new System.Windows.Forms.ToolStripSeparator(), this.ctxRefresh });
+        this.ctxMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { this.ctxSync, this.ctxDownload, this.ctxHash, this.ctxProps, this.ctxResume, this.ctxDelete, new System.Windows.Forms.ToolStripSeparator(), this.ctxRefresh });
 
         this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
         this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -105,6 +108,7 @@ partial class FileExplorerView : Krypton.Toolkit.KryptonForm
     private Krypton.Toolkit.KryptonLabel lblStatus;
     private System.Windows.Forms.ContextMenuStrip ctxMenu;
     private System.Windows.Forms.ToolStripMenuItem ctxSync;
+    private System.Windows.Forms.ToolStripMenuItem ctxDownload;
     private System.Windows.Forms.ToolStripMenuItem ctxHash;
     private System.Windows.Forms.ToolStripMenuItem ctxProps;
     private System.Windows.Forms.ToolStripMenuItem ctxResume;
