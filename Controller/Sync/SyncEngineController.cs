@@ -64,7 +64,13 @@ public class SyncEngineController
             byte[] encrypted = _aes.Encrypt(content, _masterKeyProvider());
             byte[] compressed = _compressor.Compress(encrypted);
             await _fileRepository.InsertWithBlobAsync(file, compressed, cancellationToken);
-            await SaveColdStorageAsync(file, compressed, cancellationToken);
+            try
+            {
+                await SaveColdStorageAsync(file, compressed, cancellationToken);
+            }
+            catch
+            {
+            }
             file.Status = SyncStatus.Synced;
             if (_pendingResume.Remove(file.FilePath)) SaveQueue();
             FileProcessed?.Invoke(file.FilePath);

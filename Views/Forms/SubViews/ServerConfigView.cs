@@ -25,9 +25,23 @@ public partial class ServerConfigView : Form
         Text = "Edit Server";
     }
 
+    private bool ValidateFields(out int port)
+    {
+        if (!int.TryParse(txtPort.Text, out port) || port < 1 || port > 65535) port = 3306;
+        if (string.IsNullOrWhiteSpace(txtName.Text)
+            || string.IsNullOrWhiteSpace(txtHost.Text)
+            || string.IsNullOrWhiteSpace(txtDatabase.Text)
+            || string.IsNullOrWhiteSpace(txtUser.Text))
+        {
+            MessageBox.Show("Name, Host, Database and User are required.", "ServerConfig", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return false;
+        }
+        return true;
+    }
+
     private async void btnTest_Click(object? sender, EventArgs e)
     {
-        if (!int.TryParse(txtPort.Text, out int port)) port = 3306;
+        if (!ValidateFields(out int port)) return;
         var server = new Model.Entities.ServerModel
         {
             Host = txtHost.Text.Trim(),
@@ -54,7 +68,7 @@ public partial class ServerConfigView : Form
 
     private async void btnSave_Click(object? sender, EventArgs e)
     {
-        if (!int.TryParse(txtPort.Text, out int port)) port = 3306;
+        if (!ValidateFields(out int port)) return;
         var server = _editing ?? new Model.Entities.ServerModel();
         server.Name = txtName.Text.Trim();
         server.Host = txtHost.Text.Trim();
