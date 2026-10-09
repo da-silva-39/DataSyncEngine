@@ -8,6 +8,10 @@ static class Program
         ApplicationConfiguration.Initialize();
         Components.MaterialThemeModule.Initialize();
         AppServices.Initialize();
+        using (var splash = new Forms.SplashView())
+        {
+            if (splash.ShowDialog() != DialogResult.OK) return;
+        }
         while (true)
         {
             using var login = new Forms.LoginView();

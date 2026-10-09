@@ -15,7 +15,7 @@ public partial class LoginView : MaterialSkin.Controls.MaterialForm
         if (!DarkThemeModule.IsDesignTime)
         {
             Icon = LogoModule.GetIcon() ?? AppIcon.Create();
-            Image? logo = LogoModule.GetImage(52);
+            Image? logo = LogoModule.GetImage(96);
             picLogo.Image = logo ?? AppIcon.Create().ToBitmap();
         }
     }
