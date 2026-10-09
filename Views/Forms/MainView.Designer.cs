@@ -825,7 +825,7 @@ partial class MainView : MaterialSkin.Controls.MaterialForm
         this.btnResetSettings = new MaterialSkin.Controls.MaterialButton();
         this.btnResetSettings.AutoSize = false;
         this.btnResetSettings.HighEmphasis = false;
-        this.btnResetSettings.Location = new System.Drawing.Point(480, 310);
+        this.btnResetSettings.Location = new System.Drawing.Point(480, 350);
         this.btnResetSettings.Name = "btnResetSettings";
         this.btnResetSettings.Size = new System.Drawing.Size(200, 36);
         this.btnResetSettings.TabIndex = 10;
@@ -834,6 +834,41 @@ partial class MainView : MaterialSkin.Controls.MaterialForm
         this.btnResetSettings.UseAccentColor = false;
         this.btnResetSettings.Click += new System.EventHandler(this.btnResetSettings_Click);
         this.tabSettings.Controls.Add(this.btnResetSettings);
+
+        this.swAutoSync = new MaterialSkin.Controls.MaterialSwitch();
+        this.swAutoSync.AutoSize = true;
+        this.swAutoSync.Location = new System.Drawing.Point(480, 300);
+        this.swAutoSync.Name = "swAutoSync";
+        this.swAutoSync.Size = new System.Drawing.Size(200, 37);
+        this.swAutoSync.TabIndex = 11;
+        this.swAutoSync.Text = "Auto-sync on change";
+        this.swAutoSync.CheckedChanged += new System.EventHandler(this.swAutoSync_CheckedChanged);
+        this.tabSettings.Controls.Add(this.swAutoSync);
+
+        this.lblExcludeCap = new MaterialSkin.Controls.MaterialLabel();
+        this.lblExcludeCap.AutoSize = true;
+        this.lblExcludeCap.Location = new System.Drawing.Point(20, 360);
+        this.lblExcludeCap.Name = "lblExcludeCap";
+        this.lblExcludeCap.Text = "Exclude patterns (separated by ;)";
+        this.tabSettings.Controls.Add(this.lblExcludeCap);
+
+        this.txtExclude = new MaterialSkin.Controls.MaterialTextBox2();
+        this.txtExclude.Hint = "*.tmp;*.log;~$*";
+        this.txtExclude.Location = new System.Drawing.Point(20, 390);
+        this.txtExclude.MaxLength = 1024;
+        this.txtExclude.Name = "txtExclude";
+        this.txtExclude.Size = new System.Drawing.Size(450, 48);
+        this.txtExclude.TabIndex = 12;
+        this.txtExclude.UseTallSize = false;
+        this.txtExclude.Leave += new System.EventHandler(this.txtExclude_Leave);
+        this.tabSettings.Controls.Add(this.txtExclude);
+
+        this.lblAnaServer = new MaterialSkin.Controls.MaterialLabel();
+        this.lblAnaServer.AutoSize = true;
+        this.lblAnaServer.Location = new System.Drawing.Point(20, 210);
+        this.lblAnaServer.Name = "lblAnaServer";
+        this.lblAnaServer.Text = "Server files: -";
+        this.tabAnalytics.Controls.Add(this.lblAnaServer);
 
         this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
         this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -973,6 +1008,9 @@ partial class MainView : MaterialSkin.Controls.MaterialForm
     private MaterialSkin.Controls.MaterialSwitch swNotifications;
     private MaterialSkin.Controls.MaterialSwitch swColdStorage;
     private MaterialSkin.Controls.MaterialSwitch swMinimizeToTray;
+    private MaterialSkin.Controls.MaterialSwitch swAutoSync;
+    private MaterialSkin.Controls.MaterialLabel lblExcludeCap;
+    private MaterialSkin.Controls.MaterialTextBox2 txtExclude;
     private MaterialSkin.Controls.MaterialButton btnResetSettings;
     private MaterialSkin.Controls.MaterialCard cardFiles;
     private MaterialSkin.Controls.MaterialLabel lblFilesCap;
@@ -1027,4 +1065,5 @@ partial class MainView : MaterialSkin.Controls.MaterialForm
     private MaterialSkin.Controls.MaterialLabel lblAnaPending;
     private MaterialSkin.Controls.MaterialLabel lblAnaModified;
     private MaterialSkin.Controls.MaterialLabel lblAnaBytes;
+    private MaterialSkin.Controls.MaterialLabel lblAnaServer;
 }

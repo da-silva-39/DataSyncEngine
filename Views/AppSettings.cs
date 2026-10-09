@@ -21,6 +21,8 @@ public class AppSettings
     public bool KeepColdStorage { get; set; } = true;
     public bool MinimizeToTray { get; set; } = true;
     public string LastBackupAt { get; set; } = string.Empty;
+    public bool AutoSync { get; set; } = false;
+    public string ExcludePatterns { get; set; } = "*.tmp;*.log;~$*;*.bak;*.swp";
 
     private static readonly string FilePath = Path.Combine(AppContext.BaseDirectory, "appsettings.json");
 

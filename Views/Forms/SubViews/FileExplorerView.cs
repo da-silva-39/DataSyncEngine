@@ -36,6 +36,7 @@ public partial class FileExplorerView : MaterialSkin.Controls.MaterialForm
     private async Task LoadFolderAsync(string path)
     {
         var scanner = new Controller.Sync.DirectoryScannerController(AppServices.Sha256, AppServices.Files);
+        scanner.ExcludePatternsProvider = () => AppServices.Settings.ExcludePatterns;
         _files.Clear();
         _files.AddRange(await scanner.ScanAsync(path));
         grid.DataSource = null;

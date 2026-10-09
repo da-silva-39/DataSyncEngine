@@ -12,6 +12,80 @@ public partial class MainView : MaterialSkin.Controls.MaterialForm
     private int _dots;
     private readonly System.Windows.Forms.Timer _animTimer = new() { Interval = 400 };
     private string _busyBaseText = string.Empty;
+    private Controller.Sync.DirectoryWatchController? _watcher;
+
+    private void EnsureWatcher()
+    {
+        if (AppServices.Settings.AutoSync && !string.IsNullOrWhiteSpace(_lastFolder) && Directory.Exists(_lastFolder))
+        {
+            _watcher ??= new Controller.Sync.DirectoryWatchController();
+            _watcher.FileChanged -= OnWatchedFileChanged;
+            _watcher.FileChanged += OnWatchedFileChanged;
+            _watcher.Start(_lastFolder);
+        }
+        else
+        {
+            _watcher?.Stop();
+        }
+    }
+
+    private void OnWatchedFileChanged(string path)
+    {
+        if (IsDisposed || Disposing) return;
+        if (InvokeRequired)
+        {
+            BeginInvoke(new Action<string>(OnWatchedFileChanged), path);
+            return;
+        }
+        _ = AutoSyncFileAsync(path);
+    }
+
+    private async Task AutoSyncFileAsync(string path)
+    {
+        if (_busy) return;
+        if (!File.Exists(path)) return;
+        if (Controller.Sync.DirectoryScannerController.IsExcluded(path, AppServices.Settings.ExcludePatterns)) return;
+        try
+        {
+            string hash;
+            long size;
+            await using (FileStream stream = File.OpenRead(path))
+            {
+                hash = await AppServices.Sha256.ComputeHashAsync(stream);
+                size = stream.Length;
+            }
+            Model.Entities.FileModel? model = _viewModel.Files.FirstOrDefault(f => f.FilePath.Equals(path, StringComparison.OrdinalIgnoreCase));
+            if (model == null)
+            {
+                model = new Model.Entities.FileModel
+                {
+                    FileName = Path.GetFileName(path),
+                    FilePath = path,
+                    SizeBytes = size,
+                    Sha256Hash = hash,
+                    Status = Core.Enums.SyncStatus.Pending,
+                    UploadedAt = File.GetLastWriteTimeUtc(path)
+                };
+                _viewModel.Files.Add(model);
+            }
+            else
+            {
+                if (model.Sha256Hash == hash && model.Status == Core.Enums.SyncStatus.Synced) return;
+                model.SizeBytes = size;
+                model.Sha256Hash = hash;
+            }
+            bool ok = await AppServices.SyncEngine.ProcessFileAsync(model, await File.ReadAllBytesAsync(path));
+            gridFiles.DataSource = null;
+            gridFiles.DataSource = _viewModel.Files;
+            UpdateDashboard();
+            BuildTree();
+            SetStatus(ok ? $"Auto-sync: {model.FileName} uploaded." : $"Auto-sync: {model.FileName} queued for resume.", ok ? ToastKind.Success : ToastKind.Warning);
+            if (ok) await AppServices.AuditLogger.LogAsync(Core.Enums.LogAction.FileUpload, $"Auto-sync uploaded {path}.");
+        }
+        catch
+        {
+        }
+    }
 
     private async Task RefreshFolderAsync(string path)
     {
@@ -21,11 +95,13 @@ public partial class MainView : MaterialSkin.Controls.MaterialForm
         try
         {
             var scanner = new Controller.Sync.DirectoryScannerController(AppServices.Sha256, AppServices.Files);
+            scanner.ExcludePatternsProvider = () => AppServices.Settings.ExcludePatterns;
             await _viewModel.ScanFolderAsync(path, scanner);
             gridFiles.DataSource = null;
             gridFiles.DataSource = _viewModel.Files;
             UpdateDashboard();
             BuildTree();
+            EnsureWatcher();
             txtFilter_TextChanged(txtFilter, EventArgs.Empty);
             int synced = _viewModel.Files.Count(f => f.Status == Core.Enums.SyncStatus.Synced);
             int pending = _viewModel.Files.Count(f => f.Status == Core.Enums.SyncStatus.Pending);
@@ -156,6 +232,7 @@ public partial class MainView : MaterialSkin.Controls.MaterialForm
             e.Cancel = true;
             return;
         }
+        try { _watcher?.Dispose(); } catch { }
         base.OnFormClosing(e);
     }
 
@@ -368,6 +445,21 @@ public partial class MainView : MaterialSkin.Controls.MaterialForm
         AppServices.SaveSettings();
     }
 
+    private void swAutoSync_CheckedChanged(object? sender, EventArgs e)
+    {
+        AppServices.Settings.AutoSync = swAutoSync.Checked;
+        AppServices.SaveSettings();
+        EnsureWatcher();
+        ToastForm.ShowToast(this, swAutoSync.Checked ? "Auto-sync enabled." : "Auto-sync disabled.", ToastKind.Info);
+    }
+
+    private void txtExclude_Leave(object? sender, EventArgs e)
+    {
+        AppServices.Settings.ExcludePatterns = txtExclude.Text.Trim();
+        AppServices.SaveSettings();
+        ToastForm.ShowToast(this, "Exclude patterns saved. Rescan to apply.", ToastKind.Info);
+    }
+
     private void btnResetSettings_Click(object? sender, EventArgs e)
     {
         var s = AppServices.Settings;
@@ -380,6 +472,8 @@ public partial class MainView : MaterialSkin.Controls.MaterialForm
         s.Notifications = true;
         s.KeepColdStorage = true;
         s.MinimizeToTray = true;
+        s.AutoSync = false;
+        s.ExcludePatterns = "*.tmp;*.log;~$*;*.bak;*.swp";
         AppServices.SaveSettings();
         MaterialThemeModule.SetAccent("Blue");
         MaterialThemeModule.SetTheme(true);
@@ -704,13 +798,22 @@ public partial class MainView : MaterialSkin.Controls.MaterialForm
             }
         };
 
-        tabAnalytics.Enter += (_, _) =>
+        tabAnalytics.Enter += async (_, _) =>
         {
             lblAnaTotal.Text = $"Total files: {_viewModel.Files.Count}";
             lblAnaSynced.Text = $"Synced: {_viewModel.Files.Count(f => f.Status == Core.Enums.SyncStatus.Synced)}";
             lblAnaPending.Text = $"Pending: {_viewModel.Files.Count(f => f.Status == Core.Enums.SyncStatus.Pending)}";
             lblAnaModified.Text = $"Modified: {_viewModel.Files.Count(f => f.Status == Core.Enums.SyncStatus.Modified)}";
             lblAnaBytes.Text = $"Total size: {_viewModel.Files.Sum(f => f.SizeBytes)} bytes";
+            try
+            {
+                var serverFiles = await AppServices.Files.GetAllAsync();
+                lblAnaServer.Text = $"Server files: {serverFiles.Count} ({serverFiles.Sum(f => f.SizeBytes)} bytes)";
+            }
+            catch
+            {
+                lblAnaServer.Text = "Server files: unavailable";
+            }
         };
 
         tabAudit.Enter += async (_, _) =>
@@ -829,6 +932,8 @@ public partial class MainView : MaterialSkin.Controls.MaterialForm
         swNotifications.Checked = s.Notifications;
         swColdStorage.Checked = s.KeepColdStorage;
         swMinimizeToTray.Checked = s.MinimizeToTray;
+        swAutoSync.Checked = s.AutoSync;
+        txtExclude.Text = s.ExcludePatterns;
     }
 
     private void UpdateFontPreview()

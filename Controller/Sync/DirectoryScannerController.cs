@@ -2,6 +2,7 @@ using Controller.Security;
 using Core.Enums;
 using Model.Entities;
 using Model.Repositories;
+using System.Text.RegularExpressions;
 
 namespace Controller.Sync;
 
@@ -10,10 +11,24 @@ public class DirectoryScannerController
     private readonly Sha256Controller _sha256;
     private readonly FileRepository _fileRepository;
 
+    public Func<string>? ExcludePatternsProvider { get; set; }
+
     public DirectoryScannerController(Sha256Controller sha256, FileRepository fileRepository)
     {
         _sha256 = sha256;
         _fileRepository = fileRepository;
+    }
+
+    public static bool IsExcluded(string fileName, string? patterns)
+    {
+        if (string.IsNullOrWhiteSpace(patterns)) return false;
+        string name = Path.GetFileName(fileName);
+        foreach (string raw in patterns.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+        {
+            string regex = "^" + Regex.Escape(raw).Replace(@"\*", ".*").Replace(@"\?", ".") + "$";
+            if (Regex.IsMatch(name, regex, RegexOptions.IgnoreCase)) return true;
+        }
+        return false;
     }
 
     public async Task<IReadOnlyList<FileModel>> ScanAsync(string directory, CancellationToken cancellationToken = default)
@@ -57,6 +72,7 @@ public class DirectoryScannerController
             foreach (string path in files)
             {
                 cancellationToken.ThrowIfCancellationRequested();
+                if (IsExcluded(path, ExcludePatternsProvider?.Invoke())) continue;
                 string hash;
                 long size;
                 DateTime modified;
