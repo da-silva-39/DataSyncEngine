@@ -16,13 +16,13 @@ partial class MainView : Krypton.Toolkit.KryptonForm
     private void InitializeComponent()
     {
         this.tabControl = new System.Windows.Forms.TabControl();
-        this.topSpacer = new Krypton.Toolkit.KryptonPanel();
-        this.sideBar = new Krypton.Toolkit.KryptonPanel();
-        this.sideStrip = new Krypton.Toolkit.KryptonPanel();
-        this.cardFiles = new Krypton.Toolkit.KryptonPanel();
-        this.cardSynced = new Krypton.Toolkit.KryptonPanel();
-        this.cardPending = new Krypton.Toolkit.KryptonPanel();
-        this.cardServers = new Krypton.Toolkit.KryptonPanel();
+        this.topSpacer = new System.Windows.Forms.Panel();
+        this.sideBar = new System.Windows.Forms.Panel();
+        this.sideStrip = new System.Windows.Forms.Panel();
+        this.cardFiles = new System.Windows.Forms.Panel();
+        this.cardSynced = new System.Windows.Forms.Panel();
+        this.cardPending = new System.Windows.Forms.Panel();
+        this.cardServers = new System.Windows.Forms.Panel();
         this.lblDashTitle = new Krypton.Toolkit.KryptonLabel();
         this.picUserAvatar = new System.Windows.Forms.PictureBox();
         this.lblUserBadge = new Krypton.Toolkit.KryptonLabel();
@@ -75,20 +75,6 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.sideBar.SuspendLayout();
         this.SuspendLayout();
 
-        this.sideBar.Controls.Add(this.picSideLogo);
-        this.sideBar.Controls.Add(this.lblSideTitle);
-        this.sideBar.Controls.Add(this.btnNavToggle);
-        this.sideBar.Controls.Add(this.navDashboard);
-        this.sideBar.Controls.Add(this.navSync);
-        this.sideBar.Controls.Add(this.navBackup);
-        this.sideBar.Controls.Add(this.navTrash);
-        this.sideBar.Controls.Add(this.navServers);
-        this.sideBar.Controls.Add(this.navAudit);
-        this.sideBar.Controls.Add(this.navAnalytics);
-        this.sideBar.Controls.Add(this.navUsers);
-        this.sideBar.Controls.Add(this.navSettings);
-        this.sideBar.Controls.Add(this.lblTreeCap);
-        this.sideBar.Controls.Add(this.treeFiles);
         this.sideBar.Dock = System.Windows.Forms.DockStyle.Left;
         this.sideBar.Location = new System.Drawing.Point(0, 0);
         this.sideBar.Name = "sideBar";
@@ -97,9 +83,9 @@ partial class MainView : Krypton.Toolkit.KryptonForm
 
         this.picSideLogo = new System.Windows.Forms.PictureBox();
         ((System.ComponentModel.ISupportInitialize)(this.picSideLogo)).BeginInit();
-        this.picSideLogo.Location = new System.Drawing.Point(12, 70);
+        this.picSideLogo.Location = new System.Drawing.Point(16, 16);
         this.picSideLogo.Name = "picSideLogo";
-        this.picSideLogo.Size = new System.Drawing.Size(40, 40);
+        this.picSideLogo.Size = new System.Drawing.Size(32, 32);
         this.picSideLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
         this.picSideLogo.TabIndex = 0;
         this.picSideLogo.TabStop = false;
@@ -107,19 +93,25 @@ partial class MainView : Krypton.Toolkit.KryptonForm
 
         this.lblSideTitle = new Krypton.Toolkit.KryptonLabel();
         this.lblSideTitle.AutoSize = true;
-        this.lblSideTitle.Location = new System.Drawing.Point(58, 80);
+        this.lblSideTitle.Location = new System.Drawing.Point(56, 22);
         this.lblSideTitle.Name = "lblSideTitle";
-        this.lblSideTitle.Text = "DataSync";
+        this.lblSideTitle.Text = "DataSyncEngine";
 
         this.btnNavToggle = new Krypton.Toolkit.KryptonButton();
         this.btnNavToggle.AutoSize = false;
-        this.btnNavToggle.Location = new System.Drawing.Point(196, 72);
+        this.btnNavToggle.Location = new System.Drawing.Point(200, 18);
         this.btnNavToggle.Name = "btnNavToggle";
-        this.btnNavToggle.Size = new System.Drawing.Size(32, 36);
+        this.btnNavToggle.Size = new System.Drawing.Size(28, 28);
         this.btnNavToggle.TabIndex = 1;
         this.btnNavToggle.Text = "«";
         this.btnNavToggle.ButtonStyle = Krypton.Toolkit.ButtonStyle.ListItem;
         this.btnNavToggle.Click += new System.EventHandler(this.btnNavToggle_Click);
+
+        this.lblNavCaption = new Krypton.Toolkit.KryptonLabel();
+        this.lblNavCaption.AutoSize = true;
+        this.lblNavCaption.Location = new System.Drawing.Point(20, 74);
+        this.lblNavCaption.Name = "lblNavCaption";
+        this.lblNavCaption.Text = "NAVIGATION";
 
         this.navDashboard = new Krypton.Toolkit.KryptonButton();
         this.navSync = new Krypton.Toolkit.KryptonButton();
@@ -130,15 +122,15 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.navAnalytics = new Krypton.Toolkit.KryptonButton();
         this.navUsers = new Krypton.Toolkit.KryptonButton();
         this.navSettings = new Krypton.Toolkit.KryptonButton();
-        SetupNavButton(this.navDashboard, "navDashboard", "Dashboard", 124);
-        SetupNavButton(this.navSync, "navSync", "Sync", 162);
-        SetupNavButton(this.navBackup, "navBackup", "Backup", 200);
-        SetupNavButton(this.navTrash, "navTrash", "Trash", 238);
-        SetupNavButton(this.navServers, "navServers", "Servers", 276);
-        SetupNavButton(this.navAudit, "navAudit", "Audit", 314);
-        SetupNavButton(this.navAnalytics, "navAnalytics", "Analytics", 352);
-        SetupNavButton(this.navUsers, "navUsers", "Users", 390);
-        SetupNavButton(this.navSettings, "navSettings", "Settings", 428);
+        SetupNavButton(this.navDashboard, "navDashboard", "Dashboard", 96);
+        SetupNavButton(this.navSync, "navSync", "Sync", 132);
+        SetupNavButton(this.navBackup, "navBackup", "Backup", 168);
+        SetupNavButton(this.navTrash, "navTrash", "Trash", 204);
+        SetupNavButton(this.navServers, "navServers", "Servers", 240);
+        SetupNavButton(this.navAudit, "navAudit", "Audit", 276);
+        SetupNavButton(this.navAnalytics, "navAnalytics", "Analytics", 312);
+        SetupNavButton(this.navUsers, "navUsers", "Users", 348);
+        SetupNavButton(this.navSettings, "navSettings", "Settings", 384);
         this.navDashboard.Click += new System.EventHandler(this.navDashboard_Click);
         this.navSync.Click += new System.EventHandler(this.navSync_Click);
         this.navBackup.Click += new System.EventHandler(this.navBackup_Click);
@@ -151,19 +143,26 @@ partial class MainView : Krypton.Toolkit.KryptonForm
 
         this.lblTreeCap = new Krypton.Toolkit.KryptonLabel();
         this.lblTreeCap.AutoSize = true;
-        this.lblTreeCap.Location = new System.Drawing.Point(12, 470);
+        this.lblTreeCap.Location = new System.Drawing.Point(20, 428);
         this.lblTreeCap.Name = "lblTreeCap";
-        this.lblTreeCap.Text = "Files";
+        this.lblTreeCap.Text = "FILES";
 
         this.treeFiles = new Krypton.Toolkit.KryptonTreeView();
-        this.treeFiles.Location = new System.Drawing.Point(12, 494);
+        this.treeFiles.Location = new System.Drawing.Point(12, 450);
         this.treeFiles.Name = "treeFiles";
-        this.treeFiles.Size = new System.Drawing.Size(216, 112);
+        this.treeFiles.Size = new System.Drawing.Size(216, 96);
         this.treeFiles.TabIndex = 2;
         this.treeFiles.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeFiles_AfterSelect);
         this.treeFiles.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeFiles_DoubleClick);
 
-        this.sideStrip = new Krypton.Toolkit.KryptonPanel();
+        this.sideFooter = new System.Windows.Forms.Panel();
+        this.sideFooter.Dock = System.Windows.Forms.DockStyle.Bottom;
+        this.sideFooter.Location = new System.Drawing.Point(0, 576);
+        this.sideFooter.Name = "sideFooter";
+        this.sideFooter.Size = new System.Drawing.Size(240, 64);
+        this.sideFooter.TabIndex = 6;
+
+        this.sideStrip = new System.Windows.Forms.Panel();
         this.sideStrip.Controls.Add(this.btnExpand);
         this.sideStrip.Dock = System.Windows.Forms.DockStyle.Left;
         this.sideStrip.Location = new System.Drawing.Point(0, 0);
@@ -187,6 +186,20 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.topSpacer.Name = "topSpacer";
         this.topSpacer.Size = new System.Drawing.Size(1210, 64);
         this.topSpacer.TabIndex = 3;
+
+        this.lblPageTitle = new Krypton.Toolkit.KryptonLabel();
+        this.lblPageTitle.AutoSize = true;
+        this.lblPageTitle.Location = new System.Drawing.Point(24, 14);
+        this.lblPageTitle.Name = "lblPageTitle";
+        this.lblPageTitle.Text = "Dashboard";
+        this.topSpacer.Controls.Add(this.lblPageTitle);
+
+        this.lblPageSub = new Krypton.Toolkit.KryptonLabel();
+        this.lblPageSub.AutoSize = true;
+        this.lblPageSub.Location = new System.Drawing.Point(26, 38);
+        this.lblPageSub.Name = "lblPageSub";
+        this.lblPageSub.Text = "";
+        this.topSpacer.Controls.Add(this.lblPageSub);
 
         this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
         this.tabControl.Location = new System.Drawing.Point(0, 0);
@@ -222,9 +235,9 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.lblDashTitle.Text = "Overview";
 
         ((System.ComponentModel.ISupportInitialize)(this.picUserAvatar)).BeginInit();
-        this.picUserAvatar.Location = new System.Drawing.Point(905, 15);
+        this.picUserAvatar.Location = new System.Drawing.Point(14, 14);
         this.picUserAvatar.Name = "picUserAvatar";
-        this.picUserAvatar.Size = new System.Drawing.Size(48, 48);
+        this.picUserAvatar.Size = new System.Drawing.Size(36, 36);
         this.picUserAvatar.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
         this.picUserAvatar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
         this.picUserAvatar.TabIndex = 10;
@@ -232,12 +245,12 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         ((System.ComponentModel.ISupportInitialize)(this.picUserAvatar)).EndInit();
 
         this.lblUserBadge.AutoSize = false;
-        this.lblUserBadge.Location = new System.Drawing.Point(700, 22);
+        this.lblUserBadge.Location = new System.Drawing.Point(58, 12);
         this.lblUserBadge.Name = "lblUserBadge";
-        this.lblUserBadge.Size = new System.Drawing.Size(195, 45);
+        this.lblUserBadge.Size = new System.Drawing.Size(172, 40);
         this.lblUserBadge.Text = "";
-        this.tabDashboard.Controls.Add(this.picUserAvatar);
-        this.tabDashboard.Controls.Add(this.lblUserBadge);
+        this.sideFooter.Controls.Add(this.picUserAvatar);
+        this.sideFooter.Controls.Add(this.lblUserBadge);
 
         this.lblFilesCap = new Krypton.Toolkit.KryptonLabel();
         this.lblFilesVal = new System.Windows.Forms.Label();
@@ -1018,6 +1031,22 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.tabTrash.PerformLayout();
         this.tabSettings.ResumeLayout(false);
         this.tabSettings.PerformLayout();
+        this.sideBar.Controls.Add(this.picSideLogo);
+        this.sideBar.Controls.Add(this.lblSideTitle);
+        this.sideBar.Controls.Add(this.btnNavToggle);
+        this.sideBar.Controls.Add(this.lblNavCaption);
+        this.sideBar.Controls.Add(this.navDashboard);
+        this.sideBar.Controls.Add(this.navSync);
+        this.sideBar.Controls.Add(this.navBackup);
+        this.sideBar.Controls.Add(this.navTrash);
+        this.sideBar.Controls.Add(this.navServers);
+        this.sideBar.Controls.Add(this.navAudit);
+        this.sideBar.Controls.Add(this.navAnalytics);
+        this.sideBar.Controls.Add(this.navUsers);
+        this.sideBar.Controls.Add(this.navSettings);
+        this.sideBar.Controls.Add(this.lblTreeCap);
+        this.sideBar.Controls.Add(this.treeFiles);
+        this.sideBar.Controls.Add(this.sideFooter);
         this.sideBar.ResumeLayout(false);
         this.sideBar.PerformLayout();
         this.sideStrip.ResumeLayout(false);
@@ -1025,9 +1054,13 @@ partial class MainView : Krypton.Toolkit.KryptonForm
     }
 
     private System.Windows.Forms.TabControl tabControl;
-    private Krypton.Toolkit.KryptonPanel topSpacer;
-    private Krypton.Toolkit.KryptonPanel sideBar;
-    private Krypton.Toolkit.KryptonPanel sideStrip;
+    private System.Windows.Forms.Panel topSpacer;
+    private System.Windows.Forms.Panel sideBar;
+    private System.Windows.Forms.Panel sideStrip;
+    private System.Windows.Forms.Panel sideFooter;
+    private Krypton.Toolkit.KryptonLabel lblNavCaption;
+    private Krypton.Toolkit.KryptonLabel lblPageTitle;
+    private Krypton.Toolkit.KryptonLabel lblPageSub;
     private System.Windows.Forms.PictureBox picSideLogo;
     private Krypton.Toolkit.KryptonLabel lblSideTitle;
     private Krypton.Toolkit.KryptonButton btnNavToggle;
@@ -1079,16 +1112,16 @@ partial class MainView : Krypton.Toolkit.KryptonForm
     private Krypton.Toolkit.KryptonLabel lblSetAutoBackup;
     private Krypton.Toolkit.KryptonComboBox cmbAutoBackup;
     private Krypton.Toolkit.KryptonButton btnResetSettings;
-    private Krypton.Toolkit.KryptonPanel cardFiles;
+    private System.Windows.Forms.Panel cardFiles;
     private Krypton.Toolkit.KryptonLabel lblFilesCap;
     private System.Windows.Forms.Label lblFilesVal;
-    private Krypton.Toolkit.KryptonPanel cardSynced;
+    private System.Windows.Forms.Panel cardSynced;
     private Krypton.Toolkit.KryptonLabel lblSyncedCap;
     private System.Windows.Forms.Label lblSyncedVal;
-    private Krypton.Toolkit.KryptonPanel cardPending;
+    private System.Windows.Forms.Panel cardPending;
     private Krypton.Toolkit.KryptonLabel lblPendingCap;
     private System.Windows.Forms.Label lblPendingVal;
-    private Krypton.Toolkit.KryptonPanel cardServers;
+    private System.Windows.Forms.Panel cardServers;
     private Krypton.Toolkit.KryptonLabel lblServersCap;
     private System.Windows.Forms.Label lblServersVal;
     private Krypton.Toolkit.KryptonLabel lblDashTitle;

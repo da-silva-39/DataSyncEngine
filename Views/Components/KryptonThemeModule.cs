@@ -4,7 +4,13 @@ namespace Views.Components;
 
 public static class KryptonThemeModule
 {
-    private static readonly KryptonManager _manager = new();    public static readonly string[] AccentNames = { "Blue", "Green", "Red", "Purple" };
+    private static readonly KryptonManager _manager = new();
+
+    public static readonly string[] AccentNames = { "Blue", "Green", "Red", "Purple" };
+
+    /// <summary>Raised after the global palette or accent changed so custom
+    /// (non-Krypton) surfaces such as the GitHub-style shell can re-colour.</summary>
+    public static event Action? ThemeChanged;
 
     public static void Initialize()
     {
@@ -40,9 +46,11 @@ public static class KryptonThemeModule
             ? PaletteMode.Microsoft365BlackDarkMode
             : PaletteMode.Microsoft365White;
         DarkThemeModule.SetTheme(dark);
+        ApplyAccentColor(AppSettings.Load().Accent, dark);
         if (!reapply) return;
         foreach (Form form in Application.OpenForms)
             DarkThemeModule.Apply(form);
+        ThemeChanged?.Invoke();
     }
 
     public static void SetAccent(string name)
@@ -52,17 +60,27 @@ public static class KryptonThemeModule
 
     private static void SetAccent(string name, bool reapply)
     {
-        Color accent = name switch
-        {
-            "Green" => ColorTranslator.FromHtml("#2E7D32"),
-            "Red" => ColorTranslator.FromHtml("#C62828"),
-            "Purple" => ColorTranslator.FromHtml("#6A1B9A"),
-            _ => ColorTranslator.FromHtml("#005A9E"),
-        };
-        DarkThemeModule.SetAccent(accent);
+        ApplyAccentColor(name, DarkThemeModule.IsDark);
         if (!reapply) return;
         foreach (Form form in Application.OpenForms)
             DarkThemeModule.Apply(form);
+        ThemeChanged?.Invoke();
+    }
+
+    private static void ApplyAccentColor(string name, bool dark)
+    {
+        Color accent = (name, dark) switch
+        {
+            ("Green", true) => ColorTranslator.FromHtml("#238636"),
+            ("Green", false) => ColorTranslator.FromHtml("#1F883D"),
+            ("Red", true) => ColorTranslator.FromHtml("#DA3633"),
+            ("Red", false) => ColorTranslator.FromHtml("#CF222E"),
+            ("Purple", true) => ColorTranslator.FromHtml("#8957E5"),
+            ("Purple", false) => ColorTranslator.FromHtml("#8250DF"),
+            (_, true) => ColorTranslator.FromHtml("#1F6FEB"),
+            _ => ColorTranslator.FromHtml("#0969DA"),
+        };
+        DarkThemeModule.SetAccent(accent);
     }
 
     public static void ApplyFontToOpenForms(float size, bool bold)
@@ -73,5 +91,6 @@ public static class KryptonThemeModule
             form.Font = font;
             DarkThemeModule.Apply(form);
         }
+        ThemeChanged?.Invoke();
     }
 }

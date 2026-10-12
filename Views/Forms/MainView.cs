@@ -324,6 +324,7 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         ApplyRoleLayout();
         LoadSettingsIntoControls();
         WireEvents();
+        WireShell();
         UpdateServerInfo();
         AppServices.HotSwap.ServerChanged += _ => UpdateServerInfo();
         _animTimer.Tick += AnimTimer_Tick;
@@ -394,6 +395,7 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         _maintenanceTimer.Dispose();
         NotificationCenter.Changed -= RebuildNotifications;
         if (_activityFilter != null) Application.RemoveMessageFilter(_activityFilter);
+        UnwireShell();
         base.OnFormClosed(e);
     }
 
@@ -403,6 +405,7 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         await _viewModel.LoadServersAsync();
         UpdateDashboard();
         await LoadUserBadgeAsync();
+        LayoutContent();
         ToastForm.ShowToast(this, $"Signed in as {AppServices.Session.Username} ({AppServices.Session.Role}).", ToastKind.Success);
     }
 
