@@ -23,7 +23,15 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.cardSynced = new System.Windows.Forms.Panel();
         this.cardPending = new System.Windows.Forms.Panel();
         this.cardServers = new System.Windows.Forms.Panel();
-        this.lblDashTitle = new Krypton.Toolkit.KryptonLabel();
+        this.lblDashRecent = new Krypton.Toolkit.KryptonLabel();
+        this.gridDashAudit = new Krypton.Toolkit.KryptonDataGridView();
+        this.lblDashQuick = new Krypton.Toolkit.KryptonLabel();
+        this.btnDashScan = new Krypton.Toolkit.KryptonButton();
+        this.btnDashSync = new Krypton.Toolkit.KryptonButton();
+        this.btnDashBackup = new Krypton.Toolkit.KryptonButton();
+        this.btnDashExplorer = new Krypton.Toolkit.KryptonButton();
+        this.btnDashShortcuts = new Krypton.Toolkit.KryptonButton();
+        this.lblDashHint = new Krypton.Toolkit.KryptonLabel();
         this.picUserAvatar = new System.Windows.Forms.PictureBox();
         this.lblUserBadge = new Krypton.Toolkit.KryptonLabel();
         this.tabDashboard = new System.Windows.Forms.TabPage();
@@ -122,15 +130,69 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.navAnalytics = new Krypton.Toolkit.KryptonButton();
         this.navUsers = new Krypton.Toolkit.KryptonButton();
         this.navSettings = new Krypton.Toolkit.KryptonButton();
-        SetupNavButton(this.navDashboard, "navDashboard", "Dashboard", 96);
-        SetupNavButton(this.navSync, "navSync", "Sync", 132);
-        SetupNavButton(this.navBackup, "navBackup", "Backup", 168);
-        SetupNavButton(this.navTrash, "navTrash", "Trash", 204);
-        SetupNavButton(this.navServers, "navServers", "Servers", 240);
-        SetupNavButton(this.navAudit, "navAudit", "Audit", 276);
-        SetupNavButton(this.navAnalytics, "navAnalytics", "Analytics", 312);
-        SetupNavButton(this.navUsers, "navUsers", "Users", 348);
-        SetupNavButton(this.navSettings, "navSettings", "Settings", 384);
+        this.navDashboard.AutoSize = false;
+        this.navDashboard.Location = new System.Drawing.Point(12, 96);
+        this.navDashboard.Name = "navDashboard";
+        this.navDashboard.Size = new System.Drawing.Size(216, 36);
+        this.navDashboard.TabIndex = 3;
+        this.navDashboard.Text = "Dashboard";
+        this.navDashboard.ButtonStyle = Krypton.Toolkit.ButtonStyle.ListItem;
+        this.navSync.AutoSize = false;
+        this.navSync.Location = new System.Drawing.Point(12, 132);
+        this.navSync.Name = "navSync";
+        this.navSync.Size = new System.Drawing.Size(216, 36);
+        this.navSync.TabIndex = 4;
+        this.navSync.Text = "Sync";
+        this.navSync.ButtonStyle = Krypton.Toolkit.ButtonStyle.ListItem;
+        this.navBackup.AutoSize = false;
+        this.navBackup.Location = new System.Drawing.Point(12, 168);
+        this.navBackup.Name = "navBackup";
+        this.navBackup.Size = new System.Drawing.Size(216, 36);
+        this.navBackup.TabIndex = 5;
+        this.navBackup.Text = "Backup";
+        this.navBackup.ButtonStyle = Krypton.Toolkit.ButtonStyle.ListItem;
+        this.navTrash.AutoSize = false;
+        this.navTrash.Location = new System.Drawing.Point(12, 204);
+        this.navTrash.Name = "navTrash";
+        this.navTrash.Size = new System.Drawing.Size(216, 36);
+        this.navTrash.TabIndex = 6;
+        this.navTrash.Text = "Trash";
+        this.navTrash.ButtonStyle = Krypton.Toolkit.ButtonStyle.ListItem;
+        this.navServers.AutoSize = false;
+        this.navServers.Location = new System.Drawing.Point(12, 240);
+        this.navServers.Name = "navServers";
+        this.navServers.Size = new System.Drawing.Size(216, 36);
+        this.navServers.TabIndex = 7;
+        this.navServers.Text = "Servers";
+        this.navServers.ButtonStyle = Krypton.Toolkit.ButtonStyle.ListItem;
+        this.navAudit.AutoSize = false;
+        this.navAudit.Location = new System.Drawing.Point(12, 276);
+        this.navAudit.Name = "navAudit";
+        this.navAudit.Size = new System.Drawing.Size(216, 36);
+        this.navAudit.TabIndex = 8;
+        this.navAudit.Text = "Audit";
+        this.navAudit.ButtonStyle = Krypton.Toolkit.ButtonStyle.ListItem;
+        this.navAnalytics.AutoSize = false;
+        this.navAnalytics.Location = new System.Drawing.Point(12, 312);
+        this.navAnalytics.Name = "navAnalytics";
+        this.navAnalytics.Size = new System.Drawing.Size(216, 36);
+        this.navAnalytics.TabIndex = 9;
+        this.navAnalytics.Text = "Analytics";
+        this.navAnalytics.ButtonStyle = Krypton.Toolkit.ButtonStyle.ListItem;
+        this.navUsers.AutoSize = false;
+        this.navUsers.Location = new System.Drawing.Point(12, 348);
+        this.navUsers.Name = "navUsers";
+        this.navUsers.Size = new System.Drawing.Size(216, 36);
+        this.navUsers.TabIndex = 10;
+        this.navUsers.Text = "Users";
+        this.navUsers.ButtonStyle = Krypton.Toolkit.ButtonStyle.ListItem;
+        this.navSettings.AutoSize = false;
+        this.navSettings.Location = new System.Drawing.Point(12, 384);
+        this.navSettings.Name = "navSettings";
+        this.navSettings.Size = new System.Drawing.Size(216, 36);
+        this.navSettings.TabIndex = 11;
+        this.navSettings.Text = "Settings";
+        this.navSettings.ButtonStyle = Krypton.Toolkit.ButtonStyle.ListItem;
         this.navDashboard.Click += new System.EventHandler(this.navDashboard_Click);
         this.navSync.Click += new System.EventHandler(this.navSync_Click);
         this.navBackup.Click += new System.EventHandler(this.navBackup_Click);
@@ -216,8 +278,21 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.tabControl.Controls.Add(this.tabAnalytics);
         this.tabControl.Controls.Add(this.tabUsers);
         this.tabControl.Controls.Add(this.tabSettings);
+        this.tabControl.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
+        this.tabControl.ItemSize = new System.Drawing.Size(0, 1);
+        this.tabControl.Multiline = false;
+        this.tabControl.Padding = new System.Drawing.Point(0, 0);
+        this.tabControl.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
 
-        this.tabDashboard.Controls.Add(this.lblDashTitle);
+        this.tabDashboard.Controls.Add(this.lblDashRecent);
+        this.tabDashboard.Controls.Add(this.gridDashAudit);
+        this.tabDashboard.Controls.Add(this.lblDashQuick);
+        this.tabDashboard.Controls.Add(this.btnDashScan);
+        this.tabDashboard.Controls.Add(this.btnDashSync);
+        this.tabDashboard.Controls.Add(this.btnDashBackup);
+        this.tabDashboard.Controls.Add(this.btnDashExplorer);
+        this.tabDashboard.Controls.Add(this.btnDashShortcuts);
+        this.tabDashboard.Controls.Add(this.lblDashHint);
         this.tabDashboard.Controls.Add(this.cardFiles);
         this.tabDashboard.Controls.Add(this.cardSynced);
         this.tabDashboard.Controls.Add(this.cardPending);
@@ -229,10 +304,70 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.tabDashboard.TabIndex = 0;
         this.tabDashboard.Text = "Dashboard";
 
-        this.lblDashTitle.AutoSize = true;
-        this.lblDashTitle.Location = new System.Drawing.Point(25, 20);
-        this.lblDashTitle.Name = "lblDashTitle";
-        this.lblDashTitle.Text = "Overview";
+        this.lblDashRecent.AutoSize = true;
+        this.lblDashRecent.Location = new System.Drawing.Point(25, 200);
+        this.lblDashRecent.Name = "lblDashRecent";
+        this.lblDashRecent.Text = "RECENT ACTIVITY";
+        this.lblDashQuick.AutoSize = true;
+        this.lblDashQuick.Location = new System.Drawing.Point(665, 200);
+        this.lblDashQuick.Name = "lblDashQuick";
+        this.lblDashQuick.Text = "QUICK ACTIONS";
+        this.gridDashAudit.AllowUserToAddRows = false;
+        this.gridDashAudit.AllowUserToDeleteRows = false;
+        this.gridDashAudit.ReadOnly = true;
+        ((System.ComponentModel.ISupportInitialize)(this.gridDashAudit)).BeginInit();
+        this.gridDashAudit.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+        this.gridDashAudit.Location = new System.Drawing.Point(25, 224);
+        this.gridDashAudit.Name = "gridDashAudit";
+        this.gridDashAudit.Size = new System.Drawing.Size(620, 316);
+        this.gridDashAudit.TabIndex = 0;
+        ((System.ComponentModel.ISupportInitialize)(this.gridDashAudit)).EndInit();
+        this.btnDashScan.AutoSize = false;
+        this.btnDashScan.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+        this.btnDashScan.Location = new System.Drawing.Point(665, 224);
+        this.btnDashScan.Name = "btnDashScan";
+        this.btnDashScan.Size = new System.Drawing.Size(290, 40);
+        this.btnDashScan.TabIndex = 1;
+        this.btnDashScan.Text = "Scan a folder…";
+        this.btnDashScan.ButtonStyle = Krypton.Toolkit.ButtonStyle.Standalone;
+        this.btnDashSync.AutoSize = false;
+        this.btnDashSync.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+        this.btnDashSync.Location = new System.Drawing.Point(665, 272);
+        this.btnDashSync.Name = "btnDashSync";
+        this.btnDashSync.Size = new System.Drawing.Size(290, 40);
+        this.btnDashSync.TabIndex = 2;
+        this.btnDashSync.Text = "Sync pending files";
+        this.btnDashSync.ButtonStyle = Krypton.Toolkit.ButtonStyle.Standalone;
+        this.btnDashBackup.AutoSize = false;
+        this.btnDashBackup.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+        this.btnDashBackup.Location = new System.Drawing.Point(665, 320);
+        this.btnDashBackup.Name = "btnDashBackup";
+        this.btnDashBackup.Size = new System.Drawing.Size(290, 40);
+        this.btnDashBackup.TabIndex = 3;
+        this.btnDashBackup.Text = "Backup server files";
+        this.btnDashBackup.ButtonStyle = Krypton.Toolkit.ButtonStyle.Standalone;
+        this.btnDashExplorer.AutoSize = false;
+        this.btnDashExplorer.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+        this.btnDashExplorer.Location = new System.Drawing.Point(665, 368);
+        this.btnDashExplorer.Name = "btnDashExplorer";
+        this.btnDashExplorer.Size = new System.Drawing.Size(290, 40);
+        this.btnDashExplorer.TabIndex = 4;
+        this.btnDashExplorer.Text = "Open file explorer";
+        this.btnDashExplorer.ButtonStyle = Krypton.Toolkit.ButtonStyle.Standalone;
+        this.btnDashShortcuts.AutoSize = false;
+        this.btnDashShortcuts.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+        this.btnDashShortcuts.Location = new System.Drawing.Point(665, 416);
+        this.btnDashShortcuts.Name = "btnDashShortcuts";
+        this.btnDashShortcuts.Size = new System.Drawing.Size(290, 40);
+        this.btnDashShortcuts.TabIndex = 5;
+        this.btnDashShortcuts.Text = "Keyboard shortcuts";
+        this.btnDashShortcuts.ButtonStyle = Krypton.Toolkit.ButtonStyle.Alternate;
+        this.lblDashHint.AutoSize = false;
+        this.lblDashHint.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+        this.lblDashHint.Location = new System.Drawing.Point(25, 550);
+        this.lblDashHint.Name = "lblDashHint";
+        this.lblDashHint.Size = new System.Drawing.Size(930, 22);
+        this.lblDashHint.Text = "Tip: F5 refresh · Ctrl+F search · Ctrl+S sync · Ctrl+L lock · Ctrl+Shift+E export audit";
 
         ((System.ComponentModel.ISupportInitialize)(this.picUserAvatar)).BeginInit();
         this.picUserAvatar.Location = new System.Drawing.Point(14, 14);
@@ -251,6 +386,7 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.lblUserBadge.Text = "";
         this.sideFooter.Controls.Add(this.picUserAvatar);
         this.sideFooter.Controls.Add(this.lblUserBadge);
+        this.sideFooter.Controls.Add(this.btnLogout);
 
         this.lblFilesCap = new Krypton.Toolkit.KryptonLabel();
         this.lblFilesVal = new System.Windows.Forms.Label();
@@ -278,7 +414,7 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.cardFiles.Controls.Add(this.lblFilesCap);
         this.cardFiles.Controls.Add(this.lblFilesVal);
 
-        this.cardSynced.Location = new System.Drawing.Point(268, 70);
+        this.cardSynced.Location = new System.Drawing.Point(262, 70);
         this.cardSynced.Name = "cardSynced";
         this.cardSynced.Size = new System.Drawing.Size(220, 110);
         this.cardSynced.TabIndex = 2;
@@ -295,7 +431,7 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.cardSynced.Controls.Add(this.lblSyncedCap);
         this.cardSynced.Controls.Add(this.lblSyncedVal);
 
-        this.cardPending.Location = new System.Drawing.Point(511, 70);
+        this.cardPending.Location = new System.Drawing.Point(499, 70);
         this.cardPending.Name = "cardPending";
         this.cardPending.Size = new System.Drawing.Size(220, 110);
         this.cardPending.TabIndex = 3;
@@ -312,7 +448,7 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.cardPending.Controls.Add(this.lblPendingCap);
         this.cardPending.Controls.Add(this.lblPendingVal);
 
-        this.cardServers.Location = new System.Drawing.Point(754, 70);
+        this.cardServers.Location = new System.Drawing.Point(736, 70);
         this.cardServers.Name = "cardServers";
         this.cardServers.Size = new System.Drawing.Size(220, 110);
         this.cardServers.TabIndex = 4;
@@ -336,7 +472,6 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.tabSync.Controls.Add(this.btnDelete);
         this.tabSync.Controls.Add(this.btnResume);
         this.tabSync.Controls.Add(this.btnExplorer);
-        this.tabSync.Controls.Add(this.btnLogout);
         this.tabSync.Location = new System.Drawing.Point(4, 34);
         this.tabSync.Name = "tabSync";
         this.tabSync.Padding = new System.Windows.Forms.Padding(3);
@@ -353,9 +488,11 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.btnSelectFolder.ButtonStyle = Krypton.Toolkit.ButtonStyle.Standalone;
         this.btnSelectFolder.AccessibleName = "Select folder to scan";
 
-        this.lblStatus.AutoSize = true;
-        this.lblStatus.Location = new System.Drawing.Point(510, 62);
+        this.lblStatus.AutoSize = false;
+        this.lblStatus.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+        this.lblStatus.Location = new System.Drawing.Point(505, 61);
         this.lblStatus.Name = "lblStatus";
+        this.lblStatus.Size = new System.Drawing.Size(450, 23);
         this.lblStatus.TabIndex = 1;
         this.lblStatus.Text = "Ready.";
 
@@ -369,7 +506,7 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.btnSync.AccessibleName = "Synchronize pending files";
 
         this.btnDelete.AutoSize = false;
-        this.btnDelete.Location = new System.Drawing.Point(305, 15);
+        this.btnDelete.Location = new System.Drawing.Point(430, 15);
         this.btnDelete.Name = "btnDelete";
         this.btnDelete.Size = new System.Drawing.Size(110, 36);
         this.btnDelete.TabIndex = 4;
@@ -378,7 +515,7 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.btnDelete.AccessibleName = "Delete selected file";
 
         this.btnResume.AutoSize = false;
-        this.btnResume.Location = new System.Drawing.Point(430, 15);
+        this.btnResume.Location = new System.Drawing.Point(305, 15);
         this.btnResume.Name = "btnResume";
         this.btnResume.Size = new System.Drawing.Size(110, 36);
         this.btnResume.TabIndex = 5;
@@ -396,12 +533,13 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.btnExplorer.AccessibleName = "Open file explorer";
 
         this.btnLogout.AutoSize = false;
-        this.btnLogout.Location = new System.Drawing.Point(850, 15);
+        this.btnLogout.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
+        this.btnLogout.Location = new System.Drawing.Point(156, 16);
         this.btnLogout.Name = "btnLogout";
-        this.btnLogout.Size = new System.Drawing.Size(110, 36);
+        this.btnLogout.Size = new System.Drawing.Size(70, 32);
         this.btnLogout.TabIndex = 6;
         this.btnLogout.Text = "Logout";
-        this.btnLogout.ButtonStyle = Krypton.Toolkit.ButtonStyle.Alternate;
+        this.btnLogout.ButtonStyle = Krypton.Toolkit.ButtonStyle.ListItem;
         this.btnLogout.AccessibleName = "Log out";
 
         this.notifyIcon.Icon = System.Drawing.SystemIcons.Application;
@@ -461,6 +599,13 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.btnNotifications.ToolTipText = "Recent notifications";
         this.statusStrip.Items.Add(this.btnNotifications);
 
+        this.btnShortcuts = new System.Windows.Forms.ToolStripButton();
+        this.btnShortcuts.Name = "btnShortcuts";
+        this.btnShortcuts.Text = "Shortcuts";
+        this.btnShortcuts.ToolTipText = "Keyboard shortcuts";
+        this.btnShortcuts.Click += new System.EventHandler(this.btnShortcuts_Click);
+        this.statusStrip.Items.Add(this.btnShortcuts);
+
         this.txtFilter = new Krypton.Toolkit.KryptonTextBox();
         this.txtFilter.CueHint.CueHintText = "Type to filter files...";
         this.txtFilter.Location = new System.Drawing.Point(15, 58);
@@ -479,6 +624,7 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.progressBar.TabIndex = 8;
         this.tabSync.Controls.Add(this.progressBar);
 
+        this.gridFiles.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
         this.gridFiles.Location = new System.Drawing.Point(15, 95);
         this.gridFiles.Size = new System.Drawing.Size(940, 465);
 
@@ -530,6 +676,32 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.lblLastBackup.Text = "";
         this.tabBackup.Controls.Add(this.lblLastBackup);
 
+        this.lblBackupFolderCap = new Krypton.Toolkit.KryptonLabel();
+        this.lblBackupFolderCap.AutoSize = true;
+        this.lblBackupFolderCap.Location = new System.Drawing.Point(20, 195);
+        this.lblBackupFolderCap.Name = "lblBackupFolderCap";
+        this.lblBackupFolderCap.Text = "Automatic backup folder";
+        this.tabBackup.Controls.Add(this.lblBackupFolderCap);
+
+        this.lblBackupFolderVal = new Krypton.Toolkit.KryptonLabel();
+        this.lblBackupFolderVal.AutoSize = true;
+        this.lblBackupFolderVal.Location = new System.Drawing.Point(20, 222);
+        this.lblBackupFolderVal.Name = "lblBackupFolderVal";
+        this.lblBackupFolderVal.Text = "(not set)";
+        this.tabBackup.Controls.Add(this.lblBackupFolderVal);
+
+        this.btnPickBackupFolder = new Krypton.Toolkit.KryptonButton();
+        this.btnPickBackupFolder.AutoSize = false;
+        this.btnPickBackupFolder.Location = new System.Drawing.Point(20, 252);
+        this.btnPickBackupFolder.Name = "btnPickBackupFolder";
+        this.btnPickBackupFolder.Size = new System.Drawing.Size(220, 36);
+        this.btnPickBackupFolder.TabIndex = 1;
+        this.btnPickBackupFolder.Text = "Change folder…";
+        this.btnPickBackupFolder.ButtonStyle = Krypton.Toolkit.ButtonStyle.Alternate;
+        this.btnPickBackupFolder.AccessibleName = "Choose the automatic backup folder";
+        this.btnPickBackupFolder.Click += new System.EventHandler(this.btnPickBackupFolder_Click);
+        this.tabBackup.Controls.Add(this.btnPickBackupFolder);
+
         this.tabTrash.Location = new System.Drawing.Point(4, 34);
         this.tabTrash.Name = "tabTrash";
         this.tabTrash.Padding = new System.Windows.Forms.Padding(3);
@@ -573,6 +745,7 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.gridTrash.AllowUserToAddRows = false;
         this.gridTrash.AllowUserToDeleteRows = false;
         this.gridTrash.ReadOnly = true;
+        this.gridTrash.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
         this.gridTrash.Location = new System.Drawing.Point(15, 60);
         this.gridTrash.Name = "gridTrash";
         this.gridTrash.Size = new System.Drawing.Size(940, 500);
@@ -626,6 +799,7 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.gridServers.AllowUserToAddRows = false;
         this.gridServers.AllowUserToDeleteRows = false;
         this.gridServers.ReadOnly = true;
+        this.gridServers.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
         this.gridServers.Location = new System.Drawing.Point(15, 60);
         this.gridServers.Name = "gridServers";
         this.gridServers.Size = new System.Drawing.Size(940, 500);
@@ -659,6 +833,7 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.gridAudit.AllowUserToAddRows = false;
         this.gridAudit.AllowUserToDeleteRows = false;
         this.gridAudit.ReadOnly = true;
+        this.gridAudit.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
         this.gridAudit.Location = new System.Drawing.Point(15, 60);
         this.gridAudit.Name = "gridAudit";
         this.gridAudit.Size = new System.Drawing.Size(940, 500);
@@ -717,14 +892,14 @@ partial class MainView : Krypton.Toolkit.KryptonForm
 
         this.lblSetTheme = new Krypton.Toolkit.KryptonLabel();
         this.lblSetTheme.AutoSize = true;
-        this.lblSetTheme.Location = new System.Drawing.Point(20, 20);
+        this.lblSetTheme.Location = new System.Drawing.Point(20, 15);
         this.lblSetTheme.Name = "lblSetTheme";
         this.lblSetTheme.Text = "Theme";
         this.tabSettings.Controls.Add(this.lblSetTheme);
 
         this.radDark = new Krypton.Toolkit.KryptonRadioButton();
         this.radDark.AutoSize = true;
-        this.radDark.Location = new System.Drawing.Point(20, 50);
+        this.radDark.Location = new System.Drawing.Point(20, 40);
         this.radDark.Name = "radDark";
         this.radDark.Size = new System.Drawing.Size(80, 37);
         this.radDark.TabIndex = 0;
@@ -734,7 +909,7 @@ partial class MainView : Krypton.Toolkit.KryptonForm
 
         this.radLight = new Krypton.Toolkit.KryptonRadioButton();
         this.radLight.AutoSize = true;
-        this.radLight.Location = new System.Drawing.Point(140, 50);
+        this.radLight.Location = new System.Drawing.Point(120, 40);
         this.radLight.Name = "radLight";
         this.radLight.Size = new System.Drawing.Size(80, 37);
         this.radLight.TabIndex = 1;
@@ -742,15 +917,13 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.radLight.CheckedChanged += new System.EventHandler(this.radLight_CheckedChanged);
         this.tabSettings.Controls.Add(this.radLight);
 
-        this.lblSetFont = new Krypton.Toolkit.KryptonLabel();
         this.lblSetFont.AutoSize = true;
-        this.lblSetFont.Location = new System.Drawing.Point(20, 105);
+        this.lblSetFont.Location = new System.Drawing.Point(20, 85);
         this.lblSetFont.Name = "lblSetFont";
         this.lblSetFont.Text = "Font size";
         this.tabSettings.Controls.Add(this.lblSetFont);
 
-        this.trkFontSize = new Krypton.Toolkit.KryptonTrackBar();
-        this.trkFontSize.Location = new System.Drawing.Point(20, 135);
+        this.trkFontSize.Location = new System.Drawing.Point(20, 110);
         this.trkFontSize.Minimum = 8;
         this.trkFontSize.Maximum = 16;
         this.trkFontSize.Name = "trkFontSize";
@@ -759,23 +932,20 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.trkFontSize.ValueChanged += new System.EventHandler(this.trkFontSize_ValueChanged);
         this.tabSettings.Controls.Add(this.trkFontSize);
 
-        this.lblFontSizeVal = new Krypton.Toolkit.KryptonLabel();
         this.lblFontSizeVal.AutoSize = true;
-        this.lblFontSizeVal.Location = new System.Drawing.Point(280, 145);
+        this.lblFontSizeVal.Location = new System.Drawing.Point(275, 120);
         this.lblFontSizeVal.Name = "lblFontSizeVal";
         this.lblFontSizeVal.Text = "9.5";
         this.tabSettings.Controls.Add(this.lblFontSizeVal);
 
-        this.lblFontPreview = new Krypton.Toolkit.KryptonLabel();
         this.lblFontPreview.AutoSize = true;
-        this.lblFontPreview.Location = new System.Drawing.Point(20, 185);
+        this.lblFontPreview.Location = new System.Drawing.Point(20, 165);
         this.lblFontPreview.Name = "lblFontPreview";
         this.lblFontPreview.Text = "AaBbCcDd 123";
         this.tabSettings.Controls.Add(this.lblFontPreview);
 
-        this.chkBold = new Krypton.Toolkit.KryptonCheckBox();
         this.chkBold.AutoSize = true;
-        this.chkBold.Location = new System.Drawing.Point(20, 220);
+        this.chkBold.Location = new System.Drawing.Point(20, 195);
         this.chkBold.Name = "chkBold";
         this.chkBold.Size = new System.Drawing.Size(130, 37);
         this.chkBold.TabIndex = 3;
@@ -783,25 +953,35 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.chkBold.CheckedChanged += new System.EventHandler(this.chkBold_CheckedChanged);
         this.tabSettings.Controls.Add(this.chkBold);
 
-        this.lblSetAccent = new Krypton.Toolkit.KryptonLabel();
         this.lblSetAccent.AutoSize = true;
-        this.lblSetAccent.Location = new System.Drawing.Point(20, 270);
+        this.lblSetAccent.Location = new System.Drawing.Point(20, 240);
         this.lblSetAccent.Name = "lblSetAccent";
         this.lblSetAccent.Text = "Accent color";
         this.tabSettings.Controls.Add(this.lblSetAccent);
 
         this.cmbAccent = new Krypton.Toolkit.KryptonComboBox();
         this.cmbAccent.CueHint.CueHintText = "Accent";
-        this.cmbAccent.Location = new System.Drawing.Point(20, 300);
+        this.cmbAccent.Location = new System.Drawing.Point(20, 265);
         this.cmbAccent.Name = "cmbAccent";
         this.cmbAccent.Size = new System.Drawing.Size(250, 48);
         this.cmbAccent.TabIndex = 4;
         this.cmbAccent.SelectedIndexChanged += new System.EventHandler(this.cmbAccent_SelectedIndexChanged);
         this.tabSettings.Controls.Add(this.cmbAccent);
 
+        this.btnResetSettings = new Krypton.Toolkit.KryptonButton();
+        this.btnResetSettings.AutoSize = false;
+        this.btnResetSettings.Location = new System.Drawing.Point(20, 340);
+        this.btnResetSettings.Name = "btnResetSettings";
+        this.btnResetSettings.Size = new System.Drawing.Size(250, 36);
+        this.btnResetSettings.TabIndex = 10;
+        this.btnResetSettings.Text = "Reset Defaults";
+        this.btnResetSettings.ButtonStyle = Krypton.Toolkit.ButtonStyle.Alternate;
+        this.btnResetSettings.Click += new System.EventHandler(this.btnResetSettings_Click);
+        this.tabSettings.Controls.Add(this.btnResetSettings);
+
         this.swAnimations = new Krypton.Toolkit.KryptonToggleSwitch();
         this.swAnimations.AutoSize = true;
-        this.swAnimations.Location = new System.Drawing.Point(480, 50);
+        this.swAnimations.Location = new System.Drawing.Point(340, 20);
         this.swAnimations.Name = "swAnimations";
         this.swAnimations.Size = new System.Drawing.Size(200, 37);
         this.swAnimations.TabIndex = 5;
@@ -811,7 +991,7 @@ partial class MainView : Krypton.Toolkit.KryptonForm
 
         this.swConfirmDelete = new Krypton.Toolkit.KryptonToggleSwitch();
         this.swConfirmDelete.AutoSize = true;
-        this.swConfirmDelete.Location = new System.Drawing.Point(480, 100);
+        this.swConfirmDelete.Location = new System.Drawing.Point(340, 66);
         this.swConfirmDelete.Name = "swConfirmDelete";
         this.swConfirmDelete.Size = new System.Drawing.Size(240, 37);
         this.swConfirmDelete.TabIndex = 6;
@@ -821,7 +1001,7 @@ partial class MainView : Krypton.Toolkit.KryptonForm
 
         this.swNotifications = new Krypton.Toolkit.KryptonToggleSwitch();
         this.swNotifications.AutoSize = true;
-        this.swNotifications.Location = new System.Drawing.Point(480, 150);
+        this.swNotifications.Location = new System.Drawing.Point(340, 112);
         this.swNotifications.Name = "swNotifications";
         this.swNotifications.Size = new System.Drawing.Size(220, 37);
         this.swNotifications.TabIndex = 7;
@@ -831,7 +1011,7 @@ partial class MainView : Krypton.Toolkit.KryptonForm
 
         this.swColdStorage = new Krypton.Toolkit.KryptonToggleSwitch();
         this.swColdStorage.AutoSize = true;
-        this.swColdStorage.Location = new System.Drawing.Point(480, 200);
+        this.swColdStorage.Location = new System.Drawing.Point(340, 158);
         this.swColdStorage.Name = "swColdStorage";
         this.swColdStorage.Size = new System.Drawing.Size(260, 37);
         this.swColdStorage.TabIndex = 8;
@@ -841,7 +1021,7 @@ partial class MainView : Krypton.Toolkit.KryptonForm
 
         this.swMinimizeToTray = new Krypton.Toolkit.KryptonToggleSwitch();
         this.swMinimizeToTray.AutoSize = true;
-        this.swMinimizeToTray.Location = new System.Drawing.Point(480, 250);
+        this.swMinimizeToTray.Location = new System.Drawing.Point(340, 204);
         this.swMinimizeToTray.Name = "swMinimizeToTray";
         this.swMinimizeToTray.Size = new System.Drawing.Size(240, 37);
         this.swMinimizeToTray.TabIndex = 9;
@@ -849,20 +1029,9 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.swMinimizeToTray.CheckedChanged += new System.EventHandler(this.swMinimizeToTray_CheckedChanged);
         this.tabSettings.Controls.Add(this.swMinimizeToTray);
 
-        this.btnResetSettings = new Krypton.Toolkit.KryptonButton();
-        this.btnResetSettings.AutoSize = false;
-        this.btnResetSettings.Location = new System.Drawing.Point(480, 350);
-        this.btnResetSettings.Name = "btnResetSettings";
-        this.btnResetSettings.Size = new System.Drawing.Size(200, 36);
-        this.btnResetSettings.TabIndex = 10;
-        this.btnResetSettings.Text = "Reset Defaults";
-        this.btnResetSettings.ButtonStyle = Krypton.Toolkit.ButtonStyle.Alternate;
-        this.btnResetSettings.Click += new System.EventHandler(this.btnResetSettings_Click);
-        this.tabSettings.Controls.Add(this.btnResetSettings);
-
         this.swAutoSync = new Krypton.Toolkit.KryptonToggleSwitch();
         this.swAutoSync.AutoSize = true;
-        this.swAutoSync.Location = new System.Drawing.Point(480, 300);
+        this.swAutoSync.Location = new System.Drawing.Point(340, 250);
         this.swAutoSync.Name = "swAutoSync";
         this.swAutoSync.Size = new System.Drawing.Size(200, 37);
         this.swAutoSync.TabIndex = 11;
@@ -870,16 +1039,26 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.swAutoSync.CheckedChanged += new System.EventHandler(this.swAutoSync_CheckedChanged);
         this.tabSettings.Controls.Add(this.swAutoSync);
 
+        this.swStartWithWindows = new Krypton.Toolkit.KryptonToggleSwitch();
+        this.swStartWithWindows.AutoSize = true;
+        this.swStartWithWindows.Location = new System.Drawing.Point(340, 296);
+        this.swStartWithWindows.Name = "swStartWithWindows";
+        this.swStartWithWindows.Size = new System.Drawing.Size(240, 37);
+        this.swStartWithWindows.TabIndex = 12;
+        this.swStartWithWindows.Text = "Start with Windows";
+        this.swStartWithWindows.CheckedChanged += new System.EventHandler(this.swStartWithWindows_CheckedChanged);
+        this.tabSettings.Controls.Add(this.swStartWithWindows);
+
         this.lblSetIdle = new Krypton.Toolkit.KryptonLabel();
         this.lblSetIdle.AutoSize = true;
-        this.lblSetIdle.Location = new System.Drawing.Point(480, 400);
+        this.lblSetIdle.Location = new System.Drawing.Point(340, 348);
         this.lblSetIdle.Name = "lblSetIdle";
         this.lblSetIdle.Text = "Auto-logout when idle (minutes)";
         this.tabSettings.Controls.Add(this.lblSetIdle);
 
         this.cmbIdle = new Krypton.Toolkit.KryptonComboBox();
         this.cmbIdle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-        this.cmbIdle.Location = new System.Drawing.Point(480, 428);
+        this.cmbIdle.Location = new System.Drawing.Point(340, 372);
         this.cmbIdle.Name = "cmbIdle";
         this.cmbIdle.Size = new System.Drawing.Size(250, 48);
         this.cmbIdle.TabIndex = 13;
@@ -888,14 +1067,14 @@ partial class MainView : Krypton.Toolkit.KryptonForm
 
         this.lblSetAutoBackup = new Krypton.Toolkit.KryptonLabel();
         this.lblSetAutoBackup.AutoSize = true;
-        this.lblSetAutoBackup.Location = new System.Drawing.Point(480, 484);
+        this.lblSetAutoBackup.Location = new System.Drawing.Point(340, 432);
         this.lblSetAutoBackup.Name = "lblSetAutoBackup";
         this.lblSetAutoBackup.Text = "Automatic backup (hours, 0 = off)";
         this.tabSettings.Controls.Add(this.lblSetAutoBackup);
 
         this.cmbAutoBackup = new Krypton.Toolkit.KryptonComboBox();
         this.cmbAutoBackup.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-        this.cmbAutoBackup.Location = new System.Drawing.Point(480, 512);
+        this.cmbAutoBackup.Location = new System.Drawing.Point(340, 456);
         this.cmbAutoBackup.Name = "cmbAutoBackup";
         this.cmbAutoBackup.Size = new System.Drawing.Size(250, 48);
         this.cmbAutoBackup.TabIndex = 14;
@@ -904,20 +1083,94 @@ partial class MainView : Krypton.Toolkit.KryptonForm
 
         this.lblExcludeCap = new Krypton.Toolkit.KryptonLabel();
         this.lblExcludeCap.AutoSize = true;
-        this.lblExcludeCap.Location = new System.Drawing.Point(20, 360);
+        this.lblExcludeCap.Location = new System.Drawing.Point(660, 15);
         this.lblExcludeCap.Name = "lblExcludeCap";
         this.lblExcludeCap.Text = "Exclude patterns (separated by ;)";
         this.tabSettings.Controls.Add(this.lblExcludeCap);
 
         this.txtExclude = new Krypton.Toolkit.KryptonTextBox();
         this.txtExclude.CueHint.CueHintText = "*.tmp;*.log;~$*";
-        this.txtExclude.Location = new System.Drawing.Point(20, 390);
+        this.txtExclude.Location = new System.Drawing.Point(660, 40);
         this.txtExclude.MaxLength = 1024;
         this.txtExclude.Name = "txtExclude";
-        this.txtExclude.Size = new System.Drawing.Size(450, 48);
+        this.txtExclude.Size = new System.Drawing.Size(290, 36);
         this.txtExclude.TabIndex = 12;
         this.txtExclude.Leave += new System.EventHandler(this.txtExclude_Leave);
         this.tabSettings.Controls.Add(this.txtExclude);
+
+        this.lblSetCompression = new Krypton.Toolkit.KryptonLabel();
+        this.lblSetCompression.AutoSize = true;
+        this.lblSetCompression.Location = new System.Drawing.Point(660, 95);
+        this.lblSetCompression.Name = "lblSetCompression";
+        this.lblSetCompression.Text = "Vault compression (new uploads)";
+        this.tabSettings.Controls.Add(this.lblSetCompression);
+
+        this.cmbCompression = new Krypton.Toolkit.KryptonComboBox();
+        this.cmbCompression.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+        this.cmbCompression.Location = new System.Drawing.Point(660, 119);
+        this.cmbCompression.Name = "cmbCompression";
+        this.cmbCompression.Size = new System.Drawing.Size(250, 48);
+        this.cmbCompression.TabIndex = 15;
+        this.cmbCompression.SelectedIndexChanged += new System.EventHandler(this.cmbCompression_SelectedIndexChanged);
+        this.tabSettings.Controls.Add(this.cmbCompression);
+
+        this.lblSetParallel = new Krypton.Toolkit.KryptonLabel();
+        this.lblSetParallel.AutoSize = true;
+        this.lblSetParallel.Location = new System.Drawing.Point(660, 175);
+        this.lblSetParallel.Name = "lblSetParallel";
+        this.lblSetParallel.Text = "Parallel uploads (1 = sequential)";
+        this.tabSettings.Controls.Add(this.lblSetParallel);
+
+        this.cmbParallel = new Krypton.Toolkit.KryptonComboBox();
+        this.cmbParallel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+        this.cmbParallel.Location = new System.Drawing.Point(660, 199);
+        this.cmbParallel.Name = "cmbParallel";
+        this.cmbParallel.Size = new System.Drawing.Size(250, 48);
+        this.cmbParallel.TabIndex = 16;
+        this.cmbParallel.SelectedIndexChanged += new System.EventHandler(this.cmbParallel_SelectedIndexChanged);
+        this.tabSettings.Controls.Add(this.cmbParallel);
+
+        this.swVerifyAfterSync = new Krypton.Toolkit.KryptonToggleSwitch();
+        this.swVerifyAfterSync.AutoSize = true;
+        this.swVerifyAfterSync.Location = new System.Drawing.Point(660, 255);
+        this.swVerifyAfterSync.Name = "swVerifyAfterSync";
+        this.swVerifyAfterSync.Size = new System.Drawing.Size(280, 37);
+        this.swVerifyAfterSync.TabIndex = 17;
+        this.swVerifyAfterSync.Text = "Verify integrity after sync";
+        this.swVerifyAfterSync.CheckedChanged += new System.EventHandler(this.swVerifyAfterSync_CheckedChanged);
+        this.tabSettings.Controls.Add(this.swVerifyAfterSync);
+
+        this.lblSetMaxSize = new Krypton.Toolkit.KryptonLabel();
+        this.lblSetMaxSize.AutoSize = true;
+        this.lblSetMaxSize.Location = new System.Drawing.Point(660, 300);
+        this.lblSetMaxSize.Name = "lblSetMaxSize";
+        this.lblSetMaxSize.Text = "Skip files larger than (MB, 0 = off)";
+        this.tabSettings.Controls.Add(this.lblSetMaxSize);
+
+        this.cmbMaxSize = new Krypton.Toolkit.KryptonComboBox();
+        this.cmbMaxSize.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+        this.cmbMaxSize.Location = new System.Drawing.Point(660, 324);
+        this.cmbMaxSize.Name = "cmbMaxSize";
+        this.cmbMaxSize.Size = new System.Drawing.Size(250, 48);
+        this.cmbMaxSize.TabIndex = 18;
+        this.cmbMaxSize.SelectedIndexChanged += new System.EventHandler(this.cmbMaxSize_SelectedIndexChanged);
+        this.tabSettings.Controls.Add(this.cmbMaxSize);
+
+        this.lblSetRetention = new Krypton.Toolkit.KryptonLabel();
+        this.lblSetRetention.AutoSize = true;
+        this.lblSetRetention.Location = new System.Drawing.Point(660, 380);
+        this.lblSetRetention.Name = "lblSetRetention";
+        this.lblSetRetention.Text = "Audit retention (days, 0 = keep)";
+        this.tabSettings.Controls.Add(this.lblSetRetention);
+
+        this.cmbRetention = new Krypton.Toolkit.KryptonComboBox();
+        this.cmbRetention.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+        this.cmbRetention.Location = new System.Drawing.Point(660, 404);
+        this.cmbRetention.Name = "cmbRetention";
+        this.cmbRetention.Size = new System.Drawing.Size(250, 48);
+        this.cmbRetention.TabIndex = 19;
+        this.cmbRetention.SelectedIndexChanged += new System.EventHandler(this.cmbRetention_SelectedIndexChanged);
+        this.tabSettings.Controls.Add(this.cmbRetention);
 
         this.lblAnaServer = new Krypton.Toolkit.KryptonLabel();
         this.lblAnaServer.AutoSize = true;
@@ -950,6 +1203,20 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.toolTip.SetToolTip(this.progressBar, "Synchronization progress");
         this.toolTip.SetToolTip(this.btnBackupNow, "Export all server files to a folder");
         this.toolTip.SetToolTip(this.btnRestore, "Restore the selected deleted file");
+        this.toolTip.SetToolTip(this.btnDashScan, "Scan a local folder and list its files");
+        this.toolTip.SetToolTip(this.btnDashSync, "Upload all pending files to the server");
+        this.toolTip.SetToolTip(this.btnDashBackup, "Export decrypted server files to a folder");
+        this.toolTip.SetToolTip(this.btnDashExplorer, "Browse server files with hashes and metadata");
+        this.toolTip.SetToolTip(this.btnDashShortcuts, "Show all keyboard shortcuts");
+        this.toolTip.SetToolTip(this.gridDashAudit, "Latest actions performed in the application");
+        this.toolTip.SetToolTip(this.swStartWithWindows, "Launch DataSyncEngine automatically at sign-in");
+        this.toolTip.SetToolTip(this.swVerifyAfterSync, "Re-open each stored vault payload and compare it with the source file");
+        this.toolTip.SetToolTip(this.cmbCompression, "Compression applied before sealing new uploads");
+        this.toolTip.SetToolTip(this.cmbParallel, "Number of files uploaded at the same time");
+        this.toolTip.SetToolTip(this.cmbMaxSize, "Files above this size are skipped during scan");
+        this.toolTip.SetToolTip(this.cmbRetention, "Audit entries older than this are purged automatically");
+        this.toolTip.SetToolTip(this.btnPickBackupFolder, "Folder used by the scheduled automatic backup");
+        this.toolTip.SetToolTip(this.btnLogout, "Log out of the application (Ctrl+L locks the screen)");
         this.tabControl.ResumeLayout(false);
         this.tabSync.ResumeLayout(false);
         this.tabSync.PerformLayout();
@@ -1015,6 +1282,7 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.gridUsers.AllowUserToAddRows = false;
         this.gridUsers.AllowUserToDeleteRows = false;
         this.gridUsers.ReadOnly = true;
+        this.gridUsers.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
         this.gridUsers.Location = new System.Drawing.Point(15, 60);
         this.gridUsers.Name = "gridUsers";
         this.gridUsers.Size = new System.Drawing.Size(940, 500);
@@ -1124,7 +1392,29 @@ partial class MainView : Krypton.Toolkit.KryptonForm
     private System.Windows.Forms.Panel cardServers;
     private Krypton.Toolkit.KryptonLabel lblServersCap;
     private System.Windows.Forms.Label lblServersVal;
-    private Krypton.Toolkit.KryptonLabel lblDashTitle;
+    private Krypton.Toolkit.KryptonLabel lblDashRecent;
+    private Krypton.Toolkit.KryptonDataGridView gridDashAudit;
+    private Krypton.Toolkit.KryptonLabel lblDashQuick;
+    private Krypton.Toolkit.KryptonButton btnDashScan;
+    private Krypton.Toolkit.KryptonButton btnDashSync;
+    private Krypton.Toolkit.KryptonButton btnDashBackup;
+    private Krypton.Toolkit.KryptonButton btnDashExplorer;
+    private Krypton.Toolkit.KryptonButton btnDashShortcuts;
+    private Krypton.Toolkit.KryptonLabel lblDashHint;
+    private Krypton.Toolkit.KryptonToggleSwitch swStartWithWindows;
+    private Krypton.Toolkit.KryptonLabel lblSetCompression;
+    private Krypton.Toolkit.KryptonComboBox cmbCompression;
+    private Krypton.Toolkit.KryptonLabel lblSetParallel;
+    private Krypton.Toolkit.KryptonComboBox cmbParallel;
+    private Krypton.Toolkit.KryptonToggleSwitch swVerifyAfterSync;
+    private Krypton.Toolkit.KryptonLabel lblSetMaxSize;
+    private Krypton.Toolkit.KryptonComboBox cmbMaxSize;
+    private Krypton.Toolkit.KryptonLabel lblSetRetention;
+    private Krypton.Toolkit.KryptonComboBox cmbRetention;
+    private Krypton.Toolkit.KryptonLabel lblBackupFolderCap;
+    private Krypton.Toolkit.KryptonLabel lblBackupFolderVal;
+    private Krypton.Toolkit.KryptonButton btnPickBackupFolder;
+    private System.Windows.Forms.ToolStripButton btnShortcuts;
     private System.Windows.Forms.PictureBox picUserAvatar;
     private Krypton.Toolkit.KryptonLabel lblUserBadge;
     private System.Windows.Forms.TabPage tabServers;

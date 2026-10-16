@@ -97,6 +97,17 @@ public class AuditRepository : IAuditRepository<AuditLogModel>
         return await cmd.ExecuteNonQueryAsync(linked.Token) > 0;
     }
 
+    /// <summary>Removes audit entries older than the given cutoff (retention policy).</summary>
+    public async Task<int> DeleteOlderThanAsync(DateTime cutoffUtc, CancellationToken cancellationToken = default)
+    {
+        using var timeout = Timeout();
+        using var linked = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeout.Token);
+        await using MySqlConnection conn = await DbConnectionFactory.OpenConnectionAsync(_serverProvider(), linked.Token);
+        await using var cmd = new MySqlCommand("DELETE FROM audit_logs WHERE timestamp < @cutoff", conn);
+        cmd.Parameters.AddWithValue("@cutoff", cutoffUtc);
+        return await cmd.ExecuteNonQueryAsync(linked.Token);
+    }
+
     private static AuditLogModel Map(MySqlDataReader reader)
     {
         return new AuditLogModel

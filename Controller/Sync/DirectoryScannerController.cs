@@ -13,6 +13,10 @@ public class DirectoryScannerController
 
     public Func<string>? ExcludePatternsProvider { get; set; }
 
+    /// <summary>Maximum file size in MB accepted by the scanner (0 = unlimited).
+    /// Oversized files are skipped instead of entering the sync list.</summary>
+    public Func<int>? MaxFileSizeMbProvider { get; set; }
+
     public DirectoryScannerController(Sha256Controller sha256, FileRepository fileRepository)
     {
         _sha256 = sha256;
@@ -73,14 +77,16 @@ public class DirectoryScannerController
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 if (IsExcluded(path, ExcludePatternsProvider?.Invoke())) continue;
+                int maxSizeMb = MaxFileSizeMbProvider?.Invoke() ?? 0;
                 string hash;
                 long size;
                 DateTime modified;
                 try
                 {
                     await using FileStream stream = File.OpenRead(path);
-                    hash = await _sha256.ComputeHashAsync(stream, cancellationToken);
                     size = stream.Length;
+                    if (maxSizeMb > 0 && size > maxSizeMb * 1024L * 1024L) continue;
+                    hash = await _sha256.ComputeHashAsync(stream, cancellationToken);
                     modified = File.GetLastWriteTimeUtc(path);
                 }
                 catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)

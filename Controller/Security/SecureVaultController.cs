@@ -23,6 +23,13 @@ public class SecureVaultController
         _compressor = compressor;
     }
 
+    /// <summary>Compression level used when sealing payloads (delegates to the compressor).</summary>
+    public global::System.IO.Compression.CompressionLevel CompressionLevel
+    {
+        get => _compressor.Level;
+        set => _compressor.Level = value;
+    }
+
     public byte[] Seal(byte[] plaintext, string passphrase)
     {
         byte[] compressed = _compressor.Compress(plaintext);

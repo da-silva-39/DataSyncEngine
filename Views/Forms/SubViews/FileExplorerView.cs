@@ -112,6 +112,7 @@ public partial class FileExplorerView : Krypton.Toolkit.KryptonForm
     {
         var scanner = new Controller.Sync.DirectoryScannerController(AppServices.Sha256, AppServices.Files);
         scanner.ExcludePatternsProvider = () => AppServices.Settings.ExcludePatterns;
+        scanner.MaxFileSizeMbProvider = () => AppServices.Settings.MaxFileSizeMb;
         return await scanner.ScanAsync(path);
     }
 

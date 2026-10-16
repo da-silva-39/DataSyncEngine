@@ -64,5 +64,22 @@ public static class AppServices
         SyncEngine = new Controller.Sync.SyncEngineController(Vault, Files, () => MasterKey);
         SyncEngine.KeepColdStorage = Settings.KeepColdStorage;
         Backup = new Controller.Sync.BackupController(Files, Vault, () => MasterKey);
+        ApplyRuntimeSettings();
+    }
+
+    /// <summary>Pushes the functional settings (compression, parallelism, integrity
+    /// verification, cold storage) into the live controllers. Called at startup and
+    /// whenever the Settings tab changes a value.</summary>
+    public static void ApplyRuntimeSettings()
+    {
+        Vault.CompressionLevel = Settings.CompressionLevel switch
+        {
+            "None" => System.IO.Compression.CompressionLevel.NoCompression,
+            "Fastest" => System.IO.Compression.CompressionLevel.Fastest,
+            _ => System.IO.Compression.CompressionLevel.Optimal,
+        };
+        SyncEngine.MaxParallelism = Math.Clamp(Settings.MaxParallelSync, 1, 8);
+        SyncEngine.VerifyAfterSync = Settings.VerifyAfterSync;
+        SyncEngine.KeepColdStorage = Settings.KeepColdStorage;
     }
 }

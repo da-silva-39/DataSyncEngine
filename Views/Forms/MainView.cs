@@ -18,6 +18,8 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
     private readonly System.Windows.Forms.Timer _maintenanceTimer = new() { Interval = 60_000 };
     private bool _backupRunning;
     private SubViews.LockView? _lockView;
+    private bool _settingsLoading;
+    private DateTime _lastAuditPurge = DateTime.MinValue;
 
     private void RebuildNotifications()
     {
@@ -94,6 +96,8 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         if (_busy) return;
         if (!File.Exists(path)) return;
         if (Controller.Sync.DirectoryScannerController.IsExcluded(path, AppServices.Settings.ExcludePatterns)) return;
+        int maxMb = AppServices.Settings.MaxFileSizeMb;
+        if (maxMb > 0 && new FileInfo(path).Length > maxMb * 1024L * 1024L) return;
         try
         {
             string hash;
@@ -145,6 +149,7 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         {
             var scanner = new Controller.Sync.DirectoryScannerController(AppServices.Sha256, AppServices.Files);
             scanner.ExcludePatternsProvider = () => AppServices.Settings.ExcludePatterns;
+            scanner.MaxFileSizeMbProvider = () => AppServices.Settings.MaxFileSizeMb;
             await _viewModel.ScanFolderAsync(path, scanner);
             gridFiles.DataSource = null;
             gridFiles.DataSource = _viewModel.Files;
@@ -271,6 +276,37 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
             tabControl.SelectedTab = tabSync;
             txtFilter.Focus();
         }
+        else if (e.Control && e.KeyCode == Keys.O)
+        {
+            e.Handled = true;
+            tabControl.SelectedTab = tabSync;
+            btnSelectFolder.PerformClick();
+        }
+        else if (e.Control && e.KeyCode == Keys.R)
+        {
+            e.Handled = true;
+            await RefreshCurrentTabAsync();
+        }
+        else if (e.Control && e.KeyCode == Keys.E)
+        {
+            e.Handled = true;
+            btnExplorer.PerformClick();
+        }
+        else if (e.Control && e.KeyCode == Keys.B)
+        {
+            e.Handled = true;
+            tabControl.SelectedTab = tabBackup;
+        }
+        else if (e.Control && e.KeyCode == Keys.D)
+        {
+            e.Handled = true;
+            tabControl.SelectedTab = tabDashboard;
+        }
+        else if (e.Control && e.KeyCode == Keys.K)
+        {
+            e.Handled = true;
+            OpenShortcuts();
+        }
     }
 
     protected override void OnFormClosing(FormClosingEventArgs e)
@@ -351,6 +387,24 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
             {
                 await RunBackupAsync(ResolveAutoBackupFolder(), manual: false);
             }
+            await PurgeAuditIfDueAsync();
+        }
+        catch
+        {
+        }
+    }
+
+    private async Task PurgeAuditIfDueAsync()
+    {
+        int days = AppServices.Settings.AuditRetentionDays;
+        if (days <= 0) return;
+        if (DateTime.UtcNow - _lastAuditPurge < TimeSpan.FromHours(24)) return;
+        _lastAuditPurge = DateTime.UtcNow;
+        try
+        {
+            int removed = await AppServices.Audits.DeleteOlderThanAsync(DateTime.UtcNow.AddDays(-days));
+            if (removed > 0)
+                Notify("DataSyncEngine", $"Audit retention: removed {removed} entries older than {days} days.", ToolTipIcon.Info);
         }
         catch
         {
@@ -405,7 +459,7 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         await _viewModel.LoadServersAsync();
         UpdateDashboard();
         await LoadUserBadgeAsync();
-        LayoutContent();
+        await LoadDashboardAsync();
         ToastForm.ShowToast(this, $"Signed in as {AppServices.Session.Username} ({AppServices.Session.Role}).", ToastKind.Success);
     }
 
@@ -440,15 +494,6 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         }
     }
 
-    private static void SetupNavButton(Krypton.Toolkit.KryptonButton button, string name, string text, int y)
-    {
-        button.Location = new System.Drawing.Point(12, y);
-        button.Name = name;
-        button.Size = new System.Drawing.Size(216, 36);
-        button.Text = text;
-        button.ButtonStyle = Krypton.Toolkit.ButtonStyle.ListItem;
-    }
-
     private void UpdateDashboard()
     {
         lblFilesVal.Text = _viewModel.Files.Count.ToString();
@@ -467,14 +512,18 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         if (progressBar.Value < progressBar.Maximum) progressBar.Value++;
     }
 
-    private void themeDarkItem_Click(object? sender, EventArgs e)
-    {
-        KryptonThemeModule.SetTheme(true);
-    }
+    private void themeDarkItem_Click(object? sender, EventArgs e) => ApplyThemeChoice(true);
 
-    private void themeLightItem_Click(object? sender, EventArgs e)
+    private void themeLightItem_Click(object? sender, EventArgs e) => ApplyThemeChoice(false);
+
+    private void ApplyThemeChoice(bool dark)
     {
-        KryptonThemeModule.SetTheme(false);
+        AppServices.Settings.ThemeDark = dark;
+        AppServices.SaveSettings();
+        radDark.Checked = dark;
+        radLight.Checked = !dark;
+        KryptonThemeModule.SetTheme(dark);
+        SetStatus(dark ? "Dark theme applied." : "Light theme applied.", ToastKind.Info);
     }
 
     private void txtFilter_TextChanged(object? sender, EventArgs e)
@@ -727,10 +776,18 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         s.IdleLogoutMinutes = 15;
         s.AutoBackupHours = 0;
         s.AutoBackupFolder = string.Empty;
+        s.CompressionLevel = "Optimal";
+        s.MaxParallelSync = 1;
+        s.VerifyAfterSync = true;
+        s.MaxFileSizeMb = 0;
+        s.StartWithWindows = false;
+        s.AuditRetentionDays = 0;
         AppServices.SaveSettings();
         KryptonThemeModule.SetAccent("Blue");
         KryptonThemeModule.SetTheme(true);
         AppServices.SyncEngine.KeepColdStorage = true;
+        Controller.System.AutoStartController.SetEnabled(false);
+        AppServices.ApplyRuntimeSettings();
         LoadSettingsIntoControls();
         KryptonThemeModule.ApplyFontToOpenForms(s.FontSize, s.FontBold);
         ToastForm.ShowToast(this, "Settings restored to defaults.", ToastKind.Info);
@@ -929,10 +986,17 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
 
         btnSync.Click += async (_, _) =>
         {
-            var pending = _viewModel.Files.Where(f => f.Status != Core.Enums.SyncStatus.Synced).ToList();
+            int maxMb = AppServices.Settings.MaxFileSizeMb;
+            var allPending = _viewModel.Files.Where(f => f.Status != Core.Enums.SyncStatus.Synced).ToList();
+            var pending = maxMb > 0
+                ? allPending.Where(f => f.SizeBytes <= maxMb * 1024L * 1024L).ToList()
+                : allPending;
+            int skipped = allPending.Count - pending.Count;
             if (pending.Count == 0)
             {
-                lblStatus.Text = "Nothing to sync.";
+                SetStatus(skipped > 0
+                    ? $"Nothing to sync ({skipped} file(s) exceed the {maxMb} MB limit)."
+                    : "Nothing to sync.", skipped > 0 ? ToastKind.Warning : ToastKind.Info);
                 return;
             }
             lblStatus.Text = "Syncing...";
@@ -941,9 +1005,12 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
             progressBar.Value = 0;
             progressBar.Maximum = pending.Count;
             var engine = AppServices.SyncEngine;
+            int verified = 0;
             Action<string> tick = _ => TickProgress();
+            Action<string> onVerified = _ => Interlocked.Increment(ref verified);
             engine.FileProcessed += tick;
             engine.FileFailed += tick;
+            engine.FileVerified += onVerified;
             try
             {
                 int ok = await Task.Run(() => engine.ProcessBatchAsync(pending, f => File.ReadAllBytes(f.FilePath)));
@@ -951,9 +1018,11 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
                 gridFiles.DataSource = _viewModel.Files;
                 UpdateDashboard();
                 SetBusy(false, null);
-                SetStatus($"Synced {ok}/{pending.Count} files.", ok == pending.Count ? ToastKind.Success : ToastKind.Warning);
+                SetStatus($"Synced {ok}/{pending.Count} files." + (skipped > 0 ? $" {skipped} skipped (size limit)." : ""), ok == pending.Count ? ToastKind.Success : ToastKind.Warning);
                 Notify("DataSyncEngine", $"Sync completed: {ok}/{pending.Count}.", ToolTipIcon.Info);
                 await AppServices.AuditLogger.LogAsync(Core.Enums.LogAction.SyncCompleted, $"Synced {ok}/{pending.Count} files.");
+                if (verified > 0)
+                    await AppServices.AuditLogger.LogAsync(Core.Enums.LogAction.IntegrityChecked, $"Verified {verified} stored payload(s) byte-for-byte after upload.");
                 if (engine.PendingResume.Count > 0)
                 {
                     Notify("DataSyncEngine", $"{engine.PendingResume.Count} files marked for resume.", ToolTipIcon.Warning);
@@ -972,12 +1041,14 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
                 SetBusy(false, null);
                 engine.FileProcessed -= tick;
                 engine.FileFailed -= tick;
+                engine.FileVerified -= onVerified;
                 Cursor = Cursors.Default;
             }
         };
 
-        btnExplorer.Click += (_, _) =>
+        btnExplorer.Click += async (_, _) =>
         {
+            await AppServices.AuditLogger.LogAsync(Core.Enums.LogAction.ExplorerOpened, "Opened the file explorer.");
             using var explorer = new SubViews.FileExplorerView();
             explorer.ShowDialog(this);
         };
@@ -1160,6 +1231,32 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
 
         tabSettings.Enter += (_, _) => LoadSettingsIntoControls();
 
+        tabDashboard.Enter += async (_, _) => await LoadDashboardAsync();
+
+        btnDashShortcuts.Click += (_, _) => OpenShortcuts();
+        btnDashScan.Click += (_, _) =>
+        {
+            tabControl.SelectedTab = tabSync;
+            btnSelectFolder.PerformClick();
+        };
+        btnDashSync.Click += (_, _) =>
+        {
+            tabControl.SelectedTab = tabSync;
+            btnSync.PerformClick();
+        };
+        btnDashBackup.Click += (_, _) =>
+        {
+            tabControl.SelectedTab = tabBackup;
+            btnBackupNow.PerformClick();
+        };
+        btnDashExplorer.Click += (_, _) => btnExplorer.PerformClick();
+        gridDashAudit.DoubleClick += async (_, _) =>
+        {
+            if (!tabControl.TabPages.Contains(tabAudit)) return;
+            tabControl.SelectedTab = tabAudit;
+            await LoadAuditTabAsync();
+        };
+
         gridTrash.CellFormatting += GridTrash_CellFormatting;
     }
 
@@ -1215,6 +1312,7 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         lblLastBackup.Text = string.IsNullOrWhiteSpace(AppServices.Settings.LastBackupAt)
             ? "Last backup: never"
             : $"Last backup: {AppServices.Settings.LastBackupAt}";
+        UpdateBackupFolderLabel();
     }
 
     private async Task RefreshCurrentTabAsync()
@@ -1228,6 +1326,7 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         else if (tab == tabAnalytics) await LoadAnalyticsTabAsync();
         else if (tab == tabBackup) LoadBackupTab();
         else if (tab == tabSettings) LoadSettingsIntoControls();
+        else if (tab == tabDashboard) await LoadDashboardAsync();
         else UpdateDashboard();
         SetStatus("Refreshed.", ToastKind.Info);
     }
@@ -1258,31 +1357,167 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
 
     private void LoadSettingsIntoControls()
     {
-        var s = AppServices.Settings;
-        radDark.Checked = s.ThemeDark;
-        radLight.Checked = !s.ThemeDark;
-        trkFontSize.Value = Math.Clamp((int)Math.Round(s.FontSize), trkFontSize.Minimum, trkFontSize.Maximum);
-        lblFontSizeVal.Text = s.FontSize.ToString("0.0");
-        chkBold.Checked = s.FontBold;
-        UpdateFontPreview();
-        if (cmbAccent.Items.Count == 0)
-            cmbAccent.Items.AddRange(new object[] { "Blue", "Green", "Red", "Purple" });
-        cmbAccent.SelectedItem = s.Accent;
-        swAnimations.Checked = s.Animations;
-        swConfirmDelete.Checked = s.ConfirmDelete;
-        swNotifications.Checked = s.Notifications;
-        swColdStorage.Checked = s.KeepColdStorage;
-        swMinimizeToTray.Checked = s.MinimizeToTray;
-        swAutoSync.Checked = s.AutoSync;
-        txtExclude.Text = s.ExcludePatterns;
-        if (cmbIdle.Items.Count == 0) cmbIdle.Items.AddRange(new object[] { "0", "5", "15", "30", "60" });
-        string idleValue = s.IdleLogoutMinutes.ToString();
-        if (!cmbIdle.Items.Contains(idleValue)) cmbIdle.Items.Add(idleValue);
-        cmbIdle.SelectedItem = idleValue;
-        if (cmbAutoBackup.Items.Count == 0) cmbAutoBackup.Items.AddRange(new object[] { "0", "1", "6", "12", "24" });
-        string backupValue = s.AutoBackupHours.ToString();
-        if (!cmbAutoBackup.Items.Contains(backupValue)) cmbAutoBackup.Items.Add(backupValue);
-        cmbAutoBackup.SelectedItem = backupValue;
+        _settingsLoading = true;
+        try
+        {
+            var s = AppServices.Settings;
+            radDark.Checked = s.ThemeDark;
+            radLight.Checked = !s.ThemeDark;
+            trkFontSize.Value = Math.Clamp((int)Math.Round(s.FontSize), trkFontSize.Minimum, trkFontSize.Maximum);
+            lblFontSizeVal.Text = s.FontSize.ToString("0.0");
+            chkBold.Checked = s.FontBold;
+            UpdateFontPreview();
+            if (cmbAccent.Items.Count == 0)
+                cmbAccent.Items.AddRange(new object[] { "Blue", "Green", "Red", "Purple" });
+            cmbAccent.SelectedItem = s.Accent;
+            swAnimations.Checked = s.Animations;
+            swConfirmDelete.Checked = s.ConfirmDelete;
+            swNotifications.Checked = s.Notifications;
+            swColdStorage.Checked = s.KeepColdStorage;
+            swMinimizeToTray.Checked = s.MinimizeToTray;
+            swAutoSync.Checked = s.AutoSync;
+            swStartWithWindows.Checked = s.StartWithWindows;
+            txtExclude.Text = s.ExcludePatterns;
+            if (cmbIdle.Items.Count == 0) cmbIdle.Items.AddRange(new object[] { "0", "5", "15", "30", "60" });
+            string idleValue = s.IdleLogoutMinutes.ToString();
+            if (!cmbIdle.Items.Contains(idleValue)) cmbIdle.Items.Add(idleValue);
+            cmbIdle.SelectedItem = idleValue;
+            if (cmbAutoBackup.Items.Count == 0) cmbAutoBackup.Items.AddRange(new object[] { "0", "1", "6", "12", "24" });
+            string backupValue = s.AutoBackupHours.ToString();
+            if (!cmbAutoBackup.Items.Contains(backupValue)) cmbAutoBackup.Items.Add(backupValue);
+            cmbAutoBackup.SelectedItem = backupValue;
+            if (cmbCompression.Items.Count == 0) cmbCompression.Items.AddRange(new object[] { "Optimal", "Fastest", "None" });
+            cmbCompression.SelectedItem = s.CompressionLevel;
+            if (cmbParallel.Items.Count == 0) cmbParallel.Items.AddRange(new object[] { "1", "2", "4", "8" });
+            string parallelValue = s.MaxParallelSync.ToString();
+            if (!cmbParallel.Items.Contains(parallelValue)) cmbParallel.Items.Add(parallelValue);
+            cmbParallel.SelectedItem = parallelValue;
+            swVerifyAfterSync.Checked = s.VerifyAfterSync;
+            if (cmbMaxSize.Items.Count == 0) cmbMaxSize.Items.AddRange(new object[] { "0", "10", "50", "100", "500" });
+            string maxValue = s.MaxFileSizeMb.ToString();
+            if (!cmbMaxSize.Items.Contains(maxValue)) cmbMaxSize.Items.Add(maxValue);
+            cmbMaxSize.SelectedItem = maxValue;
+            if (cmbRetention.Items.Count == 0) cmbRetention.Items.AddRange(new object[] { "0", "30", "90", "180", "365" });
+            string retentionValue = s.AuditRetentionDays.ToString();
+            if (!cmbRetention.Items.Contains(retentionValue)) cmbRetention.Items.Add(retentionValue);
+            cmbRetention.SelectedItem = retentionValue;
+            UpdateBackupFolderLabel();
+        }
+        finally
+        {
+            _settingsLoading = false;
+        }
+    }
+
+    private void swStartWithWindows_CheckedChanged(object? sender, EventArgs e)
+    {
+        if (_settingsLoading) return;
+        AppServices.Settings.StartWithWindows = swStartWithWindows.Checked;
+        AppServices.SaveSettings();
+        bool ok = Controller.System.AutoStartController.SetEnabled(swStartWithWindows.Checked);
+        ToastForm.ShowToast(this, ok
+            ? (swStartWithWindows.Checked ? "DataSyncEngine will start with Windows." : "Auto-start disabled.")
+            : "Could not update the Windows startup entry.", ok ? ToastKind.Info : ToastKind.Warning);
+    }
+
+    private void cmbCompression_SelectedIndexChanged(object? sender, EventArgs e)
+    {
+        if (_settingsLoading || cmbCompression.SelectedItem is not string value) return;
+        if (value == AppServices.Settings.CompressionLevel) return;
+        AppServices.Settings.CompressionLevel = value;
+        AppServices.SaveSettings();
+        AppServices.ApplyRuntimeSettings();
+        ToastForm.ShowToast(this, $"Vault compression set to {value}.", ToastKind.Info);
+    }
+
+    private void cmbParallel_SelectedIndexChanged(object? sender, EventArgs e)
+    {
+        if (_settingsLoading || cmbParallel.SelectedItem is not string raw || !int.TryParse(raw, out int value)) return;
+        if (value == AppServices.Settings.MaxParallelSync) return;
+        AppServices.Settings.MaxParallelSync = Math.Clamp(value, 1, 8);
+        AppServices.SaveSettings();
+        AppServices.ApplyRuntimeSettings();
+        ToastForm.ShowToast(this, value <= 1 ? "Uploads run sequentially." : $"Up to {value} uploads at the same time.", ToastKind.Info);
+    }
+
+    private void swVerifyAfterSync_CheckedChanged(object? sender, EventArgs e)
+    {
+        if (_settingsLoading) return;
+        AppServices.Settings.VerifyAfterSync = swVerifyAfterSync.Checked;
+        AppServices.SaveSettings();
+        AppServices.ApplyRuntimeSettings();
+        ToastForm.ShowToast(this, swVerifyAfterSync.Checked
+            ? "Integrity check enabled after every upload."
+            : "Integrity check disabled.", ToastKind.Info);
+    }
+
+    private void cmbMaxSize_SelectedIndexChanged(object? sender, EventArgs e)
+    {
+        if (_settingsLoading || cmbMaxSize.SelectedItem is not string raw || !int.TryParse(raw, out int value)) return;
+        if (value == AppServices.Settings.MaxFileSizeMb) return;
+        AppServices.Settings.MaxFileSizeMb = Math.Max(0, value);
+        AppServices.SaveSettings();
+        ToastForm.ShowToast(this, value <= 0
+            ? "No file size limit. Rescan to apply."
+            : $"Files larger than {value} MB are skipped. Rescan to apply.", ToastKind.Info);
+    }
+
+    private void cmbRetention_SelectedIndexChanged(object? sender, EventArgs e)
+    {
+        if (_settingsLoading || cmbRetention.SelectedItem is not string raw || !int.TryParse(raw, out int value)) return;
+        if (value == AppServices.Settings.AuditRetentionDays) return;
+        AppServices.Settings.AuditRetentionDays = Math.Max(0, value);
+        AppServices.SaveSettings();
+        ToastForm.ShowToast(this, value <= 0
+            ? "Audit entries are kept forever."
+            : $"Audit entries older than {value} days will be purged daily.", ToastKind.Info);
+    }
+
+    private void btnShortcuts_Click(object? sender, EventArgs e) => OpenShortcuts();
+
+    private void OpenShortcuts()
+    {
+        using var dialog = new SubViews.ShortcutsView();
+        dialog.ShowDialog(this);
+    }
+
+    private async Task LoadDashboardAsync()
+    {
+        UpdateDashboard();
+        try
+        {
+            var recent = (await AppServices.Audits.GetAllAsync()).Take(8).ToList();
+            gridDashAudit.DataSource = null;
+            gridDashAudit.DataSource = recent;
+            HideColumns(gridDashAudit, "Id");
+        }
+        catch
+        {
+        }
+    }
+
+    private async void btnPickBackupFolder_Click(object? sender, EventArgs e) => await PickBackupFolderAsync();
+
+    private async Task PickBackupFolderAsync()
+    {        using var dialog = new FolderBrowserDialog
+        {
+            Description = "Select the automatic backup folder",
+            SelectedPath = AppServices.Settings.AutoBackupFolder
+        };
+        if (dialog.ShowDialog(this) != DialogResult.OK) return;
+        AppServices.Settings.AutoBackupFolder = dialog.SelectedPath;
+        AppServices.SaveSettings();
+        UpdateBackupFolderLabel();
+        await AppServices.AuditLogger.LogAsync(Core.Enums.LogAction.BackupExported, $"Automatic backup folder set to {dialog.SelectedPath}.");
+        ToastForm.ShowToast(this, "Backup folder updated.", ToastKind.Success);
+    }
+
+    private void UpdateBackupFolderLabel()
+    {
+        string folder = AppServices.Settings.AutoBackupFolder;
+        lblBackupFolderVal.Text = string.IsNullOrWhiteSpace(folder)
+            ? @"(not set — defaults to Documents\DataSyncEngineBackup)"
+            : folder;
     }
 
     private void cmbIdle_SelectedIndexChanged(object? sender, EventArgs e)

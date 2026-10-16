@@ -42,11 +42,20 @@ public static class KryptonThemeModule
 
     private static void SetTheme(bool dark, bool reapply)
     {
-        _manager.GlobalPaletteMode = dark
-            ? PaletteMode.Microsoft365BlackDarkMode
-            : PaletteMode.Microsoft365White;
+        var settings = AppSettings.Load();
+        if (dark)
+        {
+            // Use the custom GitHub-dark palette so every Krypton surface shares
+            // the same #0D1117 family as the splash / processing screen.
+            _manager.GlobalCustomPalette = new GitHubDarkPalette(ResolveAccent(settings.Accent, true));
+        }
+        else
+        {
+            _manager.GlobalCustomPalette = null;
+            _manager.GlobalPaletteMode = PaletteMode.Microsoft365White;
+        }
         DarkThemeModule.SetTheme(dark);
-        ApplyAccentColor(AppSettings.Load().Accent, dark);
+        ApplyAccentColor(settings.Accent, dark);
         if (!reapply) return;
         foreach (Form form in Application.OpenForms)
             DarkThemeModule.Apply(form);
@@ -61,15 +70,17 @@ public static class KryptonThemeModule
     private static void SetAccent(string name, bool reapply)
     {
         ApplyAccentColor(name, DarkThemeModule.IsDark);
+        if (DarkThemeModule.IsDark)
+            _manager.GlobalCustomPalette = new GitHubDarkPalette(ResolveAccent(name, true));
         if (!reapply) return;
         foreach (Form form in Application.OpenForms)
             DarkThemeModule.Apply(form);
         ThemeChanged?.Invoke();
     }
 
-    private static void ApplyAccentColor(string name, bool dark)
+    private static Color ResolveAccent(string name, bool dark)
     {
-        Color accent = (name, dark) switch
+        return (name, dark) switch
         {
             ("Green", true) => ColorTranslator.FromHtml("#238636"),
             ("Green", false) => ColorTranslator.FromHtml("#1F883D"),
@@ -80,7 +91,11 @@ public static class KryptonThemeModule
             (_, true) => ColorTranslator.FromHtml("#1F6FEB"),
             _ => ColorTranslator.FromHtml("#0969DA"),
         };
-        DarkThemeModule.SetAccent(accent);
+    }
+
+    private static void ApplyAccentColor(string name, bool dark)
+    {
+        DarkThemeModule.SetAccent(ResolveAccent(name, dark));
     }
 
     public static void ApplyFontToOpenForms(float size, bool bold)

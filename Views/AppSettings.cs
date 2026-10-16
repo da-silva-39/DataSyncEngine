@@ -26,6 +26,12 @@ public class AppSettings
     public int IdleLogoutMinutes { get; set; } = 15;
     public int AutoBackupHours { get; set; } = 0;
     public string AutoBackupFolder { get; set; } = string.Empty;
+    public string CompressionLevel { get; set; } = "Optimal";
+    public int MaxParallelSync { get; set; } = 1;
+    public bool VerifyAfterSync { get; set; } = true;
+    public int MaxFileSizeMb { get; set; } = 0;
+    public bool StartWithWindows { get; set; } = false;
+    public int AuditRetentionDays { get; set; } = 0;
 
     private static readonly string FilePath = Path.Combine(AppContext.BaseDirectory, "appsettings.json");
 

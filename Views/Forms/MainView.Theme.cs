@@ -11,12 +11,9 @@ public partial class MainView
 {
     private void WireShell()
     {
-        HideTabHeaders();
         tabControl.SelectedIndexChanged += (_, _) => UpdateNavSelection();
-        ClientSizeChanged += (_, _) => LayoutContent();
         KryptonThemeModule.ThemeChanged += OnThemeChanged;
         ApplyShellTheme();
-        LayoutContent();
     }
 
     private void OnThemeChanged() => ApplyShellTheme();
@@ -46,7 +43,7 @@ public partial class MainView
         GitHubThemeModule.StyleHeading(lblPendingCap, DarkThemeModule.MutedTextColor, 9F);
         GitHubThemeModule.StyleHeading(lblServersCap, DarkThemeModule.MutedTextColor, 9F);
 
-        lblDashTitle.Visible = false;
+        lblDashHint.ForeColor = DarkThemeModule.MutedTextColor;
 
         GitHubThemeModule.StyleTree(treeFiles);
         GitHubThemeModule.StyleGrid(gridFiles);
@@ -54,6 +51,7 @@ public partial class MainView
         GitHubThemeModule.StyleGrid(gridAudit);
         GitHubThemeModule.StyleGrid(gridUsers);
         GitHubThemeModule.StyleGrid(gridTrash);
+        GitHubThemeModule.StyleGrid(gridDashAudit);
 
         lblFilesVal.ForeColor = DarkThemeModule.AccentColor;
         lblSyncedVal.ForeColor = DarkThemeModule.SuccessColor;
@@ -63,33 +61,6 @@ public partial class MainView
         BackColor = DarkThemeModule.CanvasColor;
 
         UpdateNavSelection();
-    }
-
-    private void HideTabHeaders()
-    {
-        tabControl.Appearance = TabAppearance.FlatButtons;
-        tabControl.SizeMode = TabSizeMode.Fixed;
-        tabControl.ItemSize = new Size(0, 1);
-        tabControl.Padding = new Point(0, 0);
-        tabControl.Multiline = false;
-    }
-
-    private void LayoutContent()
-    {
-        FillGrid(gridFiles, tabSync, 95);
-        FillGrid(gridServers, tabServers, 60);
-        FillGrid(gridAudit, tabAudit, 60);
-        FillGrid(gridUsers, tabUsers, 60);
-        FillGrid(gridTrash, tabTrash, 60);
-    }
-
-    private static void FillGrid(DataGridView grid, Control parent, int top)
-    {
-        grid.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-        int width = Math.Max(240, parent.ClientSize.Width - 30);
-        int height = Math.Max(120, parent.ClientSize.Height - top - 15);
-        grid.Location = new Point(15, top);
-        grid.Size = new Size(width, height);
     }
 
     private void UpdateNavSelection()
