@@ -913,7 +913,7 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         ((System.ComponentModel.ISupportInitialize)(this.gbAppearance)).BeginInit();
         this.gbAppearance.Location = new System.Drawing.Point(15, 15);
         this.gbAppearance.Name = "gbAppearance";
-        this.gbAppearance.Size = new System.Drawing.Size(310, 330);
+        this.gbAppearance.Size = new System.Drawing.Size(310, 200);
         this.gbAppearance.TabIndex = 0;
         this.gbAppearance.Values.Heading = "Appearance";
         this.tabSettings.Controls.Add(this.gbAppearance);
@@ -945,57 +945,16 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.radLight.CheckedChanged += new System.EventHandler(this.radLight_CheckedChanged);
         this.gbAppearance.Panel.Controls.Add(this.radLight);
 
-        this.lblSetFont = new Krypton.Toolkit.KryptonLabel();
-        this.lblSetFont.AutoSize = true;
-        this.lblSetFont.Location = new System.Drawing.Point(14, 100);
-        this.lblSetFont.Name = "lblSetFont";
-        this.lblSetFont.Text = "Interface font size";
-        this.gbAppearance.Panel.Controls.Add(this.lblSetFont);
-
-        this.trkFontSize = new Krypton.Toolkit.KryptonTrackBar();
-        this.trkFontSize.Location = new System.Drawing.Point(14, 122);
-        this.trkFontSize.Minimum = 8;
-        this.trkFontSize.Maximum = 16;
-        this.trkFontSize.Name = "trkFontSize";
-        this.trkFontSize.Size = new System.Drawing.Size(200, 45);
-        this.trkFontSize.TabIndex = 2;
-        this.trkFontSize.ValueChanged += new System.EventHandler(this.trkFontSize_ValueChanged);
-        this.gbAppearance.Panel.Controls.Add(this.trkFontSize);
-
-        this.lblFontSizeVal = new Krypton.Toolkit.KryptonLabel();
-        this.lblFontSizeVal.AutoSize = true;
-        this.lblFontSizeVal.Location = new System.Drawing.Point(222, 130);
-        this.lblFontSizeVal.Name = "lblFontSizeVal";
-        this.lblFontSizeVal.Text = "9.5";
-        this.gbAppearance.Panel.Controls.Add(this.lblFontSizeVal);
-
-        this.lblFontPreview = new Krypton.Toolkit.KryptonLabel();
-        this.lblFontPreview.AutoSize = true;
-        this.lblFontPreview.Location = new System.Drawing.Point(14, 172);
-        this.lblFontPreview.Name = "lblFontPreview";
-        this.lblFontPreview.Text = "AaBbCcDd 123";
-        this.gbAppearance.Panel.Controls.Add(this.lblFontPreview);
-
-        this.chkBold = new Krypton.Toolkit.KryptonCheckBox();
-        this.chkBold.AutoSize = true;
-        this.chkBold.Location = new System.Drawing.Point(14, 202);
-        this.chkBold.Name = "chkBold";
-        this.chkBold.Size = new System.Drawing.Size(130, 37);
-        this.chkBold.TabIndex = 3;
-        this.chkBold.Text = "Bold text";
-        this.chkBold.CheckedChanged += new System.EventHandler(this.chkBold_CheckedChanged);
-        this.gbAppearance.Panel.Controls.Add(this.chkBold);
-
         this.lblSetAccent = new Krypton.Toolkit.KryptonLabel();
         this.lblSetAccent.AutoSize = true;
-        this.lblSetAccent.Location = new System.Drawing.Point(14, 246);
+        this.lblSetAccent.Location = new System.Drawing.Point(14, 104);
         this.lblSetAccent.Name = "lblSetAccent";
         this.lblSetAccent.Text = "Accent color";
         this.gbAppearance.Panel.Controls.Add(this.lblSetAccent);
 
         this.cmbAccent = new Krypton.Toolkit.KryptonComboBox();
         this.cmbAccent.CueHint.CueHintText = "Accent";
-        this.cmbAccent.Location = new System.Drawing.Point(14, 268);
+        this.cmbAccent.Location = new System.Drawing.Point(14, 126);
         this.cmbAccent.Name = "cmbAccent";
         this.cmbAccent.Size = new System.Drawing.Size(258, 48);
         this.cmbAccent.TabIndex = 4;
@@ -1004,7 +963,7 @@ partial class MainView : Krypton.Toolkit.KryptonForm
 
         this.gbLanguage = new Krypton.Toolkit.KryptonGroupBox();
         ((System.ComponentModel.ISupportInitialize)(this.gbLanguage)).BeginInit();
-        this.gbLanguage.Location = new System.Drawing.Point(15, 355);
+        this.gbLanguage.Location = new System.Drawing.Point(15, 240);
         this.gbLanguage.Name = "gbLanguage";
         this.gbLanguage.Size = new System.Drawing.Size(310, 110);
         this.gbLanguage.TabIndex = 20;
@@ -1047,35 +1006,53 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.gbSync.Values.Heading = "Synchronization";
         this.tabSettings.Controls.Add(this.gbSync);
 
-        this.swAutoSync = new Krypton.Toolkit.KryptonToggleSwitch();
-        this.swAutoSync.AutoSize = true;
-        this.swAutoSync.Location = new System.Drawing.Point(14, 32);
-        this.swAutoSync.Name = "swAutoSync";
-        this.swAutoSync.Size = new System.Drawing.Size(200, 37);
-        this.swAutoSync.TabIndex = 11;
-        this.swAutoSync.Text = "Auto-sync on change";
-        this.swAutoSync.CheckedChanged += new System.EventHandler(this.swAutoSync_CheckedChanged);
-        this.gbSync.Panel.Controls.Add(this.swAutoSync);
+        this.lblAutoSync = new Krypton.Toolkit.KryptonLabel();
+        this.lblAutoSync.AutoSize = true;
+        this.lblAutoSync.Location = new System.Drawing.Point(14, 38);
+        this.lblAutoSync.Name = "lblAutoSync";
+        this.lblAutoSync.Text = "Auto-sync on change";
+        this.gbSync.Panel.Controls.Add(this.lblAutoSync);
 
-        this.swVerifyAfterSync = new Krypton.Toolkit.KryptonToggleSwitch();
-        this.swVerifyAfterSync.AutoSize = true;
-        this.swVerifyAfterSync.Location = new System.Drawing.Point(14, 72);
-        this.swVerifyAfterSync.Name = "swVerifyAfterSync";
-        this.swVerifyAfterSync.Size = new System.Drawing.Size(280, 37);
-        this.swVerifyAfterSync.TabIndex = 12;
-        this.swVerifyAfterSync.Text = "Verify integrity after sync";
-        this.swVerifyAfterSync.CheckedChanged += new System.EventHandler(this.swVerifyAfterSync_CheckedChanged);
-        this.gbSync.Panel.Controls.Add(this.swVerifyAfterSync);
+        this.cmbAutoSync = new Krypton.Toolkit.KryptonComboBox();
+        this.cmbAutoSync.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+        this.cmbAutoSync.Location = new System.Drawing.Point(200, 34);
+        this.cmbAutoSync.Name = "cmbAutoSync";
+        this.cmbAutoSync.Size = new System.Drawing.Size(82, 28);
+        this.cmbAutoSync.TabIndex = 11;
+        this.cmbAutoSync.SelectedIndexChanged += new System.EventHandler(this.cmbAutoSync_SelectedIndexChanged);
+        this.gbSync.Panel.Controls.Add(this.cmbAutoSync);
 
-        this.swColdStorage = new Krypton.Toolkit.KryptonToggleSwitch();
-        this.swColdStorage.AutoSize = true;
-        this.swColdStorage.Location = new System.Drawing.Point(14, 112);
-        this.swColdStorage.Name = "swColdStorage";
-        this.swColdStorage.Size = new System.Drawing.Size(260, 37);
-        this.swColdStorage.TabIndex = 13;
-        this.swColdStorage.Text = "Keep local cold copy";
-        this.swColdStorage.CheckedChanged += new System.EventHandler(this.swColdStorage_CheckedChanged);
-        this.gbSync.Panel.Controls.Add(this.swColdStorage);
+        this.lblVerifyAfterSync = new Krypton.Toolkit.KryptonLabel();
+        this.lblVerifyAfterSync.AutoSize = true;
+        this.lblVerifyAfterSync.Location = new System.Drawing.Point(14, 78);
+        this.lblVerifyAfterSync.Name = "lblVerifyAfterSync";
+        this.lblVerifyAfterSync.Text = "Verify after sync";
+        this.gbSync.Panel.Controls.Add(this.lblVerifyAfterSync);
+
+        this.cmbVerifyAfterSync = new Krypton.Toolkit.KryptonComboBox();
+        this.cmbVerifyAfterSync.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+        this.cmbVerifyAfterSync.Location = new System.Drawing.Point(200, 74);
+        this.cmbVerifyAfterSync.Name = "cmbVerifyAfterSync";
+        this.cmbVerifyAfterSync.Size = new System.Drawing.Size(82, 28);
+        this.cmbVerifyAfterSync.TabIndex = 12;
+        this.cmbVerifyAfterSync.SelectedIndexChanged += new System.EventHandler(this.cmbVerifyAfterSync_SelectedIndexChanged);
+        this.gbSync.Panel.Controls.Add(this.cmbVerifyAfterSync);
+
+        this.lblColdStorage = new Krypton.Toolkit.KryptonLabel();
+        this.lblColdStorage.AutoSize = true;
+        this.lblColdStorage.Location = new System.Drawing.Point(14, 118);
+        this.lblColdStorage.Name = "lblColdStorage";
+        this.lblColdStorage.Text = "Keep cold copy";
+        this.gbSync.Panel.Controls.Add(this.lblColdStorage);
+
+        this.cmbColdStorage = new Krypton.Toolkit.KryptonComboBox();
+        this.cmbColdStorage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+        this.cmbColdStorage.Location = new System.Drawing.Point(200, 114);
+        this.cmbColdStorage.Name = "cmbColdStorage";
+        this.cmbColdStorage.Size = new System.Drawing.Size(82, 28);
+        this.cmbColdStorage.TabIndex = 13;
+        this.cmbColdStorage.SelectedIndexChanged += new System.EventHandler(this.cmbColdStorage_SelectedIndexChanged);
+        this.gbSync.Panel.Controls.Add(this.cmbColdStorage);
 
         this.lblSetParallel = new Krypton.Toolkit.KryptonLabel();
         this.lblSetParallel.AutoSize = true;
@@ -1171,35 +1148,53 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.gbSecurity.Values.Heading = "Security and session";
         this.tabSettings.Controls.Add(this.gbSecurity);
 
-        this.swConfirmDelete = new Krypton.Toolkit.KryptonToggleSwitch();
-        this.swConfirmDelete.AutoSize = true;
-        this.swConfirmDelete.Location = new System.Drawing.Point(14, 32);
-        this.swConfirmDelete.Name = "swConfirmDelete";
-        this.swConfirmDelete.Size = new System.Drawing.Size(240, 37);
-        this.swConfirmDelete.TabIndex = 51;
-        this.swConfirmDelete.Text = "Confirm before delete";
-        this.swConfirmDelete.CheckedChanged += new System.EventHandler(this.swConfirmDelete_CheckedChanged);
-        this.gbSecurity.Panel.Controls.Add(this.swConfirmDelete);
+        this.lblConfirmDelete = new Krypton.Toolkit.KryptonLabel();
+        this.lblConfirmDelete.AutoSize = true;
+        this.lblConfirmDelete.Location = new System.Drawing.Point(14, 38);
+        this.lblConfirmDelete.Name = "lblConfirmDelete";
+        this.lblConfirmDelete.Text = "Confirm before delete";
+        this.gbSecurity.Panel.Controls.Add(this.lblConfirmDelete);
 
-        this.swMinimizeToTray = new Krypton.Toolkit.KryptonToggleSwitch();
-        this.swMinimizeToTray.AutoSize = true;
-        this.swMinimizeToTray.Location = new System.Drawing.Point(14, 74);
-        this.swMinimizeToTray.Name = "swMinimizeToTray";
-        this.swMinimizeToTray.Size = new System.Drawing.Size(240, 37);
-        this.swMinimizeToTray.TabIndex = 52;
-        this.swMinimizeToTray.Text = "Minimize to tray";
-        this.swMinimizeToTray.CheckedChanged += new System.EventHandler(this.swMinimizeToTray_CheckedChanged);
-        this.gbSecurity.Panel.Controls.Add(this.swMinimizeToTray);
+        this.cmbConfirmDelete = new Krypton.Toolkit.KryptonComboBox();
+        this.cmbConfirmDelete.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+        this.cmbConfirmDelete.Location = new System.Drawing.Point(200, 34);
+        this.cmbConfirmDelete.Name = "cmbConfirmDelete";
+        this.cmbConfirmDelete.Size = new System.Drawing.Size(82, 28);
+        this.cmbConfirmDelete.TabIndex = 51;
+        this.cmbConfirmDelete.SelectedIndexChanged += new System.EventHandler(this.cmbConfirmDelete_SelectedIndexChanged);
+        this.gbSecurity.Panel.Controls.Add(this.cmbConfirmDelete);
 
-        this.swNotifications = new Krypton.Toolkit.KryptonToggleSwitch();
-        this.swNotifications.AutoSize = true;
-        this.swNotifications.Location = new System.Drawing.Point(14, 116);
-        this.swNotifications.Name = "swNotifications";
-        this.swNotifications.Size = new System.Drawing.Size(220, 37);
-        this.swNotifications.TabIndex = 53;
-        this.swNotifications.Text = "Tray notifications";
-        this.swNotifications.CheckedChanged += new System.EventHandler(this.swNotifications_CheckedChanged);
-        this.gbSecurity.Panel.Controls.Add(this.swNotifications);
+        this.lblMinimizeToTray = new Krypton.Toolkit.KryptonLabel();
+        this.lblMinimizeToTray.AutoSize = true;
+        this.lblMinimizeToTray.Location = new System.Drawing.Point(14, 78);
+        this.lblMinimizeToTray.Name = "lblMinimizeToTray";
+        this.lblMinimizeToTray.Text = "Minimize to tray";
+        this.gbSecurity.Panel.Controls.Add(this.lblMinimizeToTray);
+
+        this.cmbMinimizeToTray = new Krypton.Toolkit.KryptonComboBox();
+        this.cmbMinimizeToTray.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+        this.cmbMinimizeToTray.Location = new System.Drawing.Point(200, 74);
+        this.cmbMinimizeToTray.Name = "cmbMinimizeToTray";
+        this.cmbMinimizeToTray.Size = new System.Drawing.Size(82, 28);
+        this.cmbMinimizeToTray.TabIndex = 52;
+        this.cmbMinimizeToTray.SelectedIndexChanged += new System.EventHandler(this.cmbMinimizeToTray_SelectedIndexChanged);
+        this.gbSecurity.Panel.Controls.Add(this.cmbMinimizeToTray);
+
+        this.lblNotifications = new Krypton.Toolkit.KryptonLabel();
+        this.lblNotifications.AutoSize = true;
+        this.lblNotifications.Location = new System.Drawing.Point(14, 118);
+        this.lblNotifications.Name = "lblNotifications";
+        this.lblNotifications.Text = "Tray notifications";
+        this.gbSecurity.Panel.Controls.Add(this.lblNotifications);
+
+        this.cmbNotifications = new Krypton.Toolkit.KryptonComboBox();
+        this.cmbNotifications.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+        this.cmbNotifications.Location = new System.Drawing.Point(200, 114);
+        this.cmbNotifications.Name = "cmbNotifications";
+        this.cmbNotifications.Size = new System.Drawing.Size(82, 28);
+        this.cmbNotifications.TabIndex = 53;
+        this.cmbNotifications.SelectedIndexChanged += new System.EventHandler(this.cmbNotifications_SelectedIndexChanged);
+        this.gbSecurity.Panel.Controls.Add(this.cmbNotifications);
 
         this.lblSetIdle = new Krypton.Toolkit.KryptonLabel();
         this.lblSetIdle.AutoSize = true;
@@ -1226,25 +1221,37 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.gbSystem.Values.Heading = "System";
         this.tabSettings.Controls.Add(this.gbSystem);
 
-        this.swStartWithWindows = new Krypton.Toolkit.KryptonToggleSwitch();
-        this.swStartWithWindows.AutoSize = true;
-        this.swStartWithWindows.Location = new System.Drawing.Point(14, 32);
-        this.swStartWithWindows.Name = "swStartWithWindows";
-        this.swStartWithWindows.Size = new System.Drawing.Size(240, 37);
-        this.swStartWithWindows.TabIndex = 61;
-        this.swStartWithWindows.Text = "Start with Windows";
-        this.swStartWithWindows.CheckedChanged += new System.EventHandler(this.swStartWithWindows_CheckedChanged);
-        this.gbSystem.Panel.Controls.Add(this.swStartWithWindows);
+        this.lblStartWithWindows = new Krypton.Toolkit.KryptonLabel();
+        this.lblStartWithWindows.AutoSize = true;
+        this.lblStartWithWindows.Location = new System.Drawing.Point(14, 38);
+        this.lblStartWithWindows.Name = "lblStartWithWindows";
+        this.lblStartWithWindows.Text = "Start with Windows";
+        this.gbSystem.Panel.Controls.Add(this.lblStartWithWindows);
 
-        this.swAnimations = new Krypton.Toolkit.KryptonToggleSwitch();
-        this.swAnimations.AutoSize = true;
-        this.swAnimations.Location = new System.Drawing.Point(14, 74);
-        this.swAnimations.Name = "swAnimations";
-        this.swAnimations.Size = new System.Drawing.Size(200, 37);
-        this.swAnimations.TabIndex = 62;
-        this.swAnimations.Text = "Animations";
-        this.swAnimations.CheckedChanged += new System.EventHandler(this.swAnimations_CheckedChanged);
-        this.gbSystem.Panel.Controls.Add(this.swAnimations);
+        this.cmbStartWithWindows = new Krypton.Toolkit.KryptonComboBox();
+        this.cmbStartWithWindows.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+        this.cmbStartWithWindows.Location = new System.Drawing.Point(200, 34);
+        this.cmbStartWithWindows.Name = "cmbStartWithWindows";
+        this.cmbStartWithWindows.Size = new System.Drawing.Size(82, 28);
+        this.cmbStartWithWindows.TabIndex = 61;
+        this.cmbStartWithWindows.SelectedIndexChanged += new System.EventHandler(this.cmbStartWithWindows_SelectedIndexChanged);
+        this.gbSystem.Panel.Controls.Add(this.cmbStartWithWindows);
+
+        this.lblAnimations = new Krypton.Toolkit.KryptonLabel();
+        this.lblAnimations.AutoSize = true;
+        this.lblAnimations.Location = new System.Drawing.Point(14, 78);
+        this.lblAnimations.Name = "lblAnimations";
+        this.lblAnimations.Text = "Animations";
+        this.gbSystem.Panel.Controls.Add(this.lblAnimations);
+
+        this.cmbAnimations = new Krypton.Toolkit.KryptonComboBox();
+        this.cmbAnimations.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+        this.cmbAnimations.Location = new System.Drawing.Point(200, 74);
+        this.cmbAnimations.Name = "cmbAnimations";
+        this.cmbAnimations.Size = new System.Drawing.Size(82, 28);
+        this.cmbAnimations.TabIndex = 62;
+        this.cmbAnimations.SelectedIndexChanged += new System.EventHandler(this.cmbAnimations_SelectedIndexChanged);
+        this.gbSystem.Panel.Controls.Add(this.cmbAnimations);
 
         this.lblSetCompression = new Krypton.Toolkit.KryptonLabel();
         this.lblSetCompression.AutoSize = true;
@@ -1315,8 +1322,8 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.toolTip.SetToolTip(this.btnDashExplorer, "Browse server files with hashes and metadata");
         this.toolTip.SetToolTip(this.btnDashShortcuts, "Show all keyboard shortcuts");
         this.toolTip.SetToolTip(this.gridDashAudit, "Latest actions performed in the application");
-        this.toolTip.SetToolTip(this.swStartWithWindows, "Launch DataSyncEngine automatically at sign-in");
-        this.toolTip.SetToolTip(this.swVerifyAfterSync, "Re-open each stored vault payload and compare it with the source file");
+        this.toolTip.SetToolTip(this.cmbStartWithWindows, "Launch DataSyncEngine automatically at sign-in");
+        this.toolTip.SetToolTip(this.cmbVerifyAfterSync, "Re-open each stored vault payload and compare it with the source file");
         this.toolTip.SetToolTip(this.cmbCompression, "Compression applied before sealing new uploads");
         this.toolTip.SetToolTip(this.cmbParallel, "Number of files uploaded at the same time");
         this.toolTip.SetToolTip(this.cmbMaxSize, "Files above this size are skipped during scan");
@@ -1326,16 +1333,15 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.toolTip.SetToolTip(this.cmbLanguage, "Switches the interface between English and Portuguese");
         this.toolTip.SetToolTip(this.btnSetBackupFolder, "Folder used by the scheduled automatic backup");
         this.toolTip.SetToolTip(this.btnDashDocs, "Open the step-by-step user guide");
-        this.toolTip.SetToolTip(this.swAutoSync, "Uploads a file automatically as soon as it changes on disk");
-        this.toolTip.SetToolTip(this.swColdStorage, "Keeps a local decrypted copy so backups and previews are instant");
-        this.toolTip.SetToolTip(this.swConfirmDelete, "Ask for confirmation before deleting or purging files");
-        this.toolTip.SetToolTip(this.swMinimizeToTray, "Closing the window keeps the application running in the tray");
-        this.toolTip.SetToolTip(this.swNotifications, "Show tray balloon tips for sync and backup events");
-        this.toolTip.SetToolTip(this.swAnimations, "Animated progress and toast transitions");
+        this.toolTip.SetToolTip(this.cmbAutoSync, "Uploads a file automatically as soon as it changes on disk");
+        this.toolTip.SetToolTip(this.cmbColdStorage, "Keeps a local decrypted copy so backups and previews are instant");
+        this.toolTip.SetToolTip(this.cmbConfirmDelete, "Ask for confirmation before deleting or purging files");
+        this.toolTip.SetToolTip(this.cmbMinimizeToTray, "Closing the window keeps the application running in the tray");
+        this.toolTip.SetToolTip(this.cmbNotifications, "Show tray balloon tips for sync and backup events");
+        this.toolTip.SetToolTip(this.cmbAnimations, "Animated progress and toast transitions");
         this.toolTip.SetToolTip(this.cmbIdle, "Locks the session after this idle period (0 = never)");
         this.toolTip.SetToolTip(this.cmbAutoBackup, "Runs an automatic backup every N hours (0 = off)");
         this.toolTip.SetToolTip(this.txtExclude, "File masks ignored by scans, separated by ;");
-        this.toolTip.SetToolTip(this.trkFontSize, "Changes the font size of the whole application");
         this.toolTip.SetToolTip(this.cmbAccent, "Highlight color used by buttons and selections");
         this.toolTip.SetToolTip(this.radDark, "GitHub-inspired dark theme");
         this.toolTip.SetToolTip(this.radLight, "Bright theme for well-lit environments");
@@ -1490,19 +1496,20 @@ partial class MainView : Krypton.Toolkit.KryptonForm
     private Krypton.Toolkit.KryptonLabel lblSetTheme;
     private Krypton.Toolkit.KryptonRadioButton radDark;
     private Krypton.Toolkit.KryptonRadioButton radLight;
-    private Krypton.Toolkit.KryptonLabel lblSetFont;
-    private Krypton.Toolkit.KryptonTrackBar trkFontSize;
-    private Krypton.Toolkit.KryptonLabel lblFontSizeVal;
-    private Krypton.Toolkit.KryptonLabel lblFontPreview;
-    private Krypton.Toolkit.KryptonCheckBox chkBold;
     private Krypton.Toolkit.KryptonLabel lblSetAccent;
     private Krypton.Toolkit.KryptonComboBox cmbAccent;
-    private Krypton.Toolkit.KryptonToggleSwitch swAnimations;
-    private Krypton.Toolkit.KryptonToggleSwitch swConfirmDelete;
-    private Krypton.Toolkit.KryptonToggleSwitch swNotifications;
-    private Krypton.Toolkit.KryptonToggleSwitch swColdStorage;
-    private Krypton.Toolkit.KryptonToggleSwitch swMinimizeToTray;
-    private Krypton.Toolkit.KryptonToggleSwitch swAutoSync;
+    private Krypton.Toolkit.KryptonLabel lblAnimations;
+    private Krypton.Toolkit.KryptonComboBox cmbAnimations;
+    private Krypton.Toolkit.KryptonLabel lblConfirmDelete;
+    private Krypton.Toolkit.KryptonComboBox cmbConfirmDelete;
+    private Krypton.Toolkit.KryptonLabel lblNotifications;
+    private Krypton.Toolkit.KryptonComboBox cmbNotifications;
+    private Krypton.Toolkit.KryptonLabel lblColdStorage;
+    private Krypton.Toolkit.KryptonComboBox cmbColdStorage;
+    private Krypton.Toolkit.KryptonLabel lblMinimizeToTray;
+    private Krypton.Toolkit.KryptonComboBox cmbMinimizeToTray;
+    private Krypton.Toolkit.KryptonLabel lblAutoSync;
+    private Krypton.Toolkit.KryptonComboBox cmbAutoSync;
     private Krypton.Toolkit.KryptonLabel lblExcludeCap;
     private Krypton.Toolkit.KryptonTextBox txtExclude;
     private Krypton.Toolkit.KryptonLabel lblSetIdle;
@@ -1532,12 +1539,14 @@ partial class MainView : Krypton.Toolkit.KryptonForm
     private Krypton.Toolkit.KryptonButton btnDashShortcuts;
     private Krypton.Toolkit.KryptonButton btnDashDocs;
     private Krypton.Toolkit.KryptonLabel lblDashHint;
-    private Krypton.Toolkit.KryptonToggleSwitch swStartWithWindows;
+    private Krypton.Toolkit.KryptonLabel lblStartWithWindows;
+    private Krypton.Toolkit.KryptonComboBox cmbStartWithWindows;
     private Krypton.Toolkit.KryptonLabel lblSetCompression;
     private Krypton.Toolkit.KryptonComboBox cmbCompression;
     private Krypton.Toolkit.KryptonLabel lblSetParallel;
     private Krypton.Toolkit.KryptonComboBox cmbParallel;
-    private Krypton.Toolkit.KryptonToggleSwitch swVerifyAfterSync;
+    private Krypton.Toolkit.KryptonLabel lblVerifyAfterSync;
+    private Krypton.Toolkit.KryptonComboBox cmbVerifyAfterSync;
     private Krypton.Toolkit.KryptonLabel lblSetMaxSize;
     private Krypton.Toolkit.KryptonComboBox cmbMaxSize;
     private Krypton.Toolkit.KryptonLabel lblSetRetention;

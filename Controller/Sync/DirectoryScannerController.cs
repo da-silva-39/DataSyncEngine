@@ -23,6 +23,16 @@ public class DirectoryScannerController
         _fileRepository = fileRepository;
     }
 
+    public static bool IsColdStoragePath(string path)
+    {
+        string cold = Core.Config.AppConstants.ColdStorageFolderName;
+        foreach (string segment in path.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar))
+        {
+            if (segment.Equals(cold, StringComparison.OrdinalIgnoreCase)) return true;
+        }
+        return false;
+    }
+
     public static bool IsExcluded(string fileName, string? patterns)
     {
         if (string.IsNullOrWhiteSpace(patterns)) return false;
@@ -72,10 +82,14 @@ public class DirectoryScannerController
             {
                 continue;
             }
-            foreach (string sub in subdirs) pending.Push(sub);
+            foreach (string sub in subdirs)
+            {
+                if (!IsColdStoragePath(sub)) pending.Push(sub);
+            }
             foreach (string path in files)
             {
                 cancellationToken.ThrowIfCancellationRequested();
+                if (IsColdStoragePath(path)) continue;
                 if (IsExcluded(path, ExcludePatternsProvider?.Invoke())) continue;
                 int maxSizeMb = MaxFileSizeMbProvider?.Invoke() ?? 0;
                 string hash;
@@ -102,6 +116,7 @@ public class DirectoryScannerController
 
             results.Add(new FileModel
             {
+                Id = existing?.Id ?? 0,
                 FileName = Path.GetFileName(path),
                 FilePath = path,
                 SizeBytes = size,

@@ -95,6 +95,7 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
     {
         if (_busy) return;
         if (!File.Exists(path)) return;
+        if (Controller.Sync.DirectoryScannerController.IsColdStoragePath(path)) return;
         if (Controller.Sync.DirectoryScannerController.IsExcluded(path, AppServices.Settings.ExcludePatterns)) return;
         int maxMb = AppServices.Settings.MaxFileSizeMb;
         if (maxMb > 0 && new FileInfo(path).Length > maxMb * 1024L * 1024L) return;
@@ -496,14 +497,14 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         btnDocs.ToolTipText = LocalizationModule.Tip("btnDocs");
         btnTheme.ToolTipText = LocalizationModule.Tip("btnTheme");
         btnNotifications.ToolTipText = LocalizationModule.Tip("btnNotifications");
-        toolTip.SetToolTip(swAutoSync, LocalizationModule.Tip("swAutoSync"));
-        toolTip.SetToolTip(swColdStorage, LocalizationModule.Tip("swColdStorage"));
-        toolTip.SetToolTip(swVerifyAfterSync, LocalizationModule.Tip("swVerifyAfterSync"));
-        toolTip.SetToolTip(swStartWithWindows, LocalizationModule.Tip("swStartWithWindows"));
-        toolTip.SetToolTip(swConfirmDelete, LocalizationModule.Tip("swConfirmDelete"));
-        toolTip.SetToolTip(swMinimizeToTray, LocalizationModule.Tip("swMinimizeToTray"));
-        toolTip.SetToolTip(swNotifications, LocalizationModule.Tip("swNotifications"));
-        toolTip.SetToolTip(swAnimations, LocalizationModule.Tip("swAnimations"));
+        toolTip.SetToolTip(cmbAutoSync, LocalizationModule.Tip("cmbAutoSync"));
+        toolTip.SetToolTip(cmbColdStorage, LocalizationModule.Tip("cmbColdStorage"));
+        toolTip.SetToolTip(cmbVerifyAfterSync, LocalizationModule.Tip("cmbVerifyAfterSync"));
+        toolTip.SetToolTip(cmbStartWithWindows, LocalizationModule.Tip("cmbStartWithWindows"));
+        toolTip.SetToolTip(cmbConfirmDelete, LocalizationModule.Tip("cmbConfirmDelete"));
+        toolTip.SetToolTip(cmbMinimizeToTray, LocalizationModule.Tip("cmbMinimizeToTray"));
+        toolTip.SetToolTip(cmbNotifications, LocalizationModule.Tip("cmbNotifications"));
+        toolTip.SetToolTip(cmbAnimations, LocalizationModule.Tip("cmbAnimations"));
         toolTip.SetToolTip(cmbIdle, LocalizationModule.Tip("cmbIdle"));
         toolTip.SetToolTip(cmbAutoBackup, LocalizationModule.Tip("cmbAutoBackup"));
         toolTip.SetToolTip(btnSetBackupFolder, LocalizationModule.Tip("btnSetBackupFolder"));
@@ -513,7 +514,6 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         toolTip.SetToolTip(cmbParallel, LocalizationModule.Tip("cmbParallel"));
         toolTip.SetToolTip(cmbMaxSize, LocalizationModule.Tip("cmbMaxSize"));
         toolTip.SetToolTip(cmbRetention, LocalizationModule.Tip("cmbRetention"));
-        toolTip.SetToolTip(trkFontSize, LocalizationModule.Tip("trkFontSize"));
         toolTip.SetToolTip(cmbAccent, LocalizationModule.Tip("cmbAccent"));
         toolTip.SetToolTip(radDark, LocalizationModule.Tip("radDark"));
         toolTip.SetToolTip(radLight, LocalizationModule.Tip("radLight"));
@@ -773,69 +773,69 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         KryptonThemeModule.SetTheme(false);
     }
 
-    private void trkFontSize_ValueChanged(object? sender, EventArgs e)
-    {
-        lblFontSizeVal.Text = trkFontSize.Value.ToString("0.0");
-        UpdateFontPreview();
-        AppServices.Settings.FontSize = trkFontSize.Value;
-        AppServices.SaveSettings();
-        KryptonThemeModule.ApplyFontToOpenForms(AppServices.Settings.FontSize, AppServices.Settings.FontBold);
-    }
-
-    private void chkBold_CheckedChanged(object? sender, EventArgs e)
-    {
-        UpdateFontPreview();
-        AppServices.Settings.FontBold = chkBold.Checked;
-        AppServices.SaveSettings();
-        KryptonThemeModule.ApplyFontToOpenForms(AppServices.Settings.FontSize, AppServices.Settings.FontBold);
-    }
-
     private void cmbAccent_SelectedIndexChanged(object? sender, EventArgs e)
     {
-        if (cmbAccent.SelectedItem is not string name) return;
+        if (_settingsLoading || cmbAccent.SelectedItem is not string name) return;
         AppServices.Settings.Accent = name;
         AppServices.SaveSettings();
         KryptonThemeModule.SetAccent(name);
     }
 
-    private void swAnimations_CheckedChanged(object? sender, EventArgs e)
+    private void cmbAnimations_SelectedIndexChanged(object? sender, EventArgs e)
     {
-        AppServices.Settings.Animations = swAnimations.Checked;
+        if (_settingsLoading) return;
+        AppServices.Settings.Animations = IsOn(cmbAnimations);
         AppServices.SaveSettings();
     }
 
-    private void swConfirmDelete_CheckedChanged(object? sender, EventArgs e)
+    private void cmbConfirmDelete_SelectedIndexChanged(object? sender, EventArgs e)
     {
-        AppServices.Settings.ConfirmDelete = swConfirmDelete.Checked;
+        if (_settingsLoading) return;
+        AppServices.Settings.ConfirmDelete = IsOn(cmbConfirmDelete);
         AppServices.SaveSettings();
     }
 
-    private void swNotifications_CheckedChanged(object? sender, EventArgs e)
+    private void cmbNotifications_SelectedIndexChanged(object? sender, EventArgs e)
     {
-        AppServices.Settings.Notifications = swNotifications.Checked;
+        if (_settingsLoading) return;
+        AppServices.Settings.Notifications = IsOn(cmbNotifications);
         AppServices.SaveSettings();
     }
 
-    private void swColdStorage_CheckedChanged(object? sender, EventArgs e)
+    private void cmbColdStorage_SelectedIndexChanged(object? sender, EventArgs e)
     {
-        AppServices.Settings.KeepColdStorage = swColdStorage.Checked;
+        if (_settingsLoading) return;
+        AppServices.Settings.KeepColdStorage = IsOn(cmbColdStorage);
         AppServices.SaveSettings();
-        AppServices.SyncEngine.KeepColdStorage = swColdStorage.Checked;
+        AppServices.SyncEngine.KeepColdStorage = AppServices.Settings.KeepColdStorage;
     }
 
-    private void swMinimizeToTray_CheckedChanged(object? sender, EventArgs e)
+    private void cmbMinimizeToTray_SelectedIndexChanged(object? sender, EventArgs e)
     {
-        AppServices.Settings.MinimizeToTray = swMinimizeToTray.Checked;
+        if (_settingsLoading) return;
+        AppServices.Settings.MinimizeToTray = IsOn(cmbMinimizeToTray);
         AppServices.SaveSettings();
     }
 
-    private void swAutoSync_CheckedChanged(object? sender, EventArgs e)
+    private void cmbAutoSync_SelectedIndexChanged(object? sender, EventArgs e)
     {
-        AppServices.Settings.AutoSync = swAutoSync.Checked;
+        if (_settingsLoading) return;
+        bool on = IsOn(cmbAutoSync);
+        if (on == AppServices.Settings.AutoSync) return;
+        AppServices.Settings.AutoSync = on;
         AppServices.SaveSettings();
         EnsureWatcher();
-        ToastForm.ShowToast(this, LocalizationModule.T(swAutoSync.Checked ? "MainView/autoSyncOn" : "MainView/autoSyncOff"), ToastKind.Info);
+        ToastForm.ShowToast(this, LocalizationModule.T(on ? "MainView/autoSyncOn" : "MainView/autoSyncOff"), ToastKind.Info);
     }
+
+    private static void SetToggle(Krypton.Toolkit.KryptonComboBox combo, bool value)
+    {
+        if (combo.Items.Count == 0) combo.Items.AddRange(new object[] { "On", "Off" });
+        combo.SelectedItem = value ? "On" : "Off";
+    }
+
+    private static bool IsOn(Krypton.Toolkit.KryptonComboBox combo)
+        => combo.SelectedItem is string value && value == "On";
 
     private void txtExclude_Leave(object? sender, EventArgs e)
     {
@@ -849,8 +849,6 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         var s = AppServices.Settings;
         s.ThemeDark = true;
         s.Accent = "Blue";
-        s.FontSize = 9.5f;
-        s.FontBold = false;
         s.Animations = true;
         s.ConfirmDelete = true;
         s.Notifications = true;
@@ -874,7 +872,6 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         Controller.System.AutoStartController.SetEnabled(false);
         AppServices.ApplyRuntimeSettings();
         LoadSettingsIntoControls();
-        KryptonThemeModule.ApplyFontToOpenForms(s.FontSize, s.FontBold);
         ToastForm.ShowToast(this, LocalizationModule.T("MainView/settingsReset"), ToastKind.Info);
     }
 
@@ -1449,22 +1446,18 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
             var s = AppServices.Settings;
             radDark.Checked = s.ThemeDark;
             radLight.Checked = !s.ThemeDark;
-            trkFontSize.Value = Math.Clamp((int)Math.Round(s.FontSize), trkFontSize.Minimum, trkFontSize.Maximum);
-            lblFontSizeVal.Text = s.FontSize.ToString("0.0");
-            chkBold.Checked = s.FontBold;
-            UpdateFontPreview();
             if (cmbAccent.Items.Count == 0)
                 cmbAccent.Items.AddRange(new object[] { "Blue", "Green", "Red", "Purple" });
             cmbAccent.SelectedItem = s.Accent;
             if (cmbLanguage.Items.Count == 0) cmbLanguage.Items.AddRange(LocalizationModule.Languages);
             cmbLanguage.SelectedItem = LocalizationModule.Languages.Contains(s.Language) ? s.Language : LocalizationModule.Languages[0];
-            swAnimations.Checked = s.Animations;
-            swConfirmDelete.Checked = s.ConfirmDelete;
-            swNotifications.Checked = s.Notifications;
-            swColdStorage.Checked = s.KeepColdStorage;
-            swMinimizeToTray.Checked = s.MinimizeToTray;
-            swAutoSync.Checked = s.AutoSync;
-            swStartWithWindows.Checked = s.StartWithWindows;
+            SetToggle(cmbAnimations, s.Animations);
+            SetToggle(cmbConfirmDelete, s.ConfirmDelete);
+            SetToggle(cmbNotifications, s.Notifications);
+            SetToggle(cmbColdStorage, s.KeepColdStorage);
+            SetToggle(cmbMinimizeToTray, s.MinimizeToTray);
+            SetToggle(cmbAutoSync, s.AutoSync);
+            SetToggle(cmbStartWithWindows, s.StartWithWindows);
             txtExclude.Text = s.ExcludePatterns;
             if (cmbIdle.Items.Count == 0) cmbIdle.Items.AddRange(new object[] { "0", "5", "15", "30", "60" });
             string idleValue = s.IdleLogoutMinutes.ToString();
@@ -1480,7 +1473,7 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
             string parallelValue = s.MaxParallelSync.ToString();
             if (!cmbParallel.Items.Contains(parallelValue)) cmbParallel.Items.Add(parallelValue);
             cmbParallel.SelectedItem = parallelValue;
-            swVerifyAfterSync.Checked = s.VerifyAfterSync;
+            SetToggle(cmbVerifyAfterSync, s.VerifyAfterSync);
             if (cmbMaxSize.Items.Count == 0) cmbMaxSize.Items.AddRange(new object[] { "0", "10", "50", "100", "500" });
             string maxValue = s.MaxFileSizeMb.ToString();
             if (!cmbMaxSize.Items.Contains(maxValue)) cmbMaxSize.Items.Add(maxValue);
@@ -1497,14 +1490,16 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         }
     }
 
-    private void swStartWithWindows_CheckedChanged(object? sender, EventArgs e)
+    private void cmbStartWithWindows_SelectedIndexChanged(object? sender, EventArgs e)
     {
         if (_settingsLoading) return;
-        AppServices.Settings.StartWithWindows = swStartWithWindows.Checked;
+        bool on = IsOn(cmbStartWithWindows);
+        if (on == AppServices.Settings.StartWithWindows) return;
+        AppServices.Settings.StartWithWindows = on;
         AppServices.SaveSettings();
-        bool ok = Controller.System.AutoStartController.SetEnabled(swStartWithWindows.Checked);
+        bool ok = Controller.System.AutoStartController.SetEnabled(on);
         ToastForm.ShowToast(this, ok
-            ? LocalizationModule.T(swStartWithWindows.Checked ? "MainView/startWithWinOn" : "MainView/startWithWinOff")
+            ? LocalizationModule.T(on ? "MainView/startWithWinOn" : "MainView/startWithWinOff")
             : LocalizationModule.T("MainView/startWithWinFail"), ok ? ToastKind.Info : ToastKind.Warning);
     }
 
@@ -1530,13 +1525,15 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
             : string.Format(LocalizationModule.T("MainView/parallelSet"), value), ToastKind.Info);
     }
 
-    private void swVerifyAfterSync_CheckedChanged(object? sender, EventArgs e)
+    private void cmbVerifyAfterSync_SelectedIndexChanged(object? sender, EventArgs e)
     {
         if (_settingsLoading) return;
-        AppServices.Settings.VerifyAfterSync = swVerifyAfterSync.Checked;
+        bool on = IsOn(cmbVerifyAfterSync);
+        if (on == AppServices.Settings.VerifyAfterSync) return;
+        AppServices.Settings.VerifyAfterSync = on;
         AppServices.SaveSettings();
         AppServices.ApplyRuntimeSettings();
-        ToastForm.ShowToast(this, LocalizationModule.T(swVerifyAfterSync.Checked ? "MainView/verifyOn" : "MainView/verifyOff"), ToastKind.Info);
+        ToastForm.ShowToast(this, LocalizationModule.T(on ? "MainView/verifyOn" : "MainView/verifyOff"), ToastKind.Info);
     }
 
     private void cmbMaxSize_SelectedIndexChanged(object? sender, EventArgs e)
@@ -1649,17 +1646,6 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         ToastForm.ShowToast(this, hours == 0
             ? LocalizationModule.T("MainView/autoBackupOff")
             : string.Format(LocalizationModule.T("MainView/autoBackupSet"), hours), ToastKind.Info);
-    }
-
-    private void UpdateFontPreview()
-    {
-        try
-        {
-            lblFontPreview.Font = new Font("Segoe UI", trkFontSize.Value, chkBold.Checked ? FontStyle.Bold : FontStyle.Regular);
-        }
-        catch
-        {
-        }
     }
 
     private async Task RefreshTrashAsync()

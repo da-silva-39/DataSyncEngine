@@ -83,11 +83,11 @@ DataSyncEngine — Guia de utilizador
 10. DEFINIÇÕES
     Aparência
       - Tema escuro (GitHub-inspired) ou claro.
-      - Tamanho da letra de toda a aplicação (10–20 pt) e negrito opcional.
       - Cor de destaque usada nos botões e seleções.
     Idioma
       - Português ou English; a mudança é imediata, sem reiniciar.
     Sincronização
+      - As opções On/Off são uma lista pequena: escolha On para ligar.
       - Auto-sync ao alterar um ficheiro.
       - Verificar integridade depois de sincronizar.
       - Manter cópia local (cold copy).
@@ -180,11 +180,11 @@ DataSyncEngine — User guide
 10. SETTINGS
     Appearance
       - Dark (GitHub-inspired) or light theme.
-      - Font size for the whole application (10–20 pt) and optional bold.
       - Accent colour used by buttons and selections.
     Language
       - Portuguese or English; the change is immediate, no restart needed.
     Synchronization
+      - On/Off options are a small dropdown: pick On to enable.
       - Auto-sync when a file changes.
       - Verify integrity after syncing.
       - Keep local cold copy.

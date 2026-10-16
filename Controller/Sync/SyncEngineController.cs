@@ -78,6 +78,7 @@ public class SyncEngineController
             string passphrase = _passphraseProvider();
             byte[] sealedPayload = _vault.Seal(content, passphrase);
             int id = await _fileRepository.InsertWithBlobAsync(file, sealedPayload, cancellationToken);
+            file.Id = id;
 
             if (VerifyAfterSync)
             {
@@ -180,6 +181,7 @@ public class SyncEngineController
 
     private static async Task SaveColdStorageAsync(FileModel file, byte[] payload, CancellationToken cancellationToken)
     {
+        if (DirectoryScannerController.IsColdStoragePath(file.FilePath)) return;
         string folder = Path.Combine(Path.GetDirectoryName(file.FilePath) ?? Path.GetTempPath(), Core.Config.AppConstants.ColdStorageFolderName);
         Directory.CreateDirectory(folder);
         string dest = Path.Combine(folder, Path.GetFileName(file.FilePath) + ".dsc");

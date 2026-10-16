@@ -60,6 +60,7 @@ public class DirectoryWatchController : IDisposable
     private void Enqueue(string path)
     {
         if (string.IsNullOrWhiteSpace(path)) return;
+        if (DirectoryScannerController.IsColdStoragePath(path)) return;
         lock (_sync)
         {
             _pending.Add(path);
