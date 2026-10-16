@@ -33,6 +33,10 @@ public class AppSettings
     public bool StartWithWindows { get; set; } = false;
     public int AuditRetentionDays { get; set; } = 0;
 
+    /// <summary>UI language, either "English" or "Português". First run follows
+    /// the Windows display language.</summary>
+    public string Language { get; set; } = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "pt" ? "Português" : "English";
+
     private static readonly string FilePath = Path.Combine(AppContext.BaseDirectory, "appsettings.json");
 
     public static AppSettings Load()

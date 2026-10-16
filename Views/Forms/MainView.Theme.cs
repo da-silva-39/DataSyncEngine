@@ -60,8 +60,41 @@ public partial class MainView
 
         BackColor = DarkThemeModule.CanvasColor;
 
+        ApplyButtonSemantics();
         UpdateNavSelection();
     }
+
+    private void ApplyButtonSemantics()
+    {
+        bool dark = DarkThemeModule.IsDark;
+        Color success = ColorTranslator.FromHtml(dark ? "#238636" : "#1F883D");
+        Color info = ColorTranslator.FromHtml(dark ? "#1F6FEB" : "#0969DA");
+        Color danger = ColorTranslator.FromHtml(dark ? "#DA3633" : "#CF222E");
+        Color warning = ColorTranslator.FromHtml(dark ? "#9E6A03" : "#BF8700");
+
+        StyleAction(btnSync, success, dark);
+        StyleAction(btnDashSync, success, dark);
+        StyleAction(btnBackupNow, success, dark);
+        StyleAction(btnDashBackup, success, dark);
+
+        StyleAction(btnSelectFolder, info, dark);
+        StyleAction(btnDashScan, info, dark);
+        StyleAction(btnResume, info, dark);
+        StyleAction(btnExplorer, info, dark);
+        StyleAction(btnDashExplorer, info, dark);
+        StyleAction(btnDashShortcuts, info, dark);
+        StyleAction(btnDashDocs, info, dark);
+
+        StyleAction(btnDelete, danger, dark);
+        StyleAction(btnPurge, danger, dark);
+        StyleAction(btnDeleteServer, danger, dark);
+        StyleAction(btnDeleteUser, danger, dark);
+
+        StyleAction(btnResetSettings, warning, dark);
+    }
+
+    private static void StyleAction(KryptonButton button, Color color, bool dark)
+        => GitHubThemeModule.StyleAction(button, color, Color.White, dark ? ControlPaint.Light(color, 0.18f) : ControlPaint.Dark(color, 0.08f));
 
     private void UpdateNavSelection()
     {
@@ -76,14 +109,16 @@ public partial class MainView
         GitHubThemeModule.StyleNav(navUsers, tab == tabUsers);
         GitHubThemeModule.StyleNav(navSettings, tab == tabSettings);
 
-        (lblPageTitle.Text, lblPageSub.Text) = tab == tabDashboard ? ("Dashboard", "Synchronization workspace overview")
-            : tab == tabSync ? ("Sync", "Scan a local folder and upload changed files")
-            : tab == tabBackup ? ("Backup", "Export decrypted files from the server")
-            : tab == tabTrash ? ("Trash", "Restore or permanently remove deleted files")
-            : tab == tabServers ? ("Servers", "Manage database connections")
-            : tab == tabAudit ? ("Audit log", "Traceability of every user action")
-            : tab == tabAnalytics ? ("Analytics", "Aggregated synchronization metrics")
-            : tab == tabUsers ? ("Users", "Accounts and access control")
-            : ("Settings", "Appearance, behaviour and automation");
+        (lblPageTitle.Text, lblPageSub.Text) = tab == tabDashboard ? (T("pageDashboard"), T("subDashboard"))
+            : tab == tabSync ? (T("pageSync"), T("subSync"))
+            : tab == tabBackup ? (T("pageBackup"), T("subBackup"))
+            : tab == tabTrash ? (T("pageTrash"), T("subTrash"))
+            : tab == tabServers ? (T("pageServers"), T("subServers"))
+            : tab == tabAudit ? (T("pageAudit"), T("subAudit"))
+            : tab == tabAnalytics ? (T("pageAnalytics"), T("subAnalytics"))
+            : tab == tabUsers ? (T("pageUsers"), T("subUsers"))
+            : (T("pageSettings"), T("subSettings"));
     }
+
+    private static string T(string control) => LocalizationModule.T("MainView/" + control);
 }

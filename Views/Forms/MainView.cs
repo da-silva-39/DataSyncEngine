@@ -30,18 +30,18 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
             return;
         }
         var items = NotificationCenter.Items;
-        btnNotifications.Text = $"Notifications ({items.Count})";
+        btnNotifications.Text = string.Format(LocalizationModule.T("MainView/btnNotificationsCount"), items.Count);
         var dropDown = btnNotifications.DropDownItems;
         dropDown.Clear();
         if (items.Count == 0)
         {
-            dropDown.Add(new ToolStripLabel("No notifications yet") { Enabled = false });
+            dropDown.Add(new ToolStripLabel(LocalizationModule.T("MainView/noNotifications")) { Enabled = false });
             return;
         }
         foreach (var item in items.Take(10))
             dropDown.Add(new ToolStripLabel($"{item.At:HH:mm}  {TruncateText(item.Message, 72)}") { Enabled = false });
         dropDown.Add(new ToolStripSeparator());
-        dropDown.Add(new ToolStripMenuItem("Clear all", null, (_, _) => NotificationCenter.Clear()));
+        dropDown.Add(new ToolStripMenuItem(LocalizationModule.T("MainView/clearAll"), null, (_, _) => NotificationCenter.Clear()));
     }
 
     private static string TruncateText(string text, int max)
@@ -307,6 +307,11 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
             e.Handled = true;
             OpenShortcuts();
         }
+        else if (e.Control && e.KeyCode == Keys.H)
+        {
+            e.Handled = true;
+            OpenDocs();
+        }
     }
 
     protected override void OnFormClosing(FormClosingEventArgs e)
@@ -361,6 +366,8 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         LoadSettingsIntoControls();
         WireEvents();
         WireShell();
+        LocalizationModule.LanguageChanged += OnLanguageChanged;
+        ApplyLocalization();
         UpdateServerInfo();
         AppServices.HotSwap.ServerChanged += _ => UpdateServerInfo();
         _animTimer.Tick += AnimTimer_Tick;
@@ -448,9 +455,87 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         _maintenanceTimer.Stop();
         _maintenanceTimer.Dispose();
         NotificationCenter.Changed -= RebuildNotifications;
+        LocalizationModule.LanguageChanged -= OnLanguageChanged;
         if (_activityFilter != null) Application.RemoveMessageFilter(_activityFilter);
         UnwireShell();
         base.OnFormClosed(e);
+    }
+
+    private void OnLanguageChanged()
+    {
+        ApplyLocalization();
+        RebuildNotifications();
+        UpdateNavSelection();
+        RefreshDynamicLabels();
+    }
+
+    /// <summary>Translates every tooltip and the labels whose text is produced
+    /// at runtime (counters, backup info, notification menu). Called on start
+    /// and whenever the language changes.</summary>
+    private void ApplyLocalization()
+    {
+        toolTip.SetToolTip(btnSelectFolder, LocalizationModule.Tip("btnSelectFolder"));
+        toolTip.SetToolTip(btnSync, LocalizationModule.Tip("btnSync"));
+        toolTip.SetToolTip(btnDelete, LocalizationModule.Tip("btnDelete"));
+        toolTip.SetToolTip(btnResume, LocalizationModule.Tip("btnResume"));
+        toolTip.SetToolTip(btnExplorer, LocalizationModule.Tip("btnExplorer"));
+        toolTip.SetToolTip(btnLogout, LocalizationModule.Tip("btnLogout"));
+        toolTip.SetToolTip(txtFilter, LocalizationModule.Tip("txtFilter"));
+        toolTip.SetToolTip(progressBar, LocalizationModule.Tip("progressBar"));
+        toolTip.SetToolTip(btnBackupNow, LocalizationModule.Tip("btnBackupNow"));
+        toolTip.SetToolTip(btnRestore, LocalizationModule.Tip("btnRestore"));
+        toolTip.SetToolTip(btnPurge, LocalizationModule.Tip("btnPurge"));
+        toolTip.SetToolTip(btnDashScan, LocalizationModule.Tip("btnDashScan"));
+        toolTip.SetToolTip(btnDashSync, LocalizationModule.Tip("btnDashSync"));
+        toolTip.SetToolTip(btnDashBackup, LocalizationModule.Tip("btnDashBackup"));
+        toolTip.SetToolTip(btnDashExplorer, LocalizationModule.Tip("btnDashExplorer"));
+        toolTip.SetToolTip(btnDashShortcuts, LocalizationModule.Tip("btnDashShortcuts"));
+        toolTip.SetToolTip(btnDashDocs, LocalizationModule.Tip("btnDashDocs"));
+        toolTip.SetToolTip(gridDashAudit, LocalizationModule.Tip("gridDashAudit"));
+        btnShortcuts.ToolTipText = LocalizationModule.Tip("btnShortcuts");
+        btnDocs.ToolTipText = LocalizationModule.Tip("btnDocs");
+        btnTheme.ToolTipText = LocalizationModule.Tip("btnTheme");
+        btnNotifications.ToolTipText = LocalizationModule.Tip("btnNotifications");
+        toolTip.SetToolTip(swAutoSync, LocalizationModule.Tip("swAutoSync"));
+        toolTip.SetToolTip(swColdStorage, LocalizationModule.Tip("swColdStorage"));
+        toolTip.SetToolTip(swVerifyAfterSync, LocalizationModule.Tip("swVerifyAfterSync"));
+        toolTip.SetToolTip(swStartWithWindows, LocalizationModule.Tip("swStartWithWindows"));
+        toolTip.SetToolTip(swConfirmDelete, LocalizationModule.Tip("swConfirmDelete"));
+        toolTip.SetToolTip(swMinimizeToTray, LocalizationModule.Tip("swMinimizeToTray"));
+        toolTip.SetToolTip(swNotifications, LocalizationModule.Tip("swNotifications"));
+        toolTip.SetToolTip(swAnimations, LocalizationModule.Tip("swAnimations"));
+        toolTip.SetToolTip(cmbIdle, LocalizationModule.Tip("cmbIdle"));
+        toolTip.SetToolTip(cmbAutoBackup, LocalizationModule.Tip("cmbAutoBackup"));
+        toolTip.SetToolTip(btnSetBackupFolder, LocalizationModule.Tip("btnSetBackupFolder"));
+        toolTip.SetToolTip(btnPickBackupFolder, LocalizationModule.Tip("btnPickBackupFolder"));
+        toolTip.SetToolTip(txtExclude, LocalizationModule.Tip("txtExclude"));
+        toolTip.SetToolTip(cmbCompression, LocalizationModule.Tip("cmbCompression"));
+        toolTip.SetToolTip(cmbParallel, LocalizationModule.Tip("cmbParallel"));
+        toolTip.SetToolTip(cmbMaxSize, LocalizationModule.Tip("cmbMaxSize"));
+        toolTip.SetToolTip(cmbRetention, LocalizationModule.Tip("cmbRetention"));
+        toolTip.SetToolTip(trkFontSize, LocalizationModule.Tip("trkFontSize"));
+        toolTip.SetToolTip(cmbAccent, LocalizationModule.Tip("cmbAccent"));
+        toolTip.SetToolTip(radDark, LocalizationModule.Tip("radDark"));
+        toolTip.SetToolTip(radLight, LocalizationModule.Tip("radLight"));
+        toolTip.SetToolTip(cmbLanguage, LocalizationModule.Tip("cmbLanguage"));
+        toolTip.SetToolTip(btnResetSettings, LocalizationModule.Tip("btnResetSettings"));
+        gbAppearance.Values.Heading = LocalizationModule.T("MainView/gbAppearance");
+        gbLanguage.Values.Heading = LocalizationModule.T("MainView/gbLanguage");
+        gbSync.Values.Heading = LocalizationModule.T("MainView/gbSync");
+        gbBackup.Values.Heading = LocalizationModule.T("MainView/gbBackup");
+        gbSecurity.Values.Heading = LocalizationModule.T("MainView/gbSecurity");
+        gbSystem.Values.Heading = LocalizationModule.T("MainView/gbSystem");
+        UpdateNavSelection();
+        RefreshDynamicLabels();
+    }
+
+    private void RefreshDynamicLabels()
+    {
+        if (lblStatus.Text is "Ready." or "Pronto.")
+            lblStatus.Text = LocalizationModule.T("MainView/lblStatus");
+        if (lblBackupInfo.Text is "No backup yet." or "Ainda sem backup.")
+            lblBackupInfo.Text = LocalizationModule.T("MainView/lblBackupInfo");
+        LoadBackupTab();
     }
 
     protected override async void OnShown(EventArgs e)
@@ -460,7 +545,7 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         UpdateDashboard();
         await LoadUserBadgeAsync();
         await LoadDashboardAsync();
-        ToastForm.ShowToast(this, $"Signed in as {AppServices.Session.Username} ({AppServices.Session.Role}).", ToastKind.Success);
+        ToastForm.ShowToast(this, string.Format(LocalizationModule.T("MainView/signedInFormat"), AppServices.Session.Username, AppServices.Session.Role), ToastKind.Success);
     }
 
     private async Task LoadUserBadgeAsync()
@@ -523,7 +608,7 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         radDark.Checked = dark;
         radLight.Checked = !dark;
         KryptonThemeModule.SetTheme(dark);
-        SetStatus(dark ? "Dark theme applied." : "Light theme applied.", ToastKind.Info);
+        SetStatus(LocalizationModule.T(dark ? "MainView/themeDarkApplied" : "MainView/themeLightApplied"), ToastKind.Info);
     }
 
     private void txtFilter_TextChanged(object? sender, EventArgs e)
@@ -749,14 +834,14 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         AppServices.Settings.AutoSync = swAutoSync.Checked;
         AppServices.SaveSettings();
         EnsureWatcher();
-        ToastForm.ShowToast(this, swAutoSync.Checked ? "Auto-sync enabled." : "Auto-sync disabled.", ToastKind.Info);
+        ToastForm.ShowToast(this, LocalizationModule.T(swAutoSync.Checked ? "MainView/autoSyncOn" : "MainView/autoSyncOff"), ToastKind.Info);
     }
 
     private void txtExclude_Leave(object? sender, EventArgs e)
     {
         AppServices.Settings.ExcludePatterns = txtExclude.Text.Trim();
         AppServices.SaveSettings();
-        ToastForm.ShowToast(this, "Exclude patterns saved. Rescan to apply.", ToastKind.Info);
+        ToastForm.ShowToast(this, LocalizationModule.T("MainView/excludeSaved"), ToastKind.Info);
     }
 
     private void btnResetSettings_Click(object? sender, EventArgs e)
@@ -790,7 +875,7 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         AppServices.ApplyRuntimeSettings();
         LoadSettingsIntoControls();
         KryptonThemeModule.ApplyFontToOpenForms(s.FontSize, s.FontBold);
-        ToastForm.ShowToast(this, "Settings restored to defaults.", ToastKind.Info);
+        ToastForm.ShowToast(this, LocalizationModule.T("MainView/settingsReset"), ToastKind.Info);
     }
 
     private async void btnBackupNow_Click(object? sender, EventArgs e)
@@ -811,8 +896,8 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
             var (ok, fail) = await Task.Run(() => AppServices.Backup.ExportAsync(destination));
             AppServices.Settings.LastBackupAt = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
             AppServices.SaveSettings();
-            lblBackupInfo.Text = $"Backup finished: {ok} exported, {fail} failed.";
-            lblLastBackup.Text = $"Last backup: {AppServices.Settings.LastBackupAt}";
+            lblBackupInfo.Text = string.Format(LocalizationModule.T("MainView/backupFinishedFormat"), ok, fail);
+            lblLastBackup.Text = string.Format(LocalizationModule.T("MainView/lastBackupFormat"), AppServices.Settings.LastBackupAt);
             await AppServices.AuditLogger.LogAsync(Core.Enums.LogAction.SyncCompleted,
                 $"Backup{(manual ? "" : " (automatic)")}: {ok} exported, {fail} failed to {destination}.");
             ToastForm.ShowToast(this, $"Backup finished: {ok} exported.", fail > 0 ? ToastKind.Warning : ToastKind.Success);
@@ -1250,6 +1335,7 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
             btnBackupNow.PerformClick();
         };
         btnDashExplorer.Click += (_, _) => btnExplorer.PerformClick();
+        btnDashDocs.Click += (_, _) => OpenDocs();
         gridDashAudit.DoubleClick += async (_, _) =>
         {
             if (!tabControl.TabPages.Contains(tabAudit)) return;
@@ -1310,8 +1396,8 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
     private void LoadBackupTab()
     {
         lblLastBackup.Text = string.IsNullOrWhiteSpace(AppServices.Settings.LastBackupAt)
-            ? "Last backup: never"
-            : $"Last backup: {AppServices.Settings.LastBackupAt}";
+            ? LocalizationModule.T("MainView/lastBackupNever")
+            : string.Format(LocalizationModule.T("MainView/lastBackupFormat"), AppServices.Settings.LastBackupAt);
         UpdateBackupFolderLabel();
     }
 
@@ -1370,6 +1456,8 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
             if (cmbAccent.Items.Count == 0)
                 cmbAccent.Items.AddRange(new object[] { "Blue", "Green", "Red", "Purple" });
             cmbAccent.SelectedItem = s.Accent;
+            if (cmbLanguage.Items.Count == 0) cmbLanguage.Items.AddRange(LocalizationModule.Languages);
+            cmbLanguage.SelectedItem = LocalizationModule.Languages.Contains(s.Language) ? s.Language : LocalizationModule.Languages[0];
             swAnimations.Checked = s.Animations;
             swConfirmDelete.Checked = s.ConfirmDelete;
             swNotifications.Checked = s.Notifications;
@@ -1416,8 +1504,8 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         AppServices.SaveSettings();
         bool ok = Controller.System.AutoStartController.SetEnabled(swStartWithWindows.Checked);
         ToastForm.ShowToast(this, ok
-            ? (swStartWithWindows.Checked ? "DataSyncEngine will start with Windows." : "Auto-start disabled.")
-            : "Could not update the Windows startup entry.", ok ? ToastKind.Info : ToastKind.Warning);
+            ? LocalizationModule.T(swStartWithWindows.Checked ? "MainView/startWithWinOn" : "MainView/startWithWinOff")
+            : LocalizationModule.T("MainView/startWithWinFail"), ok ? ToastKind.Info : ToastKind.Warning);
     }
 
     private void cmbCompression_SelectedIndexChanged(object? sender, EventArgs e)
@@ -1427,7 +1515,7 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         AppServices.Settings.CompressionLevel = value;
         AppServices.SaveSettings();
         AppServices.ApplyRuntimeSettings();
-        ToastForm.ShowToast(this, $"Vault compression set to {value}.", ToastKind.Info);
+        ToastForm.ShowToast(this, string.Format(LocalizationModule.T("MainView/compressionSet"), value), ToastKind.Info);
     }
 
     private void cmbParallel_SelectedIndexChanged(object? sender, EventArgs e)
@@ -1437,7 +1525,9 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         AppServices.Settings.MaxParallelSync = Math.Clamp(value, 1, 8);
         AppServices.SaveSettings();
         AppServices.ApplyRuntimeSettings();
-        ToastForm.ShowToast(this, value <= 1 ? "Uploads run sequentially." : $"Up to {value} uploads at the same time.", ToastKind.Info);
+        ToastForm.ShowToast(this, value <= 1
+            ? LocalizationModule.T("MainView/parallelSequential")
+            : string.Format(LocalizationModule.T("MainView/parallelSet"), value), ToastKind.Info);
     }
 
     private void swVerifyAfterSync_CheckedChanged(object? sender, EventArgs e)
@@ -1446,9 +1536,7 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         AppServices.Settings.VerifyAfterSync = swVerifyAfterSync.Checked;
         AppServices.SaveSettings();
         AppServices.ApplyRuntimeSettings();
-        ToastForm.ShowToast(this, swVerifyAfterSync.Checked
-            ? "Integrity check enabled after every upload."
-            : "Integrity check disabled.", ToastKind.Info);
+        ToastForm.ShowToast(this, LocalizationModule.T(swVerifyAfterSync.Checked ? "MainView/verifyOn" : "MainView/verifyOff"), ToastKind.Info);
     }
 
     private void cmbMaxSize_SelectedIndexChanged(object? sender, EventArgs e)
@@ -1458,8 +1546,8 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         AppServices.Settings.MaxFileSizeMb = Math.Max(0, value);
         AppServices.SaveSettings();
         ToastForm.ShowToast(this, value <= 0
-            ? "No file size limit. Rescan to apply."
-            : $"Files larger than {value} MB are skipped. Rescan to apply.", ToastKind.Info);
+            ? LocalizationModule.T("MainView/maxSizeOff")
+            : string.Format(LocalizationModule.T("MainView/maxSizeLimit"), value), ToastKind.Info);
     }
 
     private void cmbRetention_SelectedIndexChanged(object? sender, EventArgs e)
@@ -1469,16 +1557,34 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         AppServices.Settings.AuditRetentionDays = Math.Max(0, value);
         AppServices.SaveSettings();
         ToastForm.ShowToast(this, value <= 0
-            ? "Audit entries are kept forever."
-            : $"Audit entries older than {value} days will be purged daily.", ToastKind.Info);
+            ? LocalizationModule.T("MainView/retentionOff")
+            : string.Format(LocalizationModule.T("MainView/retentionLimit"), value), ToastKind.Info);
     }
 
     private void btnShortcuts_Click(object? sender, EventArgs e) => OpenShortcuts();
+
+    private void btnDocs_Click(object? sender, EventArgs e) => OpenDocs();
+
+    private async void btnSetBackupFolder_Click(object? sender, EventArgs e) => await PickBackupFolderAsync();
 
     private void OpenShortcuts()
     {
         using var dialog = new SubViews.ShortcutsView();
         dialog.ShowDialog(this);
+    }
+
+    private void OpenDocs()
+    {
+        using var dialog = new SubViews.HelpView();
+        dialog.ShowDialog(this);
+    }
+
+    private void cmbLanguage_SelectedIndexChanged(object? sender, EventArgs e)
+    {
+        if (_settingsLoading || cmbLanguage.SelectedItem is not string language) return;
+        if (language == AppServices.Settings.Language) return;
+        LocalizationModule.SetLanguage(language);
+        ToastForm.ShowToast(this, string.Format(LocalizationModule.T("MainView/languageSet"), language), ToastKind.Info);
     }
 
     private async Task LoadDashboardAsync()
@@ -1499,7 +1605,8 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
     private async void btnPickBackupFolder_Click(object? sender, EventArgs e) => await PickBackupFolderAsync();
 
     private async Task PickBackupFolderAsync()
-    {        using var dialog = new FolderBrowserDialog
+    {
+        using var dialog = new FolderBrowserDialog
         {
             Description = "Select the automatic backup folder",
             SelectedPath = AppServices.Settings.AutoBackupFolder
@@ -1509,15 +1616,17 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         AppServices.SaveSettings();
         UpdateBackupFolderLabel();
         await AppServices.AuditLogger.LogAsync(Core.Enums.LogAction.BackupExported, $"Automatic backup folder set to {dialog.SelectedPath}.");
-        ToastForm.ShowToast(this, "Backup folder updated.", ToastKind.Success);
+        ToastForm.ShowToast(this, LocalizationModule.T("MainView/backupFolderSet"), ToastKind.Success);
     }
 
     private void UpdateBackupFolderLabel()
     {
         string folder = AppServices.Settings.AutoBackupFolder;
-        lblBackupFolderVal.Text = string.IsNullOrWhiteSpace(folder)
-            ? @"(not set — defaults to Documents\DataSyncEngineBackup)"
+        string text = string.IsNullOrWhiteSpace(folder)
+            ? LocalizationModule.T("MainView/backupFolderDefault")
             : folder;
+        lblBackupFolderVal.Text = text;
+        toolTip.SetToolTip(btnSetBackupFolder, $"{LocalizationModule.T("MainView/btnSetBackupFolder.tip")} — {text}");
     }
 
     private void cmbIdle_SelectedIndexChanged(object? sender, EventArgs e)
@@ -1527,8 +1636,8 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         AppServices.Settings.IdleLogoutMinutes = minutes;
         AppServices.SaveSettings();
         ToastForm.ShowToast(this, minutes == 0
-            ? "Auto-logout disabled."
-            : $"Auto-logout after {minutes} minutes of inactivity.", ToastKind.Info);
+            ? LocalizationModule.T("MainView/idleOff")
+            : string.Format(LocalizationModule.T("MainView/idleSet"), minutes), ToastKind.Info);
     }
 
     private void cmbAutoBackup_SelectedIndexChanged(object? sender, EventArgs e)
@@ -1538,8 +1647,8 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         AppServices.Settings.AutoBackupHours = hours;
         AppServices.SaveSettings();
         ToastForm.ShowToast(this, hours == 0
-            ? "Automatic backup disabled."
-            : $"Automatic backup every {hours}h to Documents\\DataSyncEngineBackup.", ToastKind.Info);
+            ? LocalizationModule.T("MainView/autoBackupOff")
+            : string.Format(LocalizationModule.T("MainView/autoBackupSet"), hours), ToastKind.Info);
     }
 
     private void UpdateFontPreview()

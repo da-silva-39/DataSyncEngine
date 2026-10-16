@@ -114,7 +114,8 @@ public static class DarkThemeModule
                 case Form form when form.GetType().Namespace != "Krypton.Toolkit":
                     form.BackColor = CanvasColor;
                     form.ForeColor = TextColor;
-                    form.Font = new Font("Segoe UI", 9.5F);
+                    var settings = AppServices.Settings;
+                    form.Font = new Font("Segoe UI", settings.FontSize, settings.FontBold ? FontStyle.Bold : FontStyle.Regular);
                     break;
                 case TabControl or TabPage:
                     control.BackColor = CanvasColor;

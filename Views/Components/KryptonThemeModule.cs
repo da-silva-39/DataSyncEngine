@@ -32,6 +32,7 @@ public static class KryptonThemeModule
             {
             }
         }
+        LocalizationModule.Apply(form);
         DarkThemeModule.Apply(form);
     }
 

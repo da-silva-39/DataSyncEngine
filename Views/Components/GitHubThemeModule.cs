@@ -56,6 +56,34 @@ public static class GitHubThemeModule
         ConfigureState(button.StatePressed, hover, text, Color.Empty, false);
     }
 
+    public static void StyleAction(KryptonButton button, Color background, Color foreground, Color hover)
+    {
+        button.ButtonStyle = ButtonStyle.Standalone;
+        button.StateCommon.Border.Rounding = 6;
+        button.StateCommon.Border.Width = 1;
+        button.StateCommon.Border.DrawBorders = PaletteDrawBorders.All;
+        button.StateCommon.Border.Color1 = background;
+        button.StateCommon.Border.Color2 = background;
+        button.StateCommon.Back.Color1 = background;
+        button.StateCommon.Back.Color2 = background;
+        button.StateCommon.Back.ColorStyle = PaletteColorStyle.Solid;
+        button.StateCommon.Content.ShortText.Color1 = foreground;
+        button.StateCommon.Content.ShortText.Color2 = foreground;
+        button.StateCommon.Content.ShortText.TextH = PaletteRelativeAlign.Center;
+        button.StateTracking.Back.Color1 = hover;
+        button.StateTracking.Back.Color2 = hover;
+        button.StateTracking.Back.ColorStyle = PaletteColorStyle.Solid;
+        button.StateTracking.Border.Color1 = hover;
+        button.StateTracking.Border.Color2 = hover;
+        button.StateTracking.Content.ShortText.Color1 = foreground;
+        button.StateTracking.Content.ShortText.Color2 = foreground;
+        button.StatePressed.Back.Color1 = hover;
+        button.StatePressed.Back.Color2 = hover;
+        button.StatePressed.Back.ColorStyle = PaletteColorStyle.Solid;
+        button.StatePressed.Content.ShortText.Color1 = foreground;
+        button.StatePressed.Content.ShortText.Color2 = foreground;
+    }
+
     private static void ConfigureState(PaletteTriple state, Color background, Color text, Color accent, bool accentBar)
         => ApplyTriple(state.Back, state.Border, state.Content, background, text, accent, accentBar);
 
