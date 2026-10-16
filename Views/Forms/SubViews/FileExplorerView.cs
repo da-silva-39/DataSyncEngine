@@ -1,3 +1,9 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using Views.Components;
 
 namespace Views.Forms.SubViews;
@@ -5,12 +11,19 @@ namespace Views.Forms.SubViews;
 public partial class FileExplorerView : Krypton.Toolkit.KryptonForm
 {
     private readonly List<Model.Entities.FileModel> _files = new();
+    private readonly List<Model.Entities.FileModel> _filtered = new();
+    private string _root = string.Empty;
+    private string _current = string.Empty;
+    private readonly Controller.Processing.FileMetadataController _meta = new();
 
     public FileExplorerView()
     {
         InitializeComponent();
         KryptonThemeModule.Apply(this);
         grid.CellFormatting += Grid_CellFormatting;
+        this.AllowDrop = true;
+        this.DragEnter += grid_DragEnter;
+        this.DragDrop += grid_DragDrop;
     }
 
     private void Grid_CellFormatting(object? sender, DataGridViewCellFormattingEventArgs e)
@@ -25,33 +38,171 @@ public partial class FileExplorerView : Krypton.Toolkit.KryptonForm
         };
     }
 
-    private async void btnBrowse_Click(object? sender, EventArgs e)
+    private void btnBrowse_Click(object? sender, EventArgs e)
     {
         using var dialog = new FolderBrowserDialog();
         if (dialog.ShowDialog(this) != DialogResult.OK) return;
-        txtPath.Text = dialog.SelectedPath;
-        await LoadFolderAsync(dialog.SelectedPath);
+        _current = _root = dialog.SelectedPath;
+        txtAddress.Text = _current;
+        BuildTree(_root);
+        _ = LoadFolderAsync(_current);
+    }
+
+    private void btnBack_Click(object? sender, EventArgs e)
+    {
+        if (string.IsNullOrEmpty(_current)) return;
+        DirectoryInfo di = new DirectoryInfo(_current);
+        if (di.Parent == null) return;
+        _current = di.Parent.FullName;
+        txtAddress.Text = _current;
+        _ = LoadFolderAsync(_current);
+    }
+
+    private void btnRefresh_Click(object? sender, EventArgs e)
+    {
+        if (!string.IsNullOrEmpty(_current)) _ = LoadFolderAsync(_current);
+    }
+
+    private async void btnScan_Click(object? sender, EventArgs e)
+    {
+        if (string.IsNullOrEmpty(_current)) return;
+        lblStatus.Text = "Scanning...";
+        var items = await ScanFolder(_current);
+        _files.Clear();
+        _files.AddRange(items);
+        ApplyFilter();
+        lblStatus.Text = "Scan complete.";
+        await AppServices.AuditLogger.LogAsync(Core.Enums.LogAction.FolderScanned, _current);
+    }
+
+    private async void btnSyncAll_Click(object? sender, EventArgs e)
+    {
+        if (grid.SelectedRows.Count == 0) return;
+        var engine = AppServices.SyncEngine;
+        int ok = 0;
+        foreach (DataGridViewRow r in grid.SelectedRows)
+        {
+            if (r.DataBoundItem is Model.Entities.FileModel file)
+            {
+                try
+                {
+                    bool res = await Task.Run(() => engine.ProcessFileAsync(file, System.IO.File.ReadAllBytes(file.FilePath)));
+                    if (res) ok++;
+                }
+                catch
+                {
+                }
+            }
+        }
+        grid.Refresh();
+        lblStatus.Text = $"{ok} file(s) synchronized.";
     }
 
     private async Task LoadFolderAsync(string path)
     {
+        _files.Clear();
+        var items = await ScanFolder(path);
+        _files.AddRange(items);
+        ApplyFilter();
+        txtAddress.Text = path;
+        _current = path;
+    }
+
+    private async Task<IReadOnlyList<Model.Entities.FileModel>> ScanFolder(string path)
+    {
         var scanner = new Controller.Sync.DirectoryScannerController(AppServices.Sha256, AppServices.Files);
         scanner.ExcludePatternsProvider = () => AppServices.Settings.ExcludePatterns;
-        _files.Clear();
-        _files.AddRange(await scanner.ScanAsync(path));
+        return await scanner.ScanAsync(path);
+    }
+
+    private void BuildTree(string root)
+    {
+        treeDirs.Nodes.Clear();
+        if (string.IsNullOrEmpty(root)) return;
+        TreeNode rootNode = new TreeNode(Path.GetFileName(root) == "" ? root : Path.GetFileName(root));
+        rootNode.Tag = root;
+        treeDirs.Nodes.Add(rootNode);
+        AddNodes(rootNode, root);
+    }
+
+    private void AddNodes(TreeNode parentNode, string path)
+    {
+        try
+        {
+            foreach (string dir in System.IO.Directory.GetDirectories(path))
+            {
+                TreeNode node = new TreeNode(Path.GetFileName(dir));
+                node.Tag = dir;
+                parentNode.Nodes.Add(node);
+            }
+        }
+        catch
+        {
+        }
+    }
+
+    private void treeDirs_AfterSelect(object? sender, TreeViewEventArgs e)
+    {
+        if (e.Node?.Tag is string path && System.IO.Directory.Exists(path))
+        {
+            _ = LoadFolderAsync(path);
+        }
+    }
+
+    private void treeDirs_BeforeExpand(object? sender, TreeViewCancelEventArgs e)
+    {
+        if (e.Node == null) return;
+        foreach (TreeNode n in e.Node.Nodes)
+        {
+            if (n.Nodes.Count == 0)
+                AddNodes(n, n.Tag?.ToString() ?? "");
+        }
+    }
+
+    private void ApplyFilter()
+    {
+        string q = txtSearch.Text?.Trim() ?? "";
+        _filtered.Clear();
+        var src = string.IsNullOrEmpty(q) ? _files : _files.Where(f => f.FileName.Contains(q, StringComparison.OrdinalIgnoreCase)).ToList();
+        _filtered.AddRange(src);
         grid.DataSource = null;
-        grid.DataSource = _files;
-        lblStatus.Text = $"{_files.Count} item(s)";
+        grid.DataSource = _filtered;
+        lblCount.Text = $"{_filtered.Count}/{_files.Count} item(s)";
+    }
+
+    private void txtSearch_TextChanged(object? sender, EventArgs e)
+    {
+        ApplyFilter();
     }
 
     private Model.Entities.FileModel? SelectedFile => grid.CurrentRow?.DataBoundItem as Model.Entities.FileModel;
+
+    private void grid_SelectionChanged(object? sender, EventArgs e)
+    {
+        if (SelectedFile == null) return;
+        var items = _meta.Inspect(SelectedFile);
+        var sb = new StringBuilder();
+        foreach (var g in items.GroupBy(i => i.Group))
+        {
+            sb.AppendLine($"=== {g.Key} ===");
+            foreach (var it in g)
+                sb.AppendLine($"{it.Label}: {it.Value}");
+            sb.AppendLine();
+        }
+        txtDetails.Text = sb.ToString();
+    }
+
+    private void grid_CellDoubleClick(object? sender, DataGridViewCellEventArgs e)
+    {
+        if (SelectedFile != null) ctxMetadata_Click(sender, e);
+    }
 
     private async void ctxSync_Click(object? sender, EventArgs e)
     {
         if (SelectedFile is not { } file) return;
         var engine = AppServices.SyncEngine;
         lblStatus.Text = "Synchronizing...";
-        bool ok = await Task.Run(() => engine.ProcessFileAsync(file, File.ReadAllBytes(file.FilePath)));
+        bool ok = await Task.Run(() => engine.ProcessFileAsync(file, System.IO.File.ReadAllBytes(file.FilePath)));
         grid.Refresh();
         lblStatus.Text = ok ? $"{file.FileName} synchronized." : $"{file.FileName} marked for resume.";
         ToastForm.ShowToast(this, lblStatus.Text, ok ? ToastKind.Success : ToastKind.Warning);
@@ -62,19 +213,17 @@ public partial class FileExplorerView : Krypton.Toolkit.KryptonForm
         if (SelectedFile is not { } file) return;
         if (file.Id <= 0)
         {
-            lblStatus.Text = "File is not on the server yet. Sync it first.";
-            ToastForm.ShowToast(this, "Sync the file before downloading.", ToastKind.Warning);
+            lblStatus.Text = "File is not on the server yet.";
+            ToastForm.ShowToast(this, "Sync first.", ToastKind.Warning);
             return;
         }
-        using var dialog = new SaveFileDialog { FileName = file.FileName, Title = "Download file" };
+        using var dialog = new SaveFileDialog { FileName = file.FileName };
         if (dialog.ShowDialog(this) != DialogResult.OK) return;
         try
         {
-            var backup = new Controller.Sync.BackupController(AppServices.Files, AppServices.Aes, AppServices.Compressor,
-                () => AppServices.Aes.DeriveKey(AppServices.MasterKey));
-            await Task.Run(() => backup.ExportSingleAsync(file, dialog.FileName));
+            await Task.Run(() => AppServices.Backup.ExportSingleAsync(file, dialog.FileName));
             lblStatus.Text = $"Downloaded to {dialog.FileName}.";
-            ToastForm.ShowToast(this, $"{file.FileName} downloaded.", ToastKind.Success);
+            ToastForm.ShowToast(this, "Downloaded.", ToastKind.Success);
         }
         catch (Exception ex)
         {
@@ -83,21 +232,22 @@ public partial class FileExplorerView : Krypton.Toolkit.KryptonForm
         }
     }
 
+    private void ctxMetadata_Click(object? sender, EventArgs e)
+    {
+        if (SelectedFile != null)
+        {
+            using var dlg = new FileMetadataView(SelectedFile);
+            dlg.ShowDialog(this);
+        }
+    }
+
     private void ctxHash_Click(object? sender, EventArgs e)
     {
         if (SelectedFile is { } file)
         {
             Clipboard.SetText(file.Sha256Hash);
-            lblStatus.Text = "Hash copied to clipboard.";
+            lblStatus.Text = "Hash copied.";
         }
-    }
-
-    private void ctxProps_Click(object? sender, EventArgs e)
-    {
-        if (SelectedFile is not { } file) return;
-        MessageBox.Show(
-            $"Name: {file.FileName}\nPath: {file.FilePath}\nSize: {file.SizeBytes} bytes\nSHA-256: {file.Sha256Hash}\nStatus: {file.Status}",
-            "Properties", MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 
     private async void ctxResume_Click(object? sender, EventArgs e)
@@ -106,12 +256,11 @@ public partial class FileExplorerView : Krypton.Toolkit.KryptonForm
         var engine = AppServices.SyncEngine;
         engine.MarkForResume(file.FilePath);
         file.Status = Core.Enums.SyncStatus.Pending;
-        lblStatus.Text = "Resuming...";
-        int ok = await Task.Run(() => engine.ResumePendingAsync(
-            f => File.ReadAllBytes(f.FilePath),
-            path => _files.FirstOrDefault(f => f.FilePath.Equals(path, StringComparison.OrdinalIgnoreCase))
-                ?? new Model.Entities.FileModel { FilePath = path, FileName = Path.GetFileName(path) }));
         grid.Refresh();
+        int ok = await Task.Run(() => engine.ResumePendingAsync(
+            f => System.IO.File.ReadAllBytes(f.FilePath),
+            path => _files.FirstOrDefault(f => f.FilePath.Equals(path, StringComparison.OrdinalIgnoreCase))
+                ?? new Model.Entities.FileModel { FilePath = path, FileName = System.IO.Path.GetFileName(path) }));
         lblStatus.Text = $"Resume: {ok} file(s) recovered.";
     }
 
@@ -121,11 +270,10 @@ public partial class FileExplorerView : Krypton.Toolkit.KryptonForm
         if (AppServices.Session.Role == Core.Enums.UserRole.Operator)
         {
             using var masterKey = new MasterKeyPopUpView();
-            await AppServices.AuditLogger.LogAsync(Core.Enums.LogAction.MasterKeyPrompted, $"Operator requested delete of {file.FilePath}.");
+            await AppServices.AuditLogger.LogAsync(Core.Enums.LogAction.MasterKeyPrompted, $"Operator delete {file.FilePath}.");
             if (masterKey.ShowDialog(this) != DialogResult.OK || !masterKey.Authorized) return;
         }
-        if (AppServices.Settings.ConfirmDelete
-            && MessageBox.Show($"Delete {file.FileName} from server?", "Explorer", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
+        if (MessageBox.Show($"Move {file.FileName} to trash?", "Explorer", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
         if (file.Id > 0)
         {
             try
@@ -143,14 +291,31 @@ public partial class FileExplorerView : Krypton.Toolkit.KryptonForm
             }
         }
         _files.Remove(file);
-        grid.DataSource = null;
-        grid.DataSource = _files;
+        ApplyFilter();
         lblStatus.Text = "Moved to trash.";
-        ToastForm.ShowToast(this, $"{file.FileName} moved to trash.", ToastKind.Warning);
     }
 
-    private async void ctxRefresh_Click(object? sender, EventArgs e)
+    private void ctxRefresh_Click(object? sender, EventArgs e)
     {
-        if (!string.IsNullOrWhiteSpace(txtPath.Text)) await LoadFolderAsync(txtPath.Text);
+        if (!string.IsNullOrEmpty(_current)) _ = LoadFolderAsync(_current);
+    }
+
+    private void grid_DragEnter(object? sender, DragEventArgs e)
+    {
+        if (e.Data?.GetDataPresent(DataFormats.FileDrop) == true)
+            e.Effect = DragDropEffects.Copy;
+    }
+
+    private async void grid_DragDrop(object? sender, DragEventArgs e)
+    {
+        if (e.Data?.GetDataPresent(DataFormats.FileDrop) == true)
+        {
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            if (files.Length == 0) return;
+            string folder = files.Length == 1 && System.IO.Directory.Exists(files[0]) ? files[0] : System.IO.Path.GetDirectoryName(files[0]) ?? _current;
+            if (!string.IsNullOrEmpty(folder)) _current = folder;
+            txtAddress.Text = _current;
+            await LoadFolderAsync(_current);
+        }
     }
 }

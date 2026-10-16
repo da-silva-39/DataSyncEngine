@@ -20,7 +20,7 @@ Connection settings live in appsettings.json next to the executable.
 
 ## Features
 
-- AES-256 file encryption with PBKDF2 password hashing, GZip compression, MariaDB BLOB storage
+- AES-256-GCM vault containers (PBKDF2-HMAC-SHA256 key derivation) stored as sealed BLOBs; legacy AES-256-CBC blobs remain readable; per-file SHA-256 integrity
 - Manual, real-time (auto-sync on file change) and trash with restore
 - Exclude patterns (e.g. *.tmp;*.log), server backup export, per-file SHA-256 integrity
 - Role-based UI (Admin / Operator), silent audit logging, tray notifications and toasts

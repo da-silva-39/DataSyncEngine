@@ -1,4 +1,3 @@
-using Controller.Processing;
 using Controller.Security;
 using Core.Enums;
 using Model.Entities;
@@ -8,10 +7,9 @@ namespace Controller.Sync;
 
 public class SyncEngineController
 {
-    private readonly Aes256Controller _aes;
-    private readonly StreamCompressorController _compressor;
+    private readonly SecureVaultController _vault;
     private readonly FileRepository _fileRepository;
-    private readonly Func<byte[]> _masterKeyProvider;
+    private readonly Func<string> _passphraseProvider;
     private readonly List<string> _pendingResume = new();
 
     private static readonly string ResumeQueuePath = Path.Combine(AppContext.BaseDirectory, "resume_queue.txt");
@@ -29,13 +27,12 @@ public class SyncEngineController
     public event Action<string>? FileProcessed;
     public event Action<string>? FileFailed;
 
-    public SyncEngineController(Aes256Controller aes, StreamCompressorController compressor,
-        FileRepository fileRepository, Func<byte[]> masterKeyProvider)
+    public SyncEngineController(SecureVaultController vault, FileRepository fileRepository,
+        Func<string> passphraseProvider)
     {
-        _aes = aes;
-        _compressor = compressor;
+        _vault = vault;
         _fileRepository = fileRepository;
-        _masterKeyProvider = masterKeyProvider;
+        _passphraseProvider = passphraseProvider;
         try
         {
             if (File.Exists(ResumeQueuePath))
@@ -63,14 +60,13 @@ public class SyncEngineController
     {
         try
         {
-            byte[] encrypted = _aes.Encrypt(content, _masterKeyProvider());
-            byte[] compressed = _compressor.Compress(encrypted);
-            await _fileRepository.InsertWithBlobAsync(file, compressed, cancellationToken);
+            byte[] sealedPayload = _vault.Seal(content, _passphraseProvider());
+            await _fileRepository.InsertWithBlobAsync(file, sealedPayload, cancellationToken);
             if (KeepColdStorage)
             {
                 try
                 {
-                    await SaveColdStorageAsync(file, compressed, cancellationToken);
+                    await SaveColdStorageAsync(file, sealedPayload, cancellationToken);
                 }
                 catch
                 {

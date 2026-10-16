@@ -41,6 +41,7 @@ public static class AppServices
     public static Sha256Controller Sha256 { get; } = new();
     public static Aes256Controller Aes { get; } = new();
     public static StreamCompressorController Compressor { get; } = new();
+    public static SecureVaultController Vault { get; } = new(new Aes256Controller(), new StreamCompressorController());
     public static HotSwapController HotSwap { get; private set; } = null!;
     public static AuthController Auth { get; private set; } = null!;
 
@@ -53,13 +54,15 @@ public static class AppServices
     public static AuditLoggerController AuditLogger => new(() => Audits, () => Session.Username);
 
     public static Controller.Sync.SyncEngineController SyncEngine { get; private set; } = null!;
+    public static Controller.Sync.BackupController Backup { get; private set; } = null!;
 
     public static void Initialize()
     {
         Auth = AuthController.Initialize(Session, Hasher, () => Users);
         HotSwap = new HotSwapController(CurrentServer, Cache);
         HotSwap.ServerChanged += server => CurrentServer = server;
-        SyncEngine = new Controller.Sync.SyncEngineController(Aes, Compressor, Files, () => Aes.DeriveKey(MasterKey));
+        SyncEngine = new Controller.Sync.SyncEngineController(Vault, Files, () => MasterKey);
         SyncEngine.KeepColdStorage = Settings.KeepColdStorage;
+        Backup = new Controller.Sync.BackupController(Files, Vault, () => MasterKey);
     }
 }

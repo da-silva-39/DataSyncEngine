@@ -1,4 +1,4 @@
-using Views.Components;
+﻿using Views.Components;
 using Views.ViewModels;
 
 namespace Views.Forms;
@@ -43,7 +43,7 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
     }
 
     private static string TruncateText(string text, int max)
-        => text.Length <= max ? text : text[..(max - 1)] + "…";
+        => text.Length <= max ? text : text[..(max - 1)] + "â€¦";
 
     private sealed class ActivityMessageFilter(Action onActivity) : IMessageFilter
     {
@@ -751,9 +751,7 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
         lblBackupInfo.Text = "Backing up...";
         try
         {
-            var backup = new Controller.Sync.BackupController(AppServices.Files, AppServices.Aes, AppServices.Compressor,
-                () => AppServices.Aes.DeriveKey(AppServices.MasterKey));
-            var (ok, fail) = await Task.Run(() => backup.ExportAsync(destination));
+            var (ok, fail) = await Task.Run(() => AppServices.Backup.ExportAsync(destination));
             AppServices.Settings.LastBackupAt = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
             AppServices.SaveSettings();
             lblBackupInfo.Text = $"Backup finished: {ok} exported, {fail} failed.";
@@ -983,6 +981,23 @@ public partial class MainView : Krypton.Toolkit.KryptonForm
             using var explorer = new SubViews.FileExplorerView();
             explorer.ShowDialog(this);
         };
+        var filesCtx = new System.Windows.Forms.ContextMenuStrip();
+        var ctxMeta = new System.Windows.Forms.ToolStripMenuItem("View metadata");
+        ctxMeta.Click += async (_, _) =>
+        {
+            if (gridFiles.CurrentRow?.DataBoundItem is not Model.Entities.FileModel file) return;
+            using var dlg = new SubViews.FileMetadataView(file);
+            dlg.ShowDialog(this);
+            await AppServices.AuditLogger.LogAsync(Core.Enums.LogAction.MetadataViewed, "Inspected metadata for " + file.FileName + ".");
+        };
+        filesCtx.Items.Add(ctxMeta);
+        var ctxCopyHash = new System.Windows.Forms.ToolStripMenuItem("Copy SHA-256");
+        ctxCopyHash.Click += (_, _) =>
+        {
+            if (gridFiles.CurrentRow?.DataBoundItem is Model.Entities.FileModel file) Clipboard.SetText(file.Sha256Hash);
+        };
+        filesCtx.Items.Add(ctxCopyHash);
+        gridFiles.ContextMenuStrip = filesCtx;
 
         btnResume.Click += async (_, _) =>
         {

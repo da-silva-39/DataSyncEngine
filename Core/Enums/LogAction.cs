@@ -16,5 +16,15 @@ public enum LogAction
     UserUpdated,
     SessionLocked,
     SessionUnlocked,
-    Error
+    Error,
+    FileEncrypted,
+    FileDecrypted,
+    VaultVerified,
+    MetadataViewed,
+    FolderScanned,
+    ExplorerOpened,
+    ResumeScheduled,
+    ColdStorageWritten,
+    BackupExported,
+    IntegrityChecked
 }
