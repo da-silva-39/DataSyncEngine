@@ -115,7 +115,11 @@ public sealed class GitHubDarkPalette : KryptonCustomPaletteBase
         ControlStyles.ControlCommon.StateCommon.Back.Color2 = canvas;
         ControlStyles.ControlCommon.StateCommon.Back.ColorStyle = PaletteColorStyle.Solid;
 
-        SeparatorStyles.SeparatorCommon.StateCommon.Back.Color1 = borderMuted;
+        var separatorState = SeparatorStyles.SeparatorCommon?.StateCommon;
+        if (separatorState != null)
+        {
+            separatorState.Back.Color1 = borderMuted;
+        }
 
         ToolMenuStatus.ToolStrip.ToolStripGradientBegin = canvas;
         ToolMenuStatus.ToolStrip.ToolStripGradientMiddle = canvas;

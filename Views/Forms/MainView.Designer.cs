@@ -917,12 +917,14 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.radLight.CheckedChanged += new System.EventHandler(this.radLight_CheckedChanged);
         this.tabSettings.Controls.Add(this.radLight);
 
+        this.lblSetFont = new Krypton.Toolkit.KryptonLabel();
         this.lblSetFont.AutoSize = true;
         this.lblSetFont.Location = new System.Drawing.Point(20, 85);
         this.lblSetFont.Name = "lblSetFont";
         this.lblSetFont.Text = "Font size";
         this.tabSettings.Controls.Add(this.lblSetFont);
 
+        this.trkFontSize = new Krypton.Toolkit.KryptonTrackBar();
         this.trkFontSize.Location = new System.Drawing.Point(20, 110);
         this.trkFontSize.Minimum = 8;
         this.trkFontSize.Maximum = 16;
@@ -932,18 +934,21 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.trkFontSize.ValueChanged += new System.EventHandler(this.trkFontSize_ValueChanged);
         this.tabSettings.Controls.Add(this.trkFontSize);
 
+        this.lblFontSizeVal = new Krypton.Toolkit.KryptonLabel();
         this.lblFontSizeVal.AutoSize = true;
         this.lblFontSizeVal.Location = new System.Drawing.Point(275, 120);
         this.lblFontSizeVal.Name = "lblFontSizeVal";
         this.lblFontSizeVal.Text = "9.5";
         this.tabSettings.Controls.Add(this.lblFontSizeVal);
 
+        this.lblFontPreview = new Krypton.Toolkit.KryptonLabel();
         this.lblFontPreview.AutoSize = true;
         this.lblFontPreview.Location = new System.Drawing.Point(20, 165);
         this.lblFontPreview.Name = "lblFontPreview";
         this.lblFontPreview.Text = "AaBbCcDd 123";
         this.tabSettings.Controls.Add(this.lblFontPreview);
 
+        this.chkBold = new Krypton.Toolkit.KryptonCheckBox();
         this.chkBold.AutoSize = true;
         this.chkBold.Location = new System.Drawing.Point(20, 195);
         this.chkBold.Name = "chkBold";
@@ -953,6 +958,7 @@ partial class MainView : Krypton.Toolkit.KryptonForm
         this.chkBold.CheckedChanged += new System.EventHandler(this.chkBold_CheckedChanged);
         this.tabSettings.Controls.Add(this.chkBold);
 
+        this.lblSetAccent = new Krypton.Toolkit.KryptonLabel();
         this.lblSetAccent.AutoSize = true;
         this.lblSetAccent.Location = new System.Drawing.Point(20, 240);
         this.lblSetAccent.Name = "lblSetAccent";

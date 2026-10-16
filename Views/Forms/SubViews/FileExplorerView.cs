@@ -311,8 +311,8 @@ public partial class FileExplorerView : Krypton.Toolkit.KryptonForm
     {
         if (e.Data?.GetDataPresent(DataFormats.FileDrop) == true)
         {
-            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-            if (files.Length == 0) return;
+            var files = e.Data.GetData(DataFormats.FileDrop) as string[];
+            if (files == null || files.Length == 0) return;
             string folder = files.Length == 1 && System.IO.Directory.Exists(files[0]) ? files[0] : System.IO.Path.GetDirectoryName(files[0]) ?? _current;
             if (!string.IsNullOrEmpty(folder)) _current = folder;
             txtAddress.Text = _current;
